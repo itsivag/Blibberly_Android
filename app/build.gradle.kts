@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("plugin.serialization") version "1.9.0"
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -56,6 +57,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -68,9 +70,26 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //navigation
+    implementation(libs.navigation.compose)
+
+    //supabase
     implementation("io.github.jan-tennert.supabase:compose-auth:2.3.0")
     implementation("io.github.jan-tennert.supabase:realtime-kt:2.3.0")
     implementation("io.github.jan-tennert.supabase:storage-kt:2.3.0")
     implementation("io.github.jan-tennert.supabase:postgrest-kt:2.3.0")
 
+    //gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    //coil
+    implementation(libs.coil.kt)
+
+    //room
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 }
