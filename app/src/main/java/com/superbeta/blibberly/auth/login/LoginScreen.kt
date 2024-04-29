@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.auth.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(modifier: Modifier) {
     var userEmail by remember {
         mutableStateOf(
             TextFieldValue()
@@ -102,8 +102,15 @@ fun LoginScreen() {
 }
 
 suspend fun signInWithEmail(userEmail: String, userPassword: String) {
-    val user = supabase.auth.signUpWith(Email) {
-        email = userEmail
-        password = userPassword
+    try {
+        val user = supabase.auth.signUpWith(Email) {
+            email = userEmail
+            password = userPassword
+        }
+
+        Log.i("sign in with Email", user?.email.toString())
+    } catch (e: Exception) {
+        Log.e("sign in with Email Exception", e.toString())
     }
+
 }

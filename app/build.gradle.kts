@@ -70,6 +70,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //compose animation
+    implementation("androidx.compose.animation:animation:1.6.6")
     //navigation
     implementation(libs.navigation.compose)
 
@@ -92,4 +94,11 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+
+    //stream
+    val stream_version = "6.3.1"
+    implementation ("io.getstream:stream-chat-android-compose:$stream_version")
+    implementation ("io.getstream:stream-chat-android-client:$stream_version")
+    implementation ("io.getstream:stream-chat-android-state:$stream_version")
+    implementation ("io.getstream:stream-chat-android-offline:$stream_version")
 }

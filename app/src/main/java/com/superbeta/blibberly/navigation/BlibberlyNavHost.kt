@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.superbeta.blibberly.auth.login.LoginScreen
 import com.superbeta.blibberly.auth.register.RegisterScreen
+import com.superbeta.blibberly.chat.ChatScreen
+import com.superbeta.blibberly.home.HomeScreen
 
 @Composable
 fun BlibberlyNavHost(
@@ -17,14 +19,22 @@ fun BlibberlyNavHost(
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable("login") {
-            LoginScreen()
+            LoginScreen(modifier)
         }
 
         composable("register") {
-            RegisterScreen()
+            RegisterScreen(modifier)
+        }
+
+        composable("home") {
+            HomeScreen(modifier,navController)
+        }
+        composable("chat") {
+            ChatScreen(modifier)
         }
     }
 }
+
 
 
 
