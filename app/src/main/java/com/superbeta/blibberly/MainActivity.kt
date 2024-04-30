@@ -20,11 +20,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.ui.theme.BlibberlyTheme
+import com.superbeta.blibberly.utils.SupabaseInstance
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.logger.ChatLogLevel
 import io.getstream.chat.android.models.UploadAttachmentsNetworkType
@@ -32,16 +39,31 @@ import io.getstream.chat.android.models.User
 import io.getstream.chat.android.offline.plugin.factory.StreamOfflinePluginFactory
 import io.getstream.chat.android.state.plugin.config.StatePluginConfig
 import io.getstream.chat.android.state.plugin.factory.StreamStatePluginFactory
+import io.github.jan.supabase.gotrue.auth
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //supabase
+//        val supabase = SupabaseInstance.supabase
+//        val auth = supabase.auth
+
+        //google fonts
+
+
+        //creds manager
+        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(true)
+            .setServerClientId("612314404654-n01da2n4jg19ett4eu7k3pgvvvb337va.apps.googleusercontent.com")
+            .build()
+
+        //stream
         val apiKey = "y2st43tkq85k"
         val token =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.NACLyT7Yejq55wB-54JXh61efspeZ__jDVL2lUSDW2M"
-// Step 1 - Set up the OfflinePlugin for offline storage
+
         val offlinePluginFactory = StreamOfflinePluginFactory(applicationContext)
         val statePluginFactory = StreamStatePluginFactory(
             config = StatePluginConfig(
@@ -51,14 +73,11 @@ class MainActivity : ComponentActivity() {
             appContext = applicationContext
         )
 
-// Step 2 - Set up the client, together with offline plugin, for API calls
         val client = ChatClient.Builder(apiKey, applicationContext)
-            // Change log level
             .logLevel(ChatLogLevel.ALL)
             .withPlugins(offlinePluginFactory, statePluginFactory)
             .build()
 
-// Step 3 - Authenticate and connect the user
         val user = User(
             id = "1",
             name = "Paranoid Android",
@@ -78,35 +97,50 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        var isTopBarVisible by mutableStateOf(false)
         setContent {
             BlibberlyTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val navController = rememberNavController()
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    when (navBackStackEntry?.destination?.route) {
+                        "home" -> {
+                            isTopBarVisible = true
+                        }
+
+                        else -> {
+                            isTopBarVisible = false
+                        }
+
+                    }
+
                     Scaffold(topBar = {
-                        CenterAlignedTopAppBar(
-                            title = { Text(text = "Paging Test") },
-                            navigationIcon = {
-                                IconButton(
-                                    onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Person,
-                                        contentDescription = "Profile"
-                                    )
-                                }
-                            }, actions = {
-                                IconButton(
-                                    onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Settings,
-                                        contentDescription = "Filter"
-                                    )
-                                }
-                            })
+                        if (isTopBarVisible)
+                            CenterAlignedTopAppBar(
+                                title = { Text(text = "Paging Test") },
+                                navigationIcon = {
+                                    IconButton(
+                                        onClick = { /*TODO*/ }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Person,
+                                            contentDescription = "Profile"
+                                        )
+                                    }
+                                }, actions = {
+                                    IconButton(
+                                        onClick = { /*TODO*/ }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Settings,
+                                            contentDescription = "Filter"
+                                        )
+                                    }
+                                })
                     }) {
                         BlibberlyNavHost(
-                            navController = rememberNavController(),
+                            navController = navController,
                             modifier = Modifier.padding(it)
                         )
                     }
@@ -114,21 +148,5 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    BlibberlyTheme {
-        Greeting("Android")
     }
 }

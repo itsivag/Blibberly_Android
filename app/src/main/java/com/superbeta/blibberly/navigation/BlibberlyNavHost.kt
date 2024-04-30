@@ -14,7 +14,7 @@ import com.superbeta.blibberly.home.HomeScreen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = "home"
+    startDestination: String = "login"
 ) {
 
     NavHost(navController = navController, startDestination = startDestination) {
@@ -30,7 +30,7 @@ fun BlibberlyNavHost(
             HomeScreen(modifier,navController)
         }
         composable("chat") {
-            ChatScreen(modifier)
+            ChatScreen(modifier,navController)
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.superbeta.blibberly.utils
 
+import io.github.jan.supabase.compose.auth.ComposeAuth
+import io.github.jan.supabase.compose.auth.googleNativeLogin
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
@@ -11,5 +13,8 @@ object SupabaseInstance {
     ) {
         install(Auth)
         install(Postgrest)
+        install(ComposeAuth) {
+            googleNativeLogin(serverClientId = "google-client-id")
+        }
     }
 }
