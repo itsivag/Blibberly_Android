@@ -6,10 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -18,28 +18,37 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.googlefonts.GoogleFont
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.ui.theme.BlibberlyTheme
-import com.superbeta.blibberly.utils.SupabaseInstance
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.logger.ChatLogLevel
-import io.getstream.chat.android.models.UploadAttachmentsNetworkType
 import io.getstream.chat.android.models.User
 import io.getstream.chat.android.offline.plugin.factory.StreamOfflinePluginFactory
 import io.getstream.chat.android.state.plugin.config.StatePluginConfig
 import io.getstream.chat.android.state.plugin.factory.StreamStatePluginFactory
-import io.github.jan.supabase.gotrue.auth
+
+sealed class Screen(val route: String) {
+    data object Profile : Screen("profile")
+    data object Chat : Screen("chat")
+    data object Home : Screen("home")
+}
+
+val items = listOf(
+    Screen.Profile,
+    Screen.Home,
+    Screen.Chat,
+)
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -120,25 +129,59 @@ class MainActivity : ComponentActivity() {
                     Scaffold(topBar = {
                         if (isTopBarVisible)
                             CenterAlignedTopAppBar(
-                                title = { Text(text = "Paging Test") },
+                                title = { Text(text = "Blibberly") },
                                 navigationIcon = {
                                     IconButton(
                                         onClick = { /*TODO*/ }) {
                                         Icon(
-                                            imageVector = Icons.Default.Person,
-                                            contentDescription = "Profile"
+                                            imageVector = ImageVector.vectorResource(R.drawable.filter),
+                                            contentDescription = "Filter"
                                         )
                                     }
                                 }, actions = {
                                     IconButton(
                                         onClick = { /*TODO*/ }) {
                                         Icon(
-                                            imageVector = Icons.Default.Settings,
-                                            contentDescription = "Filter"
+                                            imageVector = ImageVector.vectorResource(R.drawable.notifications),
+                                            contentDescription = "Notifications"
                                         )
                                     }
                                 })
-                    }) {
+                    }, bottomBar = {
+                        BottomNavigation(backgroundColor = Color.White) {
+                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val currentDestination = navBackStackEntry?.destination
+                            items.forEach { screen ->
+                                BottomNavigationItem(
+                                    icon = {
+                                        Icon(
+                                            Icons.Filled.Favorite,
+                                            contentDescription = null
+                                        )
+                                    },
+                                    label = { Text(screen.route) },
+                                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                                    onClick = {
+                                        navController.navigate(screen.route) {
+                                            // Pop up to the start destination of the graph to
+                                            // avoid building up a large stack of destinations
+                                            // on the back stack as users select items
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            // Avoid multiple copies of the same destination when
+                                            // reselecting the same item
+                                            launchSingleTop = true
+                                            // Restore state when reselecting a previously selected item
+                                            restoreState = true
+                                        }
+                                    }
+                                )
+                            }
+                        }
+
+                    }
+                    ) {
                         BlibberlyNavHost(
                             navController = navController,
                             modifier = Modifier.padding(it)

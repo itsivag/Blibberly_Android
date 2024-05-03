@@ -70,6 +70,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation("androidx.compose.material:material:1.6.7")
+
     //compose animation
     implementation("androidx.compose.animation:animation:1.6.6")
     //navigation

@@ -74,7 +74,9 @@ fun OTPScreen(modifier: Modifier, navController: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp), buttonText = "Continue", isButtonEnabled = isButtonEnabled
-        ) {}
+        ) {
+            navController.navigate("onboarding")
+        }
     }
 
 }
