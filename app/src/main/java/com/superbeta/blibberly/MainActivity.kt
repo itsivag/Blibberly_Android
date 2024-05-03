@@ -54,10 +54,10 @@ class MainActivity : ComponentActivity() {
 
 
         //creds manager
-        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(true)
-            .setServerClientId("612314404654-n01da2n4jg19ett4eu7k3pgvvvb337va.apps.googleusercontent.com")
-            .build()
+//        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+//            .setFilterByAuthorizedAccounts(true)
+//            .setServerClientId("612314404654-n01da2n4jg19ett4eu7k3pgvvvb337va.apps.googleusercontent.com")
+//            .build()
 
         //stream
         val apiKey = "y2st43tkq85k"
