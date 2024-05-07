@@ -11,13 +11,14 @@ import com.superbeta.blibberly.auth.register.RegisterScreen
 import com.superbeta.blibberly.chat.ChatScreen
 import com.superbeta.blibberly.home.HomeScreen
 import com.superbeta.blibberly.onBoarding.OnBoardingScreen
+import com.superbeta.blibberly.onBoarding.SkillsAndInterestsScreen
 import com.superbeta.blibberly.profile.ProfileScreen
 
 @Composable
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = "home"
+    startDestination: String = "onboarding"
 ) {
 
     NavHost(navController = navController, startDestination = startDestination) {
@@ -27,6 +28,14 @@ fun BlibberlyNavHost(
 
         composable("register") {
             RegisterScreen(modifier)
+        }
+
+        composable("onboarding") {
+            OnBoardingScreen(modifier, navController)
+        }
+
+        composable("skill_and_interests") {
+            SkillsAndInterestsScreen(modifier = modifier, navController = navController)
         }
 
         composable("home") {
@@ -40,9 +49,6 @@ fun BlibberlyNavHost(
             OTPScreen(modifier, navController)
         }
 
-        composable("onboarding") {
-            OnBoardingScreen(modifier, navController)
-        }
 
         composable("profile") {
             ProfileScreen()

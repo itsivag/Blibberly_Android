@@ -18,4 +18,10 @@ object FontProvider {
     val poppinsFontFamily = FontFamily(
         Font(googleFont = poppins, fontProvider = provider)
     )
+
+    private val bebas = GoogleFont("Bebas Neue")
+
+    val bebasFontFamily = FontFamily(
+        Font(googleFont = bebas, fontProvider = provider)
+    )
 }
