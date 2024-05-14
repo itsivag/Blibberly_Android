@@ -10,8 +10,10 @@ import com.superbeta.blibberly.auth.login.LoginScreen
 import com.superbeta.blibberly.auth.register.RegisterScreen
 import com.superbeta.blibberly.chat.ChatScreen
 import com.superbeta.blibberly.home.HomeScreen
-import com.superbeta.blibberly.onBoarding.OnBoardingScreen
-import com.superbeta.blibberly.onBoarding.SkillsAndInterestsScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.AboutMeScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.BioScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.OnBoardingScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.SkillsAndInterestsScreen
 import com.superbeta.blibberly.profile.ProfileScreen
 
 @Composable
@@ -34,9 +36,17 @@ fun BlibberlyNavHost(
             OnBoardingScreen(modifier, navController)
         }
 
+        composable("about_me") {
+            AboutMeScreen(modifier, navController)
+        }
+        composable("bio") {
+            BioScreen(modifier = modifier, navController = navController)
+        }
+
         composable("skill_and_interests") {
             SkillsAndInterestsScreen(modifier = modifier, navController = navController)
         }
+
 
         composable("home") {
             HomeScreen(modifier, navController)

@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.onBoarding
+package com.superbeta.blibberly.onBoarding.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -28,7 +28,7 @@ import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
-import com.superbeta.blibberly.ui.theme.PrimaryButton
+import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +44,6 @@ fun AboutMeScreen(modifier: Modifier, navController: NavHostController) {
     isButtonEnabled = true
 
     Column(modifier = modifier) {
-
 
         TopAppBar(
             title = { },

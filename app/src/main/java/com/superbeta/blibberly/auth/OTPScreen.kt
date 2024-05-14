@@ -33,7 +33,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.superbeta.blibberly.ui.theme.PrimaryButton
+import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

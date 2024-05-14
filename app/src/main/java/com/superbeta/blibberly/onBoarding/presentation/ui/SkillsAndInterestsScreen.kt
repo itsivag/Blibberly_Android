@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.onBoarding
+package com.superbeta.blibberly.onBoarding.presentation.ui
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -35,7 +35,7 @@ import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
-import com.superbeta.blibberly.ui.theme.PrimaryButton
+import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -184,9 +184,11 @@ fun SkillsAndInterestsScreen(modifier: Modifier, navController: NavHostControlle
                 PrimaryButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp), buttonText = "Next", isButtonEnabled = isButtonEnabled
+                        .padding(16.dp),
+                    buttonText = "Create My Profile!",
+                    isButtonEnabled = isButtonEnabled
                 ) {
-                    navController.navigate("onboarding")
+                    navController.navigate("home")
                 }
 
             }

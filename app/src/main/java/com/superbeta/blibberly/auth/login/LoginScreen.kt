@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
-import com.superbeta.blibberly.ui.theme.PrimaryButton
+import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
