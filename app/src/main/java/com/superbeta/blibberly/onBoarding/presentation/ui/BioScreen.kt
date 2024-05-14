@@ -22,24 +22,32 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.onBoarding.data.UserLocalDbService
+import com.superbeta.blibberly.onBoarding.data.model.UserDataModel
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.TextFieldWithLabel
+import com.superbeta.blibberly.utils.BlibberlyDatabase
+import com.superbeta.blibberly.utils.RoomInstanceProvider
+import kotlinx.coroutines.launch
 
 enum class HeightUnit {
     Cm, Inch,
@@ -74,6 +82,28 @@ fun BioScreen(modifier: Modifier, navController: NavController) {
     }
 
 
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        scope.launch {
+            val userData: UserDataModel? =
+                UserLocalDbService(RoomInstanceProvider.getDb(context)).getUser()
+            if (userData != null) {
+                name = TextFieldValue(userData.name)
+            }
+            if (userData != null) {
+                age = TextFieldValue(userData.age.toString())
+            }
+            if (userData != null) {
+                height = TextFieldValue(userData.height.toString())
+            }
+            if (userData != null) {
+                weight = TextFieldValue(userData.weight.toString())
+            }
+        }
+    }
+
     isButtonEnabled = true
 //        !(name.text.isEmpty() || age.text.isEmpty() || height.text.isEmpty() || weight.text.isEmpty())
 
@@ -99,7 +129,6 @@ fun BioScreen(modifier: Modifier, navController: NavController) {
                 )
                 .padding(16.dp)
         )
-
 
         Text(
             text = "\nYour Vitals\uD83C\uDF1F",
@@ -199,7 +228,22 @@ fun BioScreen(modifier: Modifier, navController: NavController) {
             buttonText = "Next",
             isButtonEnabled = isButtonEnabled
         ) {
-            navController.navigate("about_me")
+
+            scope.launch {
+                UserLocalDbService(RoomInstanceProvider.getDb(context)).setUSer(
+                    UserDataModel(
+                        phoneNum = "88383428234",
+                        name = name.text,
+                        age = age.text.toInt(),
+                        height = height.text.toDouble(),
+                        weight = weight.text.toDouble(),
+                        aboutMe = "sample",
+                        interests = listOf("one", "two", "three")
+                    )
+                )
+            }.invokeOnCompletion {
+                navController.navigate("about_me")
+            }
         }
     }
 
