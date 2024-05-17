@@ -15,6 +15,7 @@ import com.superbeta.blibberly.home.notifications.NotificationScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.AboutMeScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.BioScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.OnBoardingScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.PhotoScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.SkillsAndInterestsScreen
 import com.superbeta.blibberly.profile.ProfileScreen
 import com.superbeta.blibberly.utils.Screen
@@ -23,7 +24,7 @@ import com.superbeta.blibberly.utils.Screen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = Screen.Profile.route
+    startDestination: String = Screen.Photo.route
 ) {
 
     NavHost(navController = navController, startDestination = startDestination) {
@@ -51,6 +52,10 @@ fun BlibberlyNavHost(
 
         composable("skill_and_interests") {
             SkillsAndInterestsScreen(modifier = modifier, navController = navController)
+        }
+
+        composable(Screen.Photo.route) {
+            PhotoScreen(modifier,navController)
         }
 
         composable(Screen.Notification.route) {

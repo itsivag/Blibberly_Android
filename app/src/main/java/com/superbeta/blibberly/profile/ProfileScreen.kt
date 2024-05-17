@@ -15,9 +15,6 @@ fun ProfileScreen(modifier: Modifier, navController: NavHostController) {
 
     val userLocalDbService = UserLocalDbService(RoomInstanceProvider.getDb(context))
 
-
-
-
     LazyColumn(modifier = modifier) {
         item {
             ProfilePhotoScreen()
