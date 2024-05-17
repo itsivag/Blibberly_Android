@@ -17,13 +17,16 @@ fun ProfileScreen(modifier: Modifier, navController: NavHostController) {
 
 
 
-    LazyColumn(modifier = modifier) {
 
+    LazyColumn(modifier = modifier) {
         item {
-            ProfileAboutMeScreen(userLocalDbService)
+            ProfilePhotoScreen()
         }
         item {
             ProfileBioScreen(userLocalDbService)
+        }
+        item {
+            ProfileAboutMeScreen(userLocalDbService)
         }
     }
 }
