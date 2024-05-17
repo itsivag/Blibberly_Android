@@ -141,6 +141,7 @@ fun BioScreen(modifier: Modifier, navController: NavController) {
             onTextFieldValueChange = { value -> name = value },
             "Name",
             "Sankar",
+            keyboardOptions = KeyboardOptions()
         )
 
 

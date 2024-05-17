@@ -38,7 +38,7 @@ fun BlibberlyNavHost(
         composable("otp_enter") {
             OTPScreen(modifier, navController)
         }
-        composable("onboarding") {
+        composable(Screen.OnBoarding.route) {
             OnBoardingScreen(modifier, navController)
         }
 

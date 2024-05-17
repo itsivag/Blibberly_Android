@@ -8,7 +8,7 @@ import com.superbeta.blibberly.onBoarding.data.UserLocalDao
 import com.superbeta.blibberly.onBoarding.data.model.Converters
 import com.superbeta.blibberly.onBoarding.data.model.UserDataModel
 
-@Database(entities = [UserDataModel::class], version = 1)
+@Database(entities = [UserDataModel::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class BlibberlyDatabase : RoomDatabase() {
     abstract fun userLocalDao(): UserLocalDao
