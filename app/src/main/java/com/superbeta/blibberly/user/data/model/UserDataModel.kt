@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.onBoarding.data.model
+package com.superbeta.blibberly.user.data.model
 
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
@@ -8,7 +8,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,7 +30,9 @@ data class UserDataModel(
 
     @SerialName("aboutMe") @ColumnInfo("aboutMe") val aboutMe: String,
 
-    @SerialName("interests") @ColumnInfo("interests") val interests: List<String>
+    @SerialName("interests") @ColumnInfo("interests") val interests: List<String>,
+
+    @SerialName("photoUri") @ColumnInfo("photoUri") val photoUri: String
 )
 
 

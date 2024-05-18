@@ -1,6 +1,6 @@
-package com.superbeta.blibberly.onBoarding.data
+package com.superbeta.blibberly.user.data
 
-import com.superbeta.blibberly.onBoarding.data.model.UserDataModel
+import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.utils.BlibberlyDatabase
 
 class UserLocalDbService(private val db: BlibberlyDatabase) : UserLocalDao {
@@ -8,8 +8,8 @@ class UserLocalDbService(private val db: BlibberlyDatabase) : UserLocalDao {
         return db.userLocalDao().getUser()
     }
 
-    override suspend fun setUSer(userDataModel: UserDataModel) {
-        return db.userLocalDao().setUSer(userDataModel)
+    override suspend fun setUser(userDataModel: UserDataModel) {
+        return db.userLocalDao().setUser(userDataModel)
     }
 
     override suspend fun updateName(newName: String) {
@@ -30,5 +30,13 @@ class UserLocalDbService(private val db: BlibberlyDatabase) : UserLocalDao {
 
     override suspend fun updateAboutMe(newAboutMe: String) {
         return db.userLocalDao().updateAboutMe(newAboutMe)
+    }
+
+    override suspend fun updateInterests(newInterests: List<String>) {
+        return db.userLocalDao().updateInterests(newInterests)
+    }
+
+    override suspend fun updatePhotoUri(newPhotoUri: String) {
+        return db.userLocalDao().updatePhotoUri(newPhotoUri)
     }
 }

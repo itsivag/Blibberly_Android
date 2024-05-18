@@ -29,7 +29,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.onBoarding.data.UserLocalDbService
+import com.superbeta.blibberly.user.data.UserLocalDbService
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import kotlinx.coroutines.launch

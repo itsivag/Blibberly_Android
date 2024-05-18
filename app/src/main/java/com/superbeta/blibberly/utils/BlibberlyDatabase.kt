@@ -2,13 +2,12 @@ package com.superbeta.blibberly.utils
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.superbeta.blibberly.onBoarding.data.UserLocalDao
-import com.superbeta.blibberly.onBoarding.data.model.Converters
-import com.superbeta.blibberly.onBoarding.data.model.UserDataModel
+import com.superbeta.blibberly.user.data.UserLocalDao
+import com.superbeta.blibberly.user.data.model.Converters
+import com.superbeta.blibberly.user.data.model.UserDataModel
 
-@Database(entities = [UserDataModel::class], version = 2)
+@Database(entities = [UserDataModel::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class BlibberlyDatabase : RoomDatabase() {
     abstract fun userLocalDao(): UserLocalDao

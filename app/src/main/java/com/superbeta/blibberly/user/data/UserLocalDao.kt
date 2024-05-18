@@ -1,11 +1,10 @@
-package com.superbeta.blibberly.onBoarding.data
+package com.superbeta.blibberly.user.data
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
-import com.superbeta.blibberly.onBoarding.data.model.UserDataModel
+import com.superbeta.blibberly.user.data.model.UserDataModel
 
 @Dao
 interface UserLocalDao {
@@ -13,7 +12,7 @@ interface UserLocalDao {
     suspend fun getUser(): UserDataModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun setUSer(userDataModel: UserDataModel)
+    suspend fun setUser(userDataModel: UserDataModel)
 
     @Query("UPDATE userInfo set name = :newName")
     suspend fun updateName(newName: String)
@@ -29,4 +28,13 @@ interface UserLocalDao {
 
     @Query("UPDATE userInfo set aboutMe = :newAboutMe")
     suspend fun updateAboutMe(newAboutMe: String)
+
+    @Query("UPDATE userInfo set photoUri = :newInterests")
+    suspend fun updateInterests(newInterests: List<String>)
+
+    @Query("UPDATE userInfo set photoUri = :newPhotoUri")
+    suspend fun updatePhotoUri(newPhotoUri: String)
+
+
+
 }

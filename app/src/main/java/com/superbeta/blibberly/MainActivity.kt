@@ -98,6 +98,8 @@ class MainActivity : ComponentActivity() {
         }
 
         var isTopBarVisible by mutableStateOf(false)
+        var isBottomNavBarVisible by mutableStateOf(false)
+
         setContent {
             BlibberlyTheme {
                 Surface(
@@ -108,9 +110,22 @@ class MainActivity : ComponentActivity() {
                     when (navBackStackEntry?.destination?.route) {
                         Screen.Home.route -> {
                             isTopBarVisible = true
+                            isBottomNavBarVisible = true
                         }
+
+                        Screen.Profile.route -> {
+                            isTopBarVisible = false
+                            isBottomNavBarVisible = true
+                        }
+
+                        Screen.Chat.route -> {
+                            isTopBarVisible = false
+                            isBottomNavBarVisible = true
+                        }
+
                         else -> {
                             isTopBarVisible = false
+                            isBottomNavBarVisible = false
                         }
 
                     }
@@ -138,28 +153,29 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 })
-                        } else {
-                            CenterAlignedTopAppBar(
-                                title = {
-                                    Text(
-                                        text = navController.currentBackStackEntryAsState().value?.destination?.route.toString()
-                                            .capitalize(
-                                                Locale.current
-                                            )
-                                    )
-                                },
-                                navigationIcon = {
-                                    IconButton(onClick = { navController.popBackStack() }) {
-                                        Icon(
-                                            imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
-                                            contentDescription = "Back"
-                                        )
-                                    }
-                                },
-                            )
                         }
+//                        else {
+//                            CenterAlignedTopAppBar(
+//                                title = {
+//                                    Text(
+//                                        text = navController.currentBackStackEntryAsState().value?.destination?.route.toString()
+//                                            .capitalize(
+//                                                Locale.current
+//                                            )
+//                                    )
+//                                },
+//                                navigationIcon = {
+//                                    IconButton(onClick = { navController.popBackStack() }) {
+//                                        Icon(
+//                                            imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
+//                                            contentDescription = "Back"
+//                                        )
+//                                    }
+//                                },
+//                            )
+//                        }
                     }, bottomBar = {
-                        if (isTopBarVisible) BottomNavigation(backgroundColor = MaterialTheme.colorScheme.background) {
+                        if (isBottomNavBarVisible) BottomNavigation(backgroundColor = MaterialTheme.colorScheme.background) {
                             val mNavBackStackEntry by navController.currentBackStackEntryAsState()
                             val currentDestination = mNavBackStackEntry?.destination
 

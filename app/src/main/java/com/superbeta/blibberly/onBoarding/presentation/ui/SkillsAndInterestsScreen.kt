@@ -36,6 +36,7 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
+import com.superbeta.blibberly.utils.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -185,10 +186,10 @@ fun SkillsAndInterestsScreen(modifier: Modifier, navController: NavHostControlle
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    buttonText = "Create My Profile!",
+                    buttonText = "Continue",
                     isButtonEnabled = isButtonEnabled
                 ) {
-                    navController.navigate("home")
+                    navController.navigate(Screen.Photo.route)
                 }
 
             }

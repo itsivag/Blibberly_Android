@@ -24,7 +24,7 @@ import com.superbeta.blibberly.utils.Screen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = Screen.Photo.route
+    startDestination: String = Screen.Home.route
 ) {
 
     NavHost(navController = navController, startDestination = startDestination) {

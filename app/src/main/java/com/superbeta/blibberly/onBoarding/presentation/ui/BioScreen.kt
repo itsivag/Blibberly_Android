@@ -1,8 +1,7 @@
 package com.superbeta.blibberly.onBoarding.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,27 +9,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -39,14 +33,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.onBoarding.data.UserLocalDbService
-import com.superbeta.blibberly.onBoarding.data.model.UserDataModel
+import com.superbeta.blibberly.user.data.UserLocalDbService
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.TextFieldWithLabel
-import com.superbeta.blibberly.utils.BlibberlyDatabase
+import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.utils.RoomInstanceProvider
+import com.superbeta.blibberly.utils.Screen
 import kotlinx.coroutines.launch
 
 enum class HeightUnit {
@@ -91,14 +85,8 @@ fun BioScreen(modifier: Modifier, navController: NavController) {
                 UserLocalDbService(RoomInstanceProvider.getDb(context)).getUser()
             if (userData != null) {
                 name = TextFieldValue(userData.name)
-            }
-            if (userData != null) {
                 age = TextFieldValue(userData.age.toString())
-            }
-            if (userData != null) {
                 height = TextFieldValue(userData.height.toString())
-            }
-            if (userData != null) {
                 weight = TextFieldValue(userData.weight.toString())
             }
         }
@@ -230,19 +218,24 @@ fun BioScreen(modifier: Modifier, navController: NavController) {
         ) {
 
             scope.launch {
-                UserLocalDbService(RoomInstanceProvider.getDb(context)).setUSer(
-                    UserDataModel(
-                        phoneNum = "88383428234",
-                        name = name.text,
-                        age = age.text.toInt(),
-                        height = height.text.toDouble(),
-                        weight = weight.text.toDouble(),
-                        aboutMe = "sample",
-                        interests = listOf("one", "two", "three")
+                try {
+                    UserLocalDbService(RoomInstanceProvider.getDb(context)).setUser(
+                        UserDataModel(
+                            phoneNum = "88383428234",
+                            name = name.text,
+                            age = age.text.toInt(),
+                            height = height.text.toDouble(),
+                            weight = weight.text.toDouble(),
+                            aboutMe = "",
+                            interests = listOf("", "", ""),
+                            photoUri = ""
+                        )
                     )
-                )
+                } catch (e: Exception) {
+                    Log.e("Error Storing data in room BioScreen", e.toString())
+                }
             }.invokeOnCompletion {
-                navController.navigate("about_me")
+                navController.navigate(Screen.AboutMe.route)
             }
         }
     }
