@@ -1,14 +1,10 @@
 package com.superbeta.blibberly
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -19,17 +15,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -39,12 +34,7 @@ import com.superbeta.blibberly.ui.theme.BlibberlyTheme
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.utils.Screen
-import io.getstream.chat.android.client.ChatClient
-import io.getstream.chat.android.client.logger.ChatLogLevel
-import io.getstream.chat.android.models.User
-import io.getstream.chat.android.offline.plugin.factory.StreamOfflinePluginFactory
-import io.getstream.chat.android.state.plugin.config.StatePluginConfig
-import io.getstream.chat.android.state.plugin.factory.StreamStatePluginFactory
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -54,48 +44,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         val bottomNavScreens = listOf(
             Screen.Profile,
             Screen.Home,
             Screen.Chat,
         )
-        //supabase
-//        val supabase = SupabaseInstance.supabase
-//        val auth = supabase.auth
-
-        //stream
-        val apiKey = "y2st43tkq85k"
-        val token =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSJ9.NACLyT7Yejq55wB-54JXh61efspeZ__jDVL2lUSDW2M"
-
-        val offlinePluginFactory = StreamOfflinePluginFactory(applicationContext)
-        val statePluginFactory = StreamStatePluginFactory(
-            config = StatePluginConfig(
-                backgroundSyncEnabled = true, userPresence = true
-            ), appContext = applicationContext
-        )
-
-        val client = ChatClient.Builder(apiKey, applicationContext).logLevel(ChatLogLevel.ALL)
-            .withPlugins(offlinePluginFactory, statePluginFactory).build()
-
-        val user = User(
-            id = "1",
-            name = "Paranoid Android",
-            image = "https://bit.ly/2TIt8NR",
-        )
-
-        client.connectUser(
-            user = user,
-            token = token, // or client.devToken(userId); if auth is disabled for your app
-        ).enqueue { result ->
-            if (result.isSuccess) {
-                // Handle success
-                Log.i("itsivag", "logged in")
-            } else {
-                // Handler error
-                Log.i("itsivag", "error signing in")
-            }
-        }
 
         var isTopBarVisible by mutableStateOf(false)
         var isBottomNavBarVisible by mutableStateOf(false)
@@ -105,6 +59,13 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
+                    val scope = rememberCoroutineScope()
+                    LaunchedEffect(key1 = Unit) {
+                        scope.launch {
+//                            streamClient.createChannel()
+                        }
+                    }
+
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     when (navBackStackEntry?.destination?.route) {
@@ -120,7 +81,7 @@ class MainActivity : ComponentActivity() {
 
                         Screen.Chat.route -> {
                             isTopBarVisible = false
-                            isBottomNavBarVisible = true
+                            isBottomNavBarVisible = false
                         }
 
                         else -> {

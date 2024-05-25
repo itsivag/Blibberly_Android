@@ -21,10 +21,13 @@ import com.superbeta.blibberly.user.data.UserLocalDbService
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.components.TextFieldWithTrailingIcon
 import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly.user.presentation.UserViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileBioScreen(userLocalDbService: UserLocalDbService) {
+fun ProfileBioScreen(
+    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -47,7 +50,7 @@ fun ProfileBioScreen(userLocalDbService: UserLocalDbService) {
     LaunchedEffect(key1 = Unit) {
         scope.launch {
             val userData: UserDataModel? =
-                userLocalDbService.getUser()
+                viewModel.userState.value
             if (userData != null) {
                 name = TextFieldValue(userData.name)
             }
@@ -80,7 +83,7 @@ fun ProfileBioScreen(userLocalDbService: UserLocalDbService) {
             updateValueInRoom = {
                 scope.launch {
                     try {
-                        userLocalDbService.updateName(name.text)
+//                        userLocalDbService.updateName(name.text)
                     } catch (e: Exception) {
                         Log.e("Profile Data Store Error", e.toString())
                     }
@@ -96,7 +99,7 @@ fun ProfileBioScreen(userLocalDbService: UserLocalDbService) {
             updateValueInRoom = {
                 scope.launch {
                     try {
-                        userLocalDbService.updateAge(age.text.toInt())
+//                        userLocalDbService.updateAge(age.text.toInt())
                     } catch (e: Exception) {
                         Log.e("Profile Data Store Error", e.toString())
                     }
@@ -113,7 +116,7 @@ fun ProfileBioScreen(userLocalDbService: UserLocalDbService) {
             updateValueInRoom = {
                 scope.launch {
                     try {
-                        userLocalDbService.updateHeight(height.text.toDouble())
+//                        userLocalDbService.updateHeight(height.text.toDouble())
                     } catch (e: Exception) {
                         Log.e("Profile Data Store Error", e.toString())
                     }
@@ -129,7 +132,7 @@ fun ProfileBioScreen(userLocalDbService: UserLocalDbService) {
             updateValueInRoom = {
                 scope.launch {
                     try {
-                        userLocalDbService.updateWeight(weight.text.toDouble())
+//                        userLocalDbService.updateWeight(weight.text.toDouble())
                     } catch (e: Exception) {
                         Log.e("Profile Data Store Error", e.toString())
                     }

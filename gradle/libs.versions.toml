@@ -13,6 +13,8 @@ lifecycleRuntimeCompose = "2.7.0"
 coit-kt = "2.6.0"
 devtools-ksp = "1.9.0-1.0.12"
 google-services = "4.4.1"
+appcompat = "1.6.1"
+material = "1.12.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,6 +36,8 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 coil-kt = { group = "io.coil-kt", name = "coil-compose", version.ref = "coit-kt" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 
 [plugins]
@@ -41,4 +45,5 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "devtools-ksp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 

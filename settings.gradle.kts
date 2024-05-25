@@ -16,10 +16,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://www.jitpack.io" ) }
+
     }
 
 }
 
 rootProject.name = "Blibberly"
 include(":app")
- 
+include(":blibberly_chat")

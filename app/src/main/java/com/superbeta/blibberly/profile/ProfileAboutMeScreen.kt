@@ -32,10 +32,13 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.user.data.UserLocalDbService
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
+import com.superbeta.blibberly.user.presentation.UserViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileAboutMeScreen(userLocalDbService: UserLocalDbService) {
+fun ProfileAboutMeScreen(
+    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+) {
 
     var aboutMe by remember {
         mutableStateOf("")

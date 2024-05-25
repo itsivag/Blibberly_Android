@@ -71,7 +71,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("androidx.compose.material:material:1.6.7")
-
+    implementation("androidx.compose.material:material-icons-extended")
     //compose animation
     implementation("androidx.compose.animation:animation:1.6.6")
     //navigation
@@ -97,20 +97,9 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
-    //stream
-    val stream_version = "6.3.1"
-    implementation ("io.getstream:stream-chat-android-compose:$stream_version")
-    implementation ("io.getstream:stream-chat-android-client:$stream_version")
-    implementation ("io.getstream:stream-chat-android-state:$stream_version")
-    implementation ("io.getstream:stream-chat-android-offline:$stream_version")
-
-    //creds manager
-//    implementation ("androidx.credentials:credentials:1.1.0")
-//    implementation ("androidx.credentials:credentials-play-services-auth:1.1.0")
-//    implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.0")
-
     //fonts
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.1")
 
-    //image picker
+    ////////
+
 }
