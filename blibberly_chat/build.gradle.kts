@@ -61,4 +61,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
+    //navigation
+    implementation(libs.navigation.compose)
+
 }

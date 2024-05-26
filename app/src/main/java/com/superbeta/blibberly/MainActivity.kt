@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
         val bottomNavScreens = listOf(
             Screen.Profile,
             Screen.Home,
-            Screen.Chat,
+            Screen.ChatList,
         )
 
         var isTopBarVisible by mutableStateOf(false)
@@ -79,9 +79,9 @@ class MainActivity : ComponentActivity() {
                             isBottomNavBarVisible = true
                         }
 
-                        Screen.Chat.route -> {
+                        Screen.ChatList.route -> {
                             isTopBarVisible = false
-                            isBottomNavBarVisible = false
+                            isBottomNavBarVisible = true
                         }
 
                         else -> {
@@ -147,7 +147,7 @@ class MainActivity : ComponentActivity() {
                                     icon = {
                                         val iconDrawable = when (screen.route) {
                                             Screen.Profile.route -> R.drawable.profile
-                                            Screen.Chat.route -> R.drawable.chat_history
+                                            Screen.ChatList.route -> R.drawable.chat_history
                                             Screen.Home.route -> R.drawable.home
 
                                             else -> {

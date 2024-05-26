@@ -2,7 +2,9 @@ package com.superbeta.blibberly.utils
 
 sealed class Screen(val route: String) {
     data object Profile : Screen("profile")
-    data object Chat : Screen("chat")
+    data object ChatList : Screen("chat_list")
+
+    data object Message : Screen("messages")
     data object Home : Screen("home")
     data object Notification : Screen("notifications")
     data object Filter : Screen("filters")

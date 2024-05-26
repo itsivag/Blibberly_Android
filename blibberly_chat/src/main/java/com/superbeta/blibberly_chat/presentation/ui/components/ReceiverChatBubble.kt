@@ -36,12 +36,12 @@ fun ReceiverChatBubble() {
                 .padding(end = 16.dp)
                 .background(
                     color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(
-                        topStart = 12.dp, topEnd = 12.dp, bottomEnd = 12.dp, bottomStart = 0.dp
+                        topStart = 16.dp, topEnd = 16.dp, bottomEnd = 16.dp, bottomStart = 0.dp
                     )
                 )
                 .padding(8.dp), horizontalAlignment = Alignment.End
         ) {
-            Text(text = "Yeah I'm fine", color = Color.Black, fontSize = 16.sp)
+            Text(text = "Yeah I'm fine", color = Color.Black, fontSize = 14.sp)
             Text(
                 text = "11:52 PM",
                 fontSize = 12.sp,

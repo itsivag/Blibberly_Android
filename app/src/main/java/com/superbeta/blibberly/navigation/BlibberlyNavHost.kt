@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import com.superbeta.blibberly.auth.OTPScreen
 import com.superbeta.blibberly.auth.login.LoginScreen
 import com.superbeta.blibberly.auth.register.RegisterScreen
-import com.superbeta.blibberly.chat.ChatScreen
 import com.superbeta.blibberly.home.HomeScreen
 import com.superbeta.blibberly.home.filter.FilterScreen
 import com.superbeta.blibberly.home.notifications.NotificationScreen
@@ -19,6 +18,8 @@ import com.superbeta.blibberly.onBoarding.presentation.ui.PhotoScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.SkillsAndInterestsScreen
 import com.superbeta.blibberly.profile.ProfileScreen
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_chat.presentation.ui.MessageScreen
+import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
 
 @Composable
 fun BlibberlyNavHost(
@@ -55,7 +56,7 @@ fun BlibberlyNavHost(
         }
 
         composable(Screen.Photo.route) {
-            PhotoScreen(modifier,navController)
+            PhotoScreen(modifier, navController)
         }
 
         composable(Screen.Notification.route) {
@@ -65,8 +66,12 @@ fun BlibberlyNavHost(
         composable(Screen.Home.route) {
             HomeScreen(modifier, navController)
         }
-        composable(Screen.Chat.route) {
-            ChatScreen(modifier, navController)
+        composable(Screen.ChatList.route) {
+            ChatListScreen(modifier,navController)
+        }
+
+        composable(Screen.Message.route) {
+            MessageScreen(modifier,navController)
         }
         composable(Screen.Filter.route) {
             FilterScreen(modifier, navController)

@@ -3,8 +3,8 @@ package com.superbeta.blibberly_chat.presentation.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.data.Message
 import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
@@ -31,9 +33,8 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubbl
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
-fun ChatScreen() {
+fun MessageScreen(modifier: Modifier, navController: NavHostController) {
 
     val messages = listOf<Message>(
         Message(
@@ -73,12 +74,12 @@ fun ChatScreen() {
             isRead = false
         ),
     )
-    
+
     val currUser = "1"
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(
             navigationIcon = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.arrow_back),
                         contentDescription = "Back",
@@ -86,12 +87,17 @@ fun ChatScreen() {
                 }
             },
             title = {
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.AccountCircle,
                         contentDescription = "Profile picture",
+                        modifier = Modifier.size(48.dp)
                     )
-                    Text(text = "John lawda", modifier = Modifier.padding(horizontal = 8.dp))
+                    Text(
+                        text = "John lawda",
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
                 }
             },
             actions = {
@@ -123,6 +129,7 @@ fun ChatScreen() {
             Row(
                 modifier = Modifier
                     .align(alignment = Alignment.BottomCenter)
+                    .padding(bottom = 8.dp)
             ) {
                 MessageTextField()
             }

@@ -39,7 +39,7 @@ fun MessageTextField() {
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth(),
-        ) {
+    ) {
 
         OutlinedTextField(
             modifier = Modifier.weight(1f),
@@ -47,10 +47,10 @@ fun MessageTextField() {
             onValueChange = { value -> message = value },
             shape = RoundedCornerShape(24.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.Unspecified,
-                errorBorderColor = Color.Unspecified,
-                focusedBorderColor = Color.Unspecified,
-                disabledBorderColor = Color.Unspecified,
+                unfocusedBorderColor = textFieldContainerColor,
+                errorBorderColor = textFieldContainerColor,
+                focusedBorderColor = textFieldContainerColor,
+                disabledBorderColor = textFieldContainerColor,
                 focusedContainerColor = textFieldContainerColor,
                 disabledContainerColor = textFieldContainerColor,
                 errorContainerColor = textFieldContainerColor,

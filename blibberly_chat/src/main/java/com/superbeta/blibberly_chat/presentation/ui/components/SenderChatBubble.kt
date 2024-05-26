@@ -50,12 +50,12 @@ fun SenderChatBubble() {
                 .padding(start = 16.dp)
                 .background(
                     color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(
-                        topStart = 12.dp, topEnd = 12.dp, bottomEnd = 0.dp, bottomStart = 12.dp
+                        topStart = 16.dp, topEnd = 16.dp, bottomEnd = 0.dp, bottomStart = 16.dp
                     )
                 )
                 .padding(8.dp), horizontalAlignment = Alignment.End
         ) {
-            Text(text = "Hi Bro, How are you?", color = Color.White, fontSize = 16.sp)
+            Text(text = "Hi Bro, How are you?", color = Color.White, fontSize = 14.sp)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
