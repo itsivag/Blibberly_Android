@@ -16,10 +16,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -36,18 +38,22 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
+import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SkillsAndInterestsScreen(modifier: Modifier, navController: NavHostController) {
+fun SkillsAndInterestsScreen(
+    modifier: Modifier, navController: NavHostController,
+    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+
+) {
 
     var isButtonEnabled by remember {
         mutableStateOf(false)
-    }
-
-    var aboutMe by remember {
-        mutableStateOf(TextFieldValue())
     }
 
     val selectedInterests = remember {
@@ -80,120 +86,131 @@ fun SkillsAndInterestsScreen(modifier: Modifier, navController: NavHostControlle
 
     val haptic = LocalHapticFeedback.current
 
-    if (selectedInterests.size == 3)
-        isButtonEnabled = true
-    else
-        isButtonEnabled = false
+    isButtonEnabled = selectedInterests.size == 3
 
-    Column(modifier = modifier) {
-//        Spacer(modifier = Modifier.weight(1f))
+    val scope = rememberCoroutineScope()
 
-        TopAppBar(
-            title = { },
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
-                        contentDescription = "back"
-                    )
+    LaunchedEffect(key1 = Unit) {
+        scope.launch {
+            viewModel.getUser()
+            val userData: UserDataModel? = viewModel.userState.value
+            if (userData != null) {
+                for (i in userData.interests) {
+                    if (i.isNotEmpty()) {
+                        selectedInterests.add(i)
+                    }
                 }
-            })
+            }
+        }
+    }
 
-        LazyColumn {
-            item {
-                Text(
-                    text = "Your interests could spark great connections! Your skills might even unlock chats with similar folks!",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.secondary,
-                            shape = RoundedCornerShape(12.dp)
+    LazyColumn(modifier = modifier) {
+        item {
+            TopAppBar(
+                title = { },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
+                            contentDescription = "back"
                         )
-                        .padding(16.dp)
-                )
-            }
+                    }
+                })
 
-            item {
+        }
+        item {
+            Text(
+                text = "Your interests could spark great connections! Your skills might even unlock chats with similar folks!",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .padding(16.dp)
+            )
+        }
 
-
-                Text(
-                    text = "Share your interests! 🌟",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
+        item {
+            Text(
+                text = "Share your interests! 🌟",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
 
 
 //                LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Adaptive(120.dp)) {
-            items(count = interests.size) { i ->
-                val currInterest = interests[i]
-                val isChecked = remember { mutableStateOf(false) }
+        items(count = interests.size) { i ->
+            val currInterest = interests[i]
 
-                Text(
-                    text = currInterest,
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .background(
-                            color = if (!isChecked.value) Color.White else ColorPrimary.copy(alpha = 0.3f),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                        .border(
-                            width = 1.dp,
-                            brush =
-                            if (!isChecked.value)
-                                Brush.horizontalGradient(listOf(ColorDisabled, ColorDisabled))
-                            else
-                                Brush.horizontalGradient(listOf(ColorPrimary, ColorPrimary)),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                        .padding(vertical = 12.dp, horizontal = 16.dp)
-                        .clickable {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            if (isChecked.value) {
-                                selectedInterests.remove(currInterest)
-                            } else {
-                                if (selectedInterests.size < 3) {
-                                    selectedInterests.add(currInterest)
-                                }
+            Text(
+                text = currInterest,
+                modifier = Modifier
+                    .padding(4.dp)
+                    .background(
+                        color = if (!selectedInterests.contains(currInterest)) Color.White else ColorPrimary.copy(
+                            alpha = 0.3f
+                        ),
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        brush =
+                        if (!selectedInterests.contains(currInterest))
+                            Brush.horizontalGradient(listOf(ColorDisabled, ColorDisabled))
+                        else
+                            Brush.horizontalGradient(listOf(ColorPrimary, ColorPrimary)),
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .padding(vertical = 12.dp, horizontal = 16.dp)
+                    .clickable {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        if (selectedInterests.contains(currInterest)) {
+                            selectedInterests.remove(currInterest)
+                        } else {
+                            if (selectedInterests.size < 3) {
+                                selectedInterests.add(currInterest)
                             }
-                            isChecked.value = !isChecked.value
-                            Log.i("interests2", selectedInterests.toString())
-                        },
-                    style = MaterialTheme.typography.labelLarge,
-                )
-            }
+                        }
+//                        isChecked.value = !isChecked.value
+                        Log.i("interests2", selectedInterests.toString())
+                    },
+                style = MaterialTheme.typography.labelLarge,
+            )
+        }
 
 //                }
 
-            item {
+        item {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                textAlign = TextAlign.End,
+                text = "${selectedInterests.size}/3",
+                style = MaterialTheme.typography.titleLarge,
+                color = if (selectedInterests.size == 3) ColorPrimary else ColorDisabled
+            )
 
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    textAlign = TextAlign.End,
-                    text = "${selectedInterests.size}/3",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = if (selectedInterests.size == 3) ColorPrimary else ColorDisabled
-                )
-
-            }
-
-            item {
-
-                PrimaryButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    buttonText = "Continue",
-                    isButtonEnabled = isButtonEnabled
-                ) {
-                    navController.navigate(Screen.Photo.route)
-                }
-
-            }
         }
 
+        item {
+            PrimaryButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                buttonText = "Continue",
+                isButtonEnabled = isButtonEnabled
+            ) {
+                scope.launch {
+                    viewModel.updateInterests(selectedInterests)
+                }
+                navController.navigate(Screen.Photo.route)
+            }
+
+        }
     }
+
 }

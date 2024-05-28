@@ -17,15 +17,28 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     private val _userState = MutableStateFlow<UserDataModel?>(null)
     val userState: MutableStateFlow<UserDataModel?> = _userState
 
-    init {
+    suspend fun getUser() {
+        _userState.value = mUserRepository.getUser()
+    }
+
+    suspend fun setUser(userDataModel: UserDataModel) {
         viewModelScope.launch {
-            getUser()
+            mUserRepository.setUser(userDataModel)
         }
     }
 
-    private suspend fun getUser() {
-        _userState.value = mUserRepository.getUser()
+    suspend fun updateAboutMe(newAboutMe: String) {
+        viewModelScope.launch {
+            mUserRepository.updateAboutMe(newAboutMe)
+        }
     }
+
+    suspend fun updateInterests(newInterests: List<String>) {
+        viewModelScope.launch {
+            mUserRepository.updateInterests(newInterests)
+        }
+    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

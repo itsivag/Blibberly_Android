@@ -29,7 +29,7 @@ interface UserLocalDao {
     @Query("UPDATE userInfo set aboutMe = :newAboutMe")
     suspend fun updateAboutMe(newAboutMe: String)
 
-    @Query("UPDATE userInfo set photoUri = :newInterests")
+    @Query("UPDATE userInfo set interests = :newInterests")
     suspend fun updateInterests(newInterests: List<String>)
 
     @Query("UPDATE userInfo set photoUri = :newPhotoUri")

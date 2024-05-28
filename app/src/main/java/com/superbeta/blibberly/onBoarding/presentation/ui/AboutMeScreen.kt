@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.onBoarding.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,12 +16,15 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -29,10 +33,17 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
+import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly.utils.Screen
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutMeScreen(modifier: Modifier, navController: NavHostController) {
+fun AboutMeScreen(
+    modifier: Modifier, navController: NavHostController,
+    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+) {
     var isButtonEnabled by remember {
         mutableStateOf(false)
     }
@@ -41,7 +52,19 @@ fun AboutMeScreen(modifier: Modifier, navController: NavHostController) {
         mutableStateOf(TextFieldValue())
     }
 
+    val scope = rememberCoroutineScope()
     isButtonEnabled = true
+
+    LaunchedEffect(key1 = Unit) {
+        scope.launch {
+            viewModel.getUser()
+            val userData: UserDataModel? = viewModel.userState.value
+            if (userData != null) {
+                aboutMe = TextFieldValue(userData.aboutMe)
+            }
+        }
+    }
+
 
     Column(modifier = modifier) {
 
@@ -103,7 +126,11 @@ fun AboutMeScreen(modifier: Modifier, navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(16.dp), buttonText = "Next", isButtonEnabled = isButtonEnabled
         ) {
-            navController.navigate("skill_and_interests")
+            scope.launch {
+                viewModel.updateAboutMe(aboutMe.text)
+            }.invokeOnCompletion {
+                navController.navigate(Screen.SkillsAndInterests.route)
+            }
         }
     }
 

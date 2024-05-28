@@ -25,33 +25,33 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = Screen.Home.route
+    startDestination: String = Screen.OnBoarding.route
 ) {
 
     NavHost(navController = navController, startDestination = startDestination) {
-        composable("login") {
+        composable(Screen.Login.route) {
             LoginScreen(modifier, navController)
         }
 
-        composable("register") {
+        composable(Screen.Register.route) {
             RegisterScreen(modifier)
         }
 
-        composable("otp_enter") {
+        composable(Screen.OTPEnter.route) {
             OTPScreen(modifier, navController)
         }
         composable(Screen.OnBoarding.route) {
             OnBoardingScreen(modifier, navController)
         }
 
-        composable("about_me") {
+        composable(Screen.AboutMe.route) {
             AboutMeScreen(modifier, navController)
         }
-        composable("bio") {
+        composable(Screen.Bio.route) {
             BioScreen(modifier = modifier, navController = navController)
         }
 
-        composable("skill_and_interests") {
+        composable(Screen.SkillsAndInterests.route) {
             SkillsAndInterestsScreen(modifier = modifier, navController = navController)
         }
 
@@ -67,11 +67,11 @@ fun BlibberlyNavHost(
             HomeScreen(modifier, navController)
         }
         composable(Screen.ChatList.route) {
-            ChatListScreen(modifier,navController)
+            ChatListScreen(modifier, navController)
         }
 
         composable(Screen.Message.route) {
-            MessageScreen(modifier,navController)
+            MessageScreen(modifier, navController)
         }
         composable(Screen.Filter.route) {
             FilterScreen(modifier, navController)

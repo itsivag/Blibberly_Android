@@ -35,14 +35,7 @@ fun ProfileScreen(
 
     LazyColumn(modifier = modifier) {
         item {
-            CenterAlignedTopAppBar(title = { Text(text = "Profile") }, navigationIcon = {
-//                IconButton(onClick = { navController.popBackStack() }) {
-//                    Icon(
-//                        imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
-//                        contentDescription = "back"
-//                    )
-//                }
-            })
+            TopAppBar(title = { Text(text = "Profile") })
         }
 
         item {

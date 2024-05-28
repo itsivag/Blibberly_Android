@@ -39,6 +39,7 @@ import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.TextFieldWithLabel
 import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.RoomInstanceProvider
 import com.superbeta.blibberly.utils.Screen
 import kotlinx.coroutines.launch
@@ -54,7 +55,11 @@ enum class WeightUnit {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BioScreen(modifier: Modifier, navController: NavController) {
+fun BioScreen(
+    modifier: Modifier, navController: NavController,
+    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+) {
+
     var isButtonEnabled by remember {
         mutableStateOf(false)
     }
@@ -81,8 +86,9 @@ fun BioScreen(modifier: Modifier, navController: NavController) {
 
     LaunchedEffect(key1 = Unit) {
         scope.launch {
-            val userData: UserDataModel? =
-                UserLocalDbService(RoomInstanceProvider.getDb(context)).getUser()
+            viewModel.getUser()
+            val userData: UserDataModel? = viewModel.userState.value
+            Log.i("sivag", userData.toString())
             if (userData != null) {
                 name = TextFieldValue(userData.name)
                 age = TextFieldValue(userData.age.toString())
@@ -216,10 +222,9 @@ fun BioScreen(modifier: Modifier, navController: NavController) {
             buttonText = "Next",
             isButtonEnabled = isButtonEnabled
         ) {
-
             scope.launch {
                 try {
-                    UserLocalDbService(RoomInstanceProvider.getDb(context)).setUser(
+                    viewModel.setUser(
                         UserDataModel(
                             phoneNum = "88383428234",
                             name = name.text,
