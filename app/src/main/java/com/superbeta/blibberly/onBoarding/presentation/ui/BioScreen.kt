@@ -223,19 +223,23 @@ fun BioScreen(
             isButtonEnabled = isButtonEnabled
         ) {
             scope.launch {
+                viewModel.getUser()
+                val userData: UserDataModel? = viewModel.userState.value
+
                 try {
-                    viewModel.setUser(
-                        UserDataModel(
-                            phoneNum = "88383428234",
-                            name = name.text,
-                            age = age.text.toInt(),
-                            height = height.text.toDouble(),
-                            weight = weight.text.toDouble(),
-                            aboutMe = "",
-                            interests = listOf("", "", ""),
-                            photoUri = ""
+                    if (userData != null)
+                        viewModel.setUser(
+                            UserDataModel(
+                                phoneNum = "88383428234",
+                                name = name.text,
+                                age = age.text.toInt(),
+                                height = height.text.toDouble(),
+                                weight = weight.text.toDouble(),
+                                aboutMe = userData.aboutMe,
+                                interests = userData.interests,
+                                photoUri = userData.photoUri
+                            )
                         )
-                    )
                 } catch (e: Exception) {
                     Log.e("Error Storing data in room BioScreen", e.toString())
                 }

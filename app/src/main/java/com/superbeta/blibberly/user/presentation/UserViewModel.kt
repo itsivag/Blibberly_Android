@@ -1,6 +1,7 @@
 package com.superbeta.blibberly.user.presentation
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,8 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.repo.MUserRepository
 import com.superbeta.blibberly.user.repo.MUserRepositoryImpl
 import com.superbeta.blibberly.utils.RoomInstanceProvider
+import com.superbeta.blibberly.utils.SupabaseInstance
+import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -39,6 +42,24 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
         }
     }
 
+    fun updatePhotoUri(photoUri: String) {
+        viewModelScope.launch {
+            mUserRepository.updatePhotoUri(photoUri)
+        }
+    }
+
+    suspend fun uploadUserToDB() {
+        viewModelScope.launch {
+            val u: UserDataModel? = userState.value
+            if (u != null) {
+                try {
+                    SupabaseInstance.supabase.from("Users").insert(u)
+                } catch (e: Exception) {
+                    Log.e("Database Upload Error", e.toString())
+                }
+            }
+        }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

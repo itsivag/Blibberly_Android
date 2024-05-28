@@ -95,12 +95,13 @@ fun SkillsAndInterestsScreen(
             viewModel.getUser()
             val userData: UserDataModel? = viewModel.userState.value
             if (userData != null) {
-                for (i in userData.interests) {
+                for (i: String in userData.interests) {
                     if (i.isNotEmpty()) {
                         selectedInterests.add(i)
                     }
                 }
             }
+//            Log.i("sivag", selectedInterests.getoString())
         }
     }
 

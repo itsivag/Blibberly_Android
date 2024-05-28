@@ -1,6 +1,7 @@
 package com.superbeta.blibberly.profile
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,9 +17,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,9 +38,15 @@ import coil.imageLoader
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.extensions.dashedBorder
+import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly.user.presentation.UserViewModel
+import kotlinx.coroutines.launch
+import java.net.URI
 
 @Composable
-fun ProfilePhotoScreen() {
+fun ProfilePhotoScreen(
+    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+) {
 
     var photoUri: Uri? by remember { mutableStateOf(null) }
 
@@ -50,6 +59,20 @@ fun ProfilePhotoScreen() {
     val screenHeight = config.screenHeightDp.dp
 
     val imageLoader = LocalContext.current.imageLoader
+
+
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = Unit) {
+        scope.launch {
+            viewModel.getUser()
+            val userData: UserDataModel? = viewModel.userState.value
+            if (userData != null) {
+                photoUri = Uri.parse(userData.photoUri)
+            }
+            Log.i("sivag", photoUri.toString())
+        }
+    }
 
     Text(
         text = "Photo",
@@ -90,11 +113,15 @@ fun ProfilePhotoScreen() {
                 .align(alignment = Alignment.BottomEnd)
                 .padding(16.dp),
             onClick = {
-                imagePickerLauncher.launch(
-                    PickVisualMediaRequest(
-                        mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                scope.launch {
+                    imagePickerLauncher.launch(
+                        PickVisualMediaRequest(
+                            mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
+                        )
                     )
-                )
+                }.invokeOnCompletion {
+                    viewModel.updatePhotoUri(photoUri.toString())
+                }
             }) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.edit),
