@@ -10,7 +10,7 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.repo.MUserRepository
 import com.superbeta.blibberly.user.repo.MUserRepositoryImpl
 import com.superbeta.blibberly.utils.RoomInstanceProvider
-import com.superbeta.blibberly.utils.SupabaseInstance
+import com.superbeta.blibberly.utils.supabase
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -50,13 +50,18 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
 
     suspend fun uploadUserToDB() {
         viewModelScope.launch {
+            getUser()
             val u: UserDataModel? = userState.value
             if (u != null) {
                 try {
-                    SupabaseInstance.supabase.from("Users").insert(u)
+                    supabase.from("Users").insert(u)
+                    Log.i("Database Upload Successful", "")
                 } catch (e: Exception) {
                     Log.e("Database Upload Error", e.toString())
                 }
+            } else {
+                Log.e("Database Upload Error", "User Data is null")
+
             }
         }
     }

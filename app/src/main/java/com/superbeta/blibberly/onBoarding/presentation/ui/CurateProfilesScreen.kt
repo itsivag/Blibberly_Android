@@ -38,7 +38,7 @@ fun CurateProfilesScreen(
         scope.launch {
             viewModel.uploadUserToDB()
         }.invokeOnCompletion {
-//            navController.navigate(Screen.Home.route)
+            navController.navigate(Screen.Home.route)
         }
     }
 
@@ -47,13 +47,10 @@ fun CurateProfilesScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
         LottieAnimation(
             modifier = Modifier.padding(16.dp),
             composition = composition,
             progress = { progress },
-
             )
     }
 }

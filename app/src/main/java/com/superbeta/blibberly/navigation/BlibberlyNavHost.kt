@@ -26,7 +26,7 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = Screen.CurateProfile.route
+    startDestination: String = Screen.OnBoarding.route
 ) {
 
     NavHost(navController = navController, startDestination = startDestination) {

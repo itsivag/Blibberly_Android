@@ -75,14 +75,16 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     //compose animation
     implementation("androidx.compose.animation:animation:1.6.6")
+
     //navigation
     implementation(libs.navigation.compose)
 
+    //ktor client for supabase
+    implementation("io.ktor:ktor-client-android:2.3.11")
+
     //supabase
-    implementation("io.github.jan-tennert.supabase:compose-auth:2.3.0")
-    implementation("io.github.jan-tennert.supabase:realtime-kt:2.3.0")
-    implementation("io.github.jan-tennert.supabase:storage-kt:2.3.0")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.3.0")
+    implementation(platform("io.github.jan-tennert.supabase:bom:2.4.2"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
 
     //gson
     implementation("com.google.code.gson:gson:2.10.1")
@@ -102,6 +104,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.1")
 
     //lottie
-    implementation ("com.airbnb.android:lottie-compose:6.4.1")
+    implementation("com.airbnb.android:lottie-compose:6.4.1")
 
 }

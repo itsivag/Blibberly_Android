@@ -20,10 +20,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -56,7 +58,8 @@ enum class WeightUnit {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BioScreen(
-    modifier: Modifier, navController: NavController,
+    modifier: Modifier,
+    navController: NavController,
     viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
 ) {
 
@@ -80,6 +83,17 @@ fun BioScreen(
         mutableStateOf(TextFieldValue())
     }
 
+    var aboutMe by remember {
+        mutableStateOf("")
+    }
+
+    var photoUri by remember {
+        mutableStateOf("")
+    }
+
+    var interests = remember {
+        mutableStateListOf<String>()
+    }
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -94,6 +108,9 @@ fun BioScreen(
                 age = TextFieldValue(userData.age.toString())
                 height = TextFieldValue(userData.height.toString())
                 weight = TextFieldValue(userData.weight.toString())
+                aboutMe = userData.aboutMe
+                interests.addAll(userData.interests)
+                photoUri = userData.photoUri
             }
         }
     }
@@ -172,6 +189,7 @@ fun BioScreen(
                         focusedBorderColor = ColorPrimary,
                         unfocusedBorderColor = ColorDisabled,
                     ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     trailingIcon = {
                         Text(
                             text = "cm",
@@ -195,6 +213,7 @@ fun BioScreen(
                     modifier = Modifier.padding(16.dp),
                     onValueChange = { value -> weight = value },
                     shape = RoundedCornerShape(14.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     placeholder = {
                         Text(
                             text = "80",
@@ -223,23 +242,20 @@ fun BioScreen(
             isButtonEnabled = isButtonEnabled
         ) {
             scope.launch {
-                viewModel.getUser()
-                val userData: UserDataModel? = viewModel.userState.value
-
                 try {
-                    if (userData != null)
-                        viewModel.setUser(
-                            UserDataModel(
-                                phoneNum = "88383428234",
-                                name = name.text,
-                                age = age.text.toInt(),
-                                height = height.text.toDouble(),
-                                weight = weight.text.toDouble(),
-                                aboutMe = userData.aboutMe,
-                                interests = userData.interests,
-                                photoUri = userData.photoUri
-                            )
+                    viewModel.setUser(
+                        UserDataModel(
+                            phoneNum = "88383428234",
+                            name = name.text,
+                            age = age.text.toInt(),
+                            height = height.text.toDouble(),
+                            weight = weight.text.toDouble(),
+                            aboutMe = aboutMe,
+                            interests = interests,
+                            photoUri = photoUri
                         )
+                    )
+
                 } catch (e: Exception) {
                     Log.e("Error Storing data in room BioScreen", e.toString())
                 }
