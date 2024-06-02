@@ -24,6 +24,8 @@ data class UserDataModel(
 
     @SerialName("age") @ColumnInfo("age") val age: Int,
 
+    @SerialName("gender") @ColumnInfo("gender") val gender: String,
+
     @SerialName("height") @ColumnInfo("height") val height: Double,
 
     @SerialName("weight") @ColumnInfo("weight") val weight: Double,

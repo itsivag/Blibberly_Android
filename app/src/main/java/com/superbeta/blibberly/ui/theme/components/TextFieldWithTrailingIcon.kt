@@ -1,6 +1,7 @@
 package com.superbeta.blibberly.ui.theme.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -85,7 +88,7 @@ fun TextFieldWithTrailingIcon(
                 )
         }
     ) {
-        TextField(
+        OutlinedTextField(
             maxLines = 1,
             value = textFieldValue,
             onValueChange = onTextFieldValueChange,
@@ -101,22 +104,16 @@ fun TextFieldWithTrailingIcon(
                     color = ColorDisabled,
                 )
             },
-            colors = TextFieldDefaults.colors(
-                unfocusedTextColor = ColorDisabled,
-                focusedContainerColor = Color.Unspecified,
-                disabledContainerColor = Color.Unspecified,
-                errorContainerColor = Color.Unspecified,
-                unfocusedContainerColor = Color.Unspecified,
-                focusedIndicatorColor = Color.Unspecified,
-                errorIndicatorColor = Color.Unspecified,
-                disabledIndicatorColor = Color.Unspecified,
-                unfocusedIndicatorColor = Color.Unspecified
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent
             ),
             keyboardOptions = keyboardOptions
         )
 
         AnimatedVisibility(visible = isFocused) {
-
             Row(modifier = Modifier.padding(end = 4.dp)) {
                 IconButton(onClick = {
                     scope.launch {

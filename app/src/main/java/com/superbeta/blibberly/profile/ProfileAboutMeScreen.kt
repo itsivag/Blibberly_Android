@@ -60,6 +60,7 @@ fun ProfileAboutMeScreen(
 
     LaunchedEffect(key1 = Unit) {
         scope.launch {
+            viewModel.getUser()
             val userData: UserDataModel? =
                 viewModel.userState.value
             if (userData != null) {

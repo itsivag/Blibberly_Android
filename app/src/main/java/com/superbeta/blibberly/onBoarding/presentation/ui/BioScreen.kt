@@ -2,11 +2,13 @@ package com.superbeta.blibberly.onBoarding.presentation.ui
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +35,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.user.data.UserLocalDbService
@@ -91,18 +94,26 @@ fun BioScreen(
         mutableStateOf("")
     }
 
-    var interests = remember {
+    val interests = remember {
         mutableStateListOf<String>()
+    }
+
+    var gender by remember {
+        mutableStateOf("")
     }
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val userData = viewModel.userState.collectAsStateWithLifecycle().value
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = true) {
         scope.launch {
             viewModel.getUser()
-            val userData: UserDataModel? = viewModel.userState.value
-            Log.i("sivag", userData.toString())
+        }
+    }
+
+    LaunchedEffect(key1 = userData) {
+        scope.launch {
             if (userData != null) {
                 name = TextFieldValue(userData.name)
                 age = TextFieldValue(userData.age.toString())
@@ -111,156 +122,225 @@ fun BioScreen(
                 aboutMe = userData.aboutMe
                 interests.addAll(userData.interests)
                 photoUri = userData.photoUri
+                gender = userData.gender
             }
         }
     }
 
+
     isButtonEnabled = true
 //        !(name.text.isEmpty() || age.text.isEmpty() || height.text.isEmpty() || weight.text.isEmpty())
 
-    Column(modifier = modifier) {
-        TopAppBar(title = { }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
-                    contentDescription = "back"
-                )
-            }
-        })
+    LazyColumn(modifier = modifier) {
+        item {
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Text(
-            text = "Sharpen your profile! Add your 'Vitals' to stand out from the crowd and make a lasting impression!",
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier
-                .padding(16.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(12.dp)
-                )
-                .padding(16.dp)
-        )
-
-        Text(
-            text = "\nYour Vitals\uD83C\uDF1F",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(16.dp)
-        )
-
-        TextFieldWithLabel(
-            textFieldValue = name,
-            onTextFieldValueChange = { value -> name = value },
-            "Name",
-            "Sankar",
-            keyboardOptions = KeyboardOptions()
-        )
-
-
-        TextFieldWithLabel(
-            textFieldValue = age,
-            onTextFieldValueChange = { value -> age = value },
-            "Age",
-            "22",
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-
-        )
-
-        Row {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "Height",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-
-                OutlinedTextField(
-                    maxLines = 1,
-                    value = height,
-                    modifier = Modifier.padding(16.dp),
-                    onValueChange = { value -> height = value },
-                    shape = RoundedCornerShape(14.dp),
-                    placeholder = {
-                        Text(
-                            text = "180",
-                            color = ColorDisabled,
-                        )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = ColorPrimary,
-                        unfocusedBorderColor = ColorDisabled,
-                    ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    trailingIcon = {
-                        Text(
-                            text = "cm",
-                            color = ColorDisabled,
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    },
-
+            TopAppBar(title = { }, navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
+                        contentDescription = "back"
                     )
+                }
+            })
+        }
+
+
+//        Spacer(modifier = Modifier.weight(1f))
+
+        item {
+
+            Text(
+                text = "Sharpen your profile! Add your 'Vitals' to stand out from the crowd and make a lasting impression!",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .padding(16.dp)
+            )
+
+        }
+        item {
+
+            Text(
+                text = "\nYour Vitals\uD83C\uDF1F",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        item {
+
+            TextFieldWithLabel(
+                textFieldValue = name,
+                onTextFieldValueChange = { value -> name = value },
+                "Name",
+                "Sankar",
+                keyboardOptions = KeyboardOptions()
+            )
+        }
+
+        item {
+
+            TextFieldWithLabel(
+                textFieldValue = age,
+                onTextFieldValueChange = { value -> age = value },
+                "Age",
+                "22",
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+            )
+        }
+
+        item {
+
+            Text(
+                text = "Gender",
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp, horizontal = 8.dp)
+            ) {
+                IconButton(modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp)
+                    .border(
+                        width = 1.dp,
+                        color = if (gender == "F") ColorPrimary else ColorDisabled,
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .padding(16.dp), onClick = { gender = "F" }) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.female),
+                        contentDescription = "Female"
+                    )
+                }
+
+                IconButton(modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp)
+                    .border(
+                        width = 1.dp,
+                        color = if (gender == "M") ColorPrimary else ColorDisabled,
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .padding(16.dp), onClick = { gender = "M" }) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.male),
+                        contentDescription = "Male"
+                    )
+                }
             }
+        }
+        item {
 
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "Weight",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+            Row(modifier = Modifier.padding(vertical = 8.dp)) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Height",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
 
-                OutlinedTextField(maxLines = 1,
-                    value = weight,
-                    modifier = Modifier.padding(16.dp),
-                    onValueChange = { value -> weight = value },
-                    shape = RoundedCornerShape(14.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    placeholder = {
-                        Text(
-                            text = "80",
-                            color = ColorDisabled,
+                    OutlinedTextField(
+                        maxLines = 1,
+                        value = height,
+                        modifier = Modifier.padding(16.dp),
+                        onValueChange = { value -> height = value },
+                        shape = RoundedCornerShape(14.dp),
+                        placeholder = {
+                            Text(
+                                text = "180",
+                                color = ColorDisabled,
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = ColorPrimary,
+                            unfocusedBorderColor = ColorDisabled,
+                        ),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        trailingIcon = {
+                            Text(
+                                text = "cm",
+                                color = ColorDisabled,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        },
+
                         )
-                    },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = ColorPrimary,
-                        unfocusedBorderColor = ColorDisabled,
-                    ),
-                    trailingIcon = {
-                        Text(
-                            text = "kg",
-                            color = ColorDisabled,
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    })
+                }
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Weight",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+
+                    OutlinedTextField(maxLines = 1,
+                        value = weight,
+                        modifier = Modifier.padding(16.dp),
+                        onValueChange = { value -> weight = value },
+                        shape = RoundedCornerShape(14.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        placeholder = {
+                            Text(
+                                text = "80",
+                                color = ColorDisabled,
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = ColorPrimary,
+                            unfocusedBorderColor = ColorDisabled,
+                        ),
+                        trailingIcon = {
+                            Text(
+                                text = "kg",
+                                color = ColorDisabled,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        })
+                }
             }
         }
 
-        PrimaryButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            buttonText = "Next",
-            isButtonEnabled = isButtonEnabled
-        ) {
-            scope.launch {
-                try {
-                    viewModel.setUser(
-                        UserDataModel(
-                            phoneNum = "88383428234",
-                            name = name.text,
-                            age = age.text.toInt(),
-                            height = height.text.toDouble(),
-                            weight = weight.text.toDouble(),
-                            aboutMe = aboutMe,
-                            interests = interests,
-                            photoUri = photoUri
-                        )
-                    )
+        item {
 
-                } catch (e: Exception) {
-                    Log.e("Error Storing data in room BioScreen", e.toString())
+            PrimaryButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                buttonText = "Next",
+                isButtonEnabled = isButtonEnabled
+            ) {
+                scope.launch {
+                    try {
+                        viewModel.setUser(
+                            UserDataModel(
+                                phoneNum = "88383428234",
+                                name = name.text,
+                                age = age.text.toInt(),
+                                height = height.text.toDouble(),
+                                weight = weight.text.toDouble(),
+                                aboutMe = aboutMe,
+                                interests = interests,
+                                gender = gender,
+                                photoUri = photoUri
+                            )
+                        )
+
+                    } catch (e: Exception) {
+                        Log.e("Error Storing data in room BioScreen", e.toString())
+                    }
+                }.invokeOnCompletion {
+                    navController.navigate(Screen.AboutMe.route)
                 }
-            }.invokeOnCompletion {
-                navController.navigate(Screen.AboutMe.route)
             }
         }
     }

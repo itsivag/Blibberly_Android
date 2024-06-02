@@ -27,6 +27,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     suspend fun setUser(userDataModel: UserDataModel) {
         viewModelScope.launch {
             mUserRepository.setUser(userDataModel)
+            getUser()
         }
     }
 

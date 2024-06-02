@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +50,7 @@ fun ProfileBioScreen(
 
     LaunchedEffect(key1 = Unit) {
         scope.launch {
+            viewModel.getUser()
             val userData: UserDataModel? =
                 viewModel.userState.value
             if (userData != null) {
@@ -68,7 +70,7 @@ fun ProfileBioScreen(
 
     Column {
 
-        Divider(color = ColorDisabled, modifier = Modifier.padding(bottom = 16.dp))
+        HorizontalDivider(color = ColorDisabled, modifier = Modifier.padding(bottom = 16.dp))
         Text(
             text = "Vitals",
             style = MaterialTheme.typography.titleLarge,

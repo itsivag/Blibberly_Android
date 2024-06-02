@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.home
+package com.superbeta.blibberly.home.main.presentation.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -45,13 +45,20 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.home.main.presentation.viewModel.HomeViewModel
+import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(modifier: Modifier, navController: NavHostController) {
+fun HomeScreen(
+    modifier: Modifier, navController: NavHostController,
+    viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = HomeViewModel.Factory)
+
+) {
+
     val pagerState = rememberPagerState(pageCount = {
         10
     })
@@ -62,7 +69,6 @@ fun HomeScreen(modifier: Modifier, navController: NavHostController) {
 
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-//            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
             shape = RectangleShape, modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer {

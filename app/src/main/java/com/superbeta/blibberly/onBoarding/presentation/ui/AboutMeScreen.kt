@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
@@ -55,10 +56,16 @@ fun AboutMeScreen(
     val scope = rememberCoroutineScope()
     isButtonEnabled = true
 
+    val userData: UserDataModel? = viewModel.userState.collectAsStateWithLifecycle().value
+
     LaunchedEffect(key1 = Unit) {
         scope.launch {
             viewModel.getUser()
-            val userData: UserDataModel? = viewModel.userState.value
+        }
+    }
+
+    LaunchedEffect(key1 = userData) {
+        scope.launch {
             if (userData != null) {
                 aboutMe = TextFieldValue(userData.aboutMe)
             }
