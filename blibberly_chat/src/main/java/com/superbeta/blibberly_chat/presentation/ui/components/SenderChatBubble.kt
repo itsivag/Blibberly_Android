@@ -25,10 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.superbeta.blibberly_chat.R
+import com.superbeta.blibberly_chat.data.Message
 
-@Preview(showBackground = true)
 @Composable
-fun SenderChatBubble() {
+fun SenderChatBubble(currMessage: Message) {
 
     var isMessageRead by remember {
         mutableStateOf(false)
@@ -55,13 +55,13 @@ fun SenderChatBubble() {
                 )
                 .padding(8.dp), horizontalAlignment = Alignment.End
         ) {
-            Text(text = "Hi Bro, How are you?", color = Color.White, fontSize = 14.sp)
+            Text(text = currMessage.content, color = Color.White, fontSize = 14.sp)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
             ) {
                 Text(
-                    text = "11:52 PM",
+                    text = currMessage.timeStamp,
                     fontSize = 12.sp,
                     color = Color.White,
                 )

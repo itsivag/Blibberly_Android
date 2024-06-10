@@ -1,5 +1,6 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -31,49 +34,69 @@ import com.superbeta.blibberly_chat.data.Message
 import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
 import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubble
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
+import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MessageScreen(modifier: Modifier, navController: NavHostController) {
-
-    val messages = listOf<Message>(
-        Message(
-            messageId = "1",
-            content = "hi how are you",
-            senderID = "1",
-            receiverID = "2",
-            timeStamp = "10:23 pm",
-            isDelivered = false,
-            isRead = false
-        ),
-        Message(
-            messageId = "2",
-            content = "hi,I'm fine!",
-            senderID = "2",
-            receiverID = "1",
-            timeStamp = "10:24 pm",
-            isDelivered = false,
-            isRead = false
-        ),
-        Message(
-            messageId = "3",
-            content = "i have a doubt",
-            senderID = "1",
-            receiverID = "2",
-            timeStamp = "10:25 pm",
-            isDelivered = false,
-            isRead = false
-        ),
-        Message(
-            messageId = "4",
-            content = "yes please ask",
-            senderID = "2",
-            receiverID = "1",
-            timeStamp = "10:28 pm",
-            isDelivered = false,
-            isRead = false
-        ),
+fun MessageScreen(
+    modifier: Modifier,
+    navController: NavHostController,
+    viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = MessageViewModel.Factory
     )
+) {
+
+    val scope = rememberCoroutineScope()
+    val messages = remember {
+        mutableListOf<Message>()
+    }
+
+    LaunchedEffect(key1 = viewModel.messageState) {
+        Log.i("sivag", viewModel.messageState.value.toString())
+        scope.launch {
+            messages.addAll(viewModel.messageState.value)
+        }
+    }
+
+//    val messages = listOf<Message>(
+//        Message(
+//            messageId = "1",
+//            content = "hi how are you",
+//            senderID = "1",
+//            receiverID = "2",
+//            timeStamp = "10:23 pm",
+//            isDelivered = false,
+//            isRead = false
+//        ),
+//        Message(
+//            messageId = "2",
+//            content = "hi,I'm fine!",
+//            senderID = "2",
+//            receiverID = "1",
+//            timeStamp = "10:24 pm",
+//            isDelivered = false,
+//            isRead = false
+//        ),
+//        Message(
+//            messageId = "3",
+//            content = "i have a doubt",
+//            senderID = "1",
+//            receiverID = "2",
+//            timeStamp = "10:25 pm",
+//            isDelivered = false,
+//            isRead = false
+//        ),
+//        Message(
+//            messageId = "4",
+//            content = "yes please ask",
+//            senderID = "2",
+//            receiverID = "1",
+//            timeStamp = "10:28 pm",
+//            isDelivered = false,
+//            isRead = false
+//        ),
+//    )
 
     val currUser = "1"
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
@@ -118,10 +141,11 @@ fun MessageScreen(modifier: Modifier, navController: NavHostController) {
         ) {
             LazyColumn {
                 items(count = messages.size) { i ->
-                    if (messages[i].senderID == currUser) {
-                        SenderChatBubble()
+                    val currMessage = messages[i]
+                    if (currMessage.senderID == currUser) {
+                        SenderChatBubble(currMessage)
                     } else {
-                        ReceiverChatBubble()
+                        ReceiverChatBubble(currMessage)
                     }
                 }
 

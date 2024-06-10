@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,18 +23,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.superbeta.blibberly_chat.R
+import com.superbeta.blibberly_chat.data.Message
+import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
+import kotlinx.coroutines.launch
 
-@Preview(showBackground = true)
 @Composable
-fun MessageTextField() {
+fun MessageTextField(
+    viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = MessageViewModel.Factory
+    )
+) {
+
+
     var message by remember {
         mutableStateOf(TextFieldValue())
     }
 
+    val data = Message(
+        messageId = "1",
+        content = message.text,
+        senderID = "1",
+        receiverID = "2",
+        timeStamp = "10:23 pm",
+        isDelivered = false,
+        isRead = false
+    )
+
     val textFieldContainerColor = MaterialTheme.colorScheme.primaryContainer
+    val scope = rememberCoroutineScope()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -58,7 +78,11 @@ fun MessageTextField() {
             )
         )
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+                scope.launch {
+                    viewModel.sendMessage(data)
+                }
+            },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = Color.White

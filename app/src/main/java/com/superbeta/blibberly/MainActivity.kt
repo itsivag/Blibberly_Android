@@ -1,14 +1,12 @@
 package com.superbeta.blibberly
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,23 +33,17 @@ import com.superbeta.blibberly.ui.theme.BlibberlyTheme
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.utils.Screen
-import io.socket.client.IO
-import io.socket.client.Socket
-import kotlinx.coroutines.launch
+import com.superbeta.blibberly_chat.utils.SocketHandlerImpl
 
 
 class MainActivity : ComponentActivity() {
-
-    private val socketHandler: SocketHandler = SocketHandler
-
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //socket
-        socketHandler.getSocket()
+        SocketHandlerImpl.getSocket()
 
-        /////////////
         val bottomNavScreens = listOf(
             Screen.Profile,
             Screen.Home,
@@ -67,13 +58,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    val scope = rememberCoroutineScope()
-                    LaunchedEffect(key1 = Unit) {
-                        scope.launch {
-//                            streamClient.createChannel()
-                        }
-                    }
 
+                    val scope = rememberCoroutineScope()
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     when (navBackStackEntry?.destination?.route) {
@@ -195,28 +181,19 @@ class MainActivity : ComponentActivity() {
                         }
 
                     }) {
-                        Button(
-                            modifier = Modifier.padding(it),
-                            onClick = {
-                                socketHandler.emitChat()
-                            }
-                        ) {
-                            Text(text = "Emit Message")
-                        }
-//                        BlibberlyNavHost(
-//                            navController = navController, modifier = Modifier.padding(it)
-//                        )
+                        BlibberlyNavHost(
+                            navController = navController, modifier = Modifier.padding(it)
+                        )
                     }
                 }
             }
+
         }
-
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
-        socketHandler.disconnectSocket()
+        SocketHandlerImpl.disconnectSocket()
     }
-
 }
+
