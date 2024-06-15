@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Stable
 data class UserDataModel(
-    @PrimaryKey @SerialName("phoneNumber") @ColumnInfo("phoneNumber") val phoneNum: String,
+    @PrimaryKey @SerialName("email") @ColumnInfo("email") val email: String,
 
     @SerialName("name") @ColumnInfo("name") val name: String,
 
