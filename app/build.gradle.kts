@@ -85,6 +85,7 @@ dependencies {
     //supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:2.4.2"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.github.jan-tennert.supabase:compose-auth")
 
     //gson
     implementation("com.google.code.gson:gson:2.10.1")
@@ -105,10 +106,22 @@ dependencies {
 
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.4.1")
-
     //socket io
     implementation("io.socket:socket.io-client:2.0.0") {
         exclude(group = "org.json", module = "json")
     }
+
+    //
+    dependencies {
+        implementation("androidx.credentials:credentials:1.2.2")
+        implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
+        // optional - needed for credentials support from play services, for devices running
+        // Android 13 and below.
+        implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
+    }
+// optional - needed for credentials support from play services, for devices running
+// Android 13 and below.
+    implementation("androidx.credentials:credentials-play-services-auth:<latest version>")
 
 }
