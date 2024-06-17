@@ -14,6 +14,7 @@ import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.Google
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.gotrue.providers.builtin.IDToken
+import io.github.jan.supabase.gotrue.providers.builtin.Phone
 import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineScope
@@ -23,14 +24,26 @@ import java.util.UUID
 
 class AuthRepositoryImpl : AuthRepository {
     override suspend fun createUser(mEmail: String, mPassword: String) {
-        val user = supabase.auth.signUpWith(Email) {
-            email = mEmail
-            password = mPassword
+
+        try {
+            supabase.auth.signUpWith(Email) {
+                email = mEmail
+                password = mPassword
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     override suspend fun signInWithEmail(mEmail: String, mPassword: String) {
-        TODO("Not yet implemented")
+        try {
+            supabase.auth.signInWith(Email) {
+                email = mEmail
+                password = mPassword
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override suspend fun signInWithGoogle(

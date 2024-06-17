@@ -1,8 +1,8 @@
 package com.superbeta.blibberly.utils
 
 sealed class Screen(val route: String) {
-    data object Login : Screen("login")
-    data object Register : Screen("register")
+    data object SignIn : Screen("sign_in")
+    data object SignUp : Screen("sign_up")
     data object OTPEnter : Screen("otp_enter")
     data object SkillsAndInterests : Screen("skill_and_interests")
     data object Bio : Screen("bio")
