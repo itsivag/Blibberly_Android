@@ -136,7 +136,7 @@ fun SignUpScreen(modifier: Modifier, navController: NavHostController) {
 
 
         PrimaryButton(modifier = internalModifier,
-            buttonText = "Sign In",
+            buttonText = "Sign Up",
             isButtonEnabled = isButtonEnabled,
             onClickMethod = {
                 scope.launch {
@@ -144,7 +144,7 @@ fun SignUpScreen(modifier: Modifier, navController: NavHostController) {
 //                        mEmail = email.text, mPassword = password.text
 //                    )
 
-                    AuthRepositoryImpl().signInWithEmail(email.text, password.text)
+                    AuthRepositoryImpl().createUser(email.text, password.text)
 
                 }
 //                navController.navigate("otp_enter")

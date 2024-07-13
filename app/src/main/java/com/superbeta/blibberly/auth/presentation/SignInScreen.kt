@@ -132,6 +132,8 @@ fun SignInScreen(modifier: Modifier, navController: NavHostController) {
 
                     AuthRepositoryImpl().signInWithEmail(email.text, password.text)
 
+                }.invokeOnCompletion {
+                    navController.navigate(Screen.Home.route)
                 }
 //                navController.navigate("otp_enter")
             })
