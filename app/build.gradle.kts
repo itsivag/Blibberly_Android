@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.superbeta.blibberly"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(project(":blibberly_chat"))
+    implementation(libs.androidx.compose.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -86,6 +87,7 @@ dependencies {
     implementation(platform("io.github.jan-tennert.supabase:bom:2.4.2"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.github.jan-tennert.supabase:compose-auth")
+    implementation("io.github.jan-tennert.supabase:storage-kt")
 
     //gson
     implementation("com.google.code.gson:gson:2.10.1")
@@ -111,17 +113,17 @@ dependencies {
         exclude(group = "org.json", module = "json")
     }
 
-    //
-    dependencies {
-        implementation("androidx.credentials:credentials:1.2.2")
-        implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
-
-        // optional - needed for credentials support from play services, for devices running
-        // Android 13 and below.
-        implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
-    }
-// optional - needed for credentials support from play services, for devices running
-// Android 13 and below.
-    implementation("androidx.credentials:credentials-play-services-auth:<latest version>")
+//    //
+//    dependencies {
+//        implementation("androidx.credentials:credentials:1.2.2")
+//        implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+//
+//        // optional - needed for credentials support from play services, for devices running
+//        // Android 13 and below.
+//        implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
+//    }
+//// optional - needed for credentials support from play services, for devices running
+//// Android 13 and below.
+//    implementation("androidx.credentials:credentials-play-services-auth:<latest version>")
 
 }

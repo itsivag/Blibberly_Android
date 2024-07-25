@@ -24,4 +24,10 @@ object FontProvider {
     val bebasFontFamily = FontFamily(
         Font(googleFont = bebas, fontProvider = provider)
     )
+
+    private val notoEmoji = GoogleFont("Noto Emoji")
+
+    val notoEmojiFontFamily = FontFamily(
+        Font(googleFont = notoEmoji, fontProvider = provider)
+    )
 }
