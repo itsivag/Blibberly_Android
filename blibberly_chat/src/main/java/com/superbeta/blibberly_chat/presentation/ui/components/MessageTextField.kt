@@ -81,6 +81,7 @@ fun MessageTextField(
             onClick = {
                 scope.launch {
                     viewModel.sendMessage(data)
+                    message = TextFieldValue("")
                 }
             },
             colors = IconButtonDefaults.iconButtonColors(

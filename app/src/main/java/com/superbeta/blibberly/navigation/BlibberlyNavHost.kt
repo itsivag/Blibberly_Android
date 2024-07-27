@@ -26,9 +26,8 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = Screen.Profile.route
+    startDestination: String = Screen.ChatList.route
 ) {
-
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Screen.SignIn.route) {
             SignInScreen(modifier, navController)

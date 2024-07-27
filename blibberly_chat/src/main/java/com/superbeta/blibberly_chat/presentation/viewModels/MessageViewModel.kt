@@ -8,21 +8,30 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.superbeta.blibberly_chat.data.Message
 import com.superbeta.blibberly_chat.utils.SocketHandler
 import com.superbeta.blibberly_chat.utils.SocketHandlerImpl
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class MessageViewModel(private val socketHandler: SocketHandler) : ViewModel() {
-    private var _messageState = SocketHandlerImpl.messageList
-    val messageState = _messageState
+    private var _messageState = MutableStateFlow<List<Message>>(emptyList())
+    val messageState: MutableStateFlow<List<Message>> get() = _messageState
 
-//    suspend fun getMessages() {
-//        viewModelScope.launch {
-//            _messageState.value =
-//        }
-//    }
+    init {
+        getMessages()
+    }
 
-    suspend fun sendMessage(data: Message) {
+    private fun getMessages() {
+        viewModelScope.launch {
+            socketHandler.getMessageList().collect { messages ->
+                _messageState.value = messages
+            }
+        }
+    }
+
+    fun sendMessage(data: Message) {
         viewModelScope.launch {
             socketHandler.sendMessage(data)
+            // Add the new message to the current list
+            _messageState.value = _messageState.value + data
         }
     }
 

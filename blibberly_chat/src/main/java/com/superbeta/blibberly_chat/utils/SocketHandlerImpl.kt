@@ -6,12 +6,13 @@ import com.superbeta.blibberly_chat.data.Message
 import io.socket.client.IO
 import io.socket.client.Socket
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 object SocketHandlerImpl : SocketHandler {
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow(arrayListOf<Message>())
-    val messageList = _messageList
+//    val messageList = _messageList
 
     init {
         try {
@@ -29,10 +30,14 @@ object SocketHandlerImpl : SocketHandler {
             if (!msg.isNullOrEmpty()) {
                 Log.i("Message from server", msg[0].toString() + " size -> " + msg.size)
                 val data = Gson().fromJson(msg[0].toString(), Message::class.java)
-                _messageList.value.add(data)
+                _messageList.value = ArrayList(_messageList.value + data)
             }
         }
 //        return msgList
+    }
+
+    override fun getMessageList(): MutableStateFlow<ArrayList<Message>> {
+        return _messageList
     }
 
     override fun getSocket(): Socket {

@@ -20,8 +20,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -48,57 +52,9 @@ fun MessageScreen(
 ) {
 
     val scope = rememberCoroutineScope()
-    val messages = remember {
-        mutableListOf<Message>()
-    }
-
-    LaunchedEffect(key1 = viewModel.messageState) {
-        Log.i("sivag", viewModel.messageState.value.toString())
-        scope.launch {
-            messages.addAll(viewModel.messageState.value)
-        }
-    }
-
-//    val messages = listOf<Message>(
-//        Message(
-//            messageId = "1",
-//            content = "hi how are you",
-//            senderID = "1",
-//            receiverID = "2",
-//            timeStamp = "10:23 pm",
-//            isDelivered = false,
-//            isRead = false
-//        ),
-//        Message(
-//            messageId = "2",
-//            content = "hi,I'm fine!",
-//            senderID = "2",
-//            receiverID = "1",
-//            timeStamp = "10:24 pm",
-//            isDelivered = false,
-//            isRead = false
-//        ),
-//        Message(
-//            messageId = "3",
-//            content = "i have a doubt",
-//            senderID = "1",
-//            receiverID = "2",
-//            timeStamp = "10:25 pm",
-//            isDelivered = false,
-//            isRead = false
-//        ),
-//        Message(
-//            messageId = "4",
-//            content = "yes please ask",
-//            senderID = "2",
-//            receiverID = "1",
-//            timeStamp = "10:28 pm",
-//            isDelivered = false,
-//            isRead = false
-//        ),
-//    )
-
+    val messages by viewModel.messageState.collectAsState()
     val currUser = "1"
+
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(
             navigationIcon = {
@@ -148,7 +104,6 @@ fun MessageScreen(
                         ReceiverChatBubble(currMessage)
                     }
                 }
-
             }
             Row(
                 modifier = Modifier
