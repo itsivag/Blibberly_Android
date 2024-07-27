@@ -29,7 +29,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,10 +88,23 @@ enum class BG_COLORS {
 
 }
 
+val avatarBGColorsMap = mapOf<String, Color>(
+    BG_COLORS.BLUE.toString() to Color.Blue,
+    BG_COLORS.WHITE.toString() to Color.White,
+    BG_COLORS.RED.toString() to Color.Red,
+    BG_COLORS.GRAY.toString() to Color.Gray,
+    BG_COLORS.CYAN.toString() to Color.Cyan,
+    BG_COLORS.BLACK.toString() to Color.Black,
+    BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
+    BG_COLORS.GREEN.toString() to Color.Green,
+    BG_COLORS.MAGENTA.toString() to Color.Magenta,
+    BG_COLORS.YELLOW.toString() to Color.Yellow
+)
+
 @SuppressLint("Range")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotoScreen(
+fun BlibmojiScreen(
     modifier: Modifier,
     navController: NavHostController,
     viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
@@ -111,18 +123,6 @@ fun PhotoScreen(
         mutableStateOf(true)
     }
 
-    val avatarBGColorsMap = mapOf<String, Color>(
-        BG_COLORS.BLUE.toString() to Color.Blue,
-        BG_COLORS.WHITE.toString() to Color.White,
-        BG_COLORS.RED.toString() to Color.Red,
-        BG_COLORS.GRAY.toString() to Color.Gray,
-        BG_COLORS.CYAN.toString() to Color.Cyan,
-        BG_COLORS.BLACK.toString() to Color.Black,
-        BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
-        BG_COLORS.GREEN.toString() to Color.Green,
-        BG_COLORS.MAGENTA.toString() to Color.Magenta,
-        BG_COLORS.YELLOW.toString() to Color.Yellow
-    )
 
     val avatarBgColorList = avatarBGColorsMap.entries.toList()
 
@@ -287,7 +287,6 @@ fun PhotoScreen(
                     showBottomSheet = false
                 }
             ) {
-
                 LazyColumn {
                     item {
                         Text(text = "Bg Color", modifier = Modifier.padding(8.dp))
