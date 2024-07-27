@@ -40,6 +40,7 @@ import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.TextFieldWithLabel
+import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
@@ -117,7 +118,7 @@ fun BioScreen(
                 weight = TextFieldValue(userData.weight.toString())
                 aboutMe = userData.aboutMe
                 interests.addAll(userData.interests)
-                photoUri = userData.photoUri
+//                photoUri = userData.photoMetaData
                 gender = userData.gender
             }
         }
@@ -327,7 +328,7 @@ fun BioScreen(
                                 aboutMe = aboutMe,
                                 interests = interests,
                                 gender = gender,
-                                photoUri = photoUri
+                                photoMetaData = PhotoMetaData("","","")
                             )
                         )
 

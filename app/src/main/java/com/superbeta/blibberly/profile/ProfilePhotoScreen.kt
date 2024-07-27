@@ -41,7 +41,6 @@ import com.superbeta.blibberly.ui.theme.extensions.dashedBorder
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import kotlinx.coroutines.launch
-import java.net.URI
 
 @Composable
 fun ProfilePhotoScreen(
@@ -68,7 +67,7 @@ fun ProfilePhotoScreen(
             viewModel.getUser()
             val userData: UserDataModel? = viewModel.userState.value
             if (userData != null) {
-                photoUri = Uri.parse(userData.photoUri)
+//                photoUri = Uri.parse(userData.photoMetaData)
             }
             Log.i("sivag", photoUri.toString())
         }
@@ -120,7 +119,7 @@ fun ProfilePhotoScreen(
                         )
                     )
                 }.invokeOnCompletion {
-                    viewModel.updatePhotoUri(photoUri.toString())
+//                    viewModel.updatePhotoMetaData(photoUri.toString())
                 }
             }) {
             Icon(

@@ -20,6 +20,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,6 +37,7 @@ fun CurateProfilesScreen(
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = Unit) {
         scope.launch {
+            delay(3000)
             viewModel.uploadUserToDB()
         }.invokeOnCompletion {
             navController.navigate(Screen.Home.route)
@@ -51,6 +53,6 @@ fun CurateProfilesScreen(
             modifier = Modifier.padding(16.dp),
             composition = composition,
             progress = { progress },
-            )
+        )
     }
 }

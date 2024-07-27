@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.user.data.model
 
+import android.provider.ContactsContract.Contacts.Photo
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
@@ -34,7 +35,17 @@ data class UserDataModel(
 
     @SerialName("interests") @ColumnInfo("interests") val interests: List<String>,
 
-    @SerialName("photoUri") @ColumnInfo("photoUri") val photoUri: String
+    @SerialName("photoMetaData") @ColumnInfo("photoUri") val photoMetaData: PhotoMetaData
+)
+
+@Serializable
+@Stable
+@Immutable
+data class PhotoMetaData(
+    @SerialName("blibmojiUrl") val blibmojiUrl: String,
+    @SerialName("bgEmoji") val bgEmoji: String,
+    @SerialName("bgColor") val bgColor: String
+
 )
 
 
@@ -45,4 +56,11 @@ class Converters {
 
     @TypeConverter
     fun jsonToList(value: String) = Gson().fromJson(value, Array<String>::class.java).toList()
+
+    @TypeConverter
+    fun photoMetaDataToJson(value: PhotoMetaData): String = Gson().toJson(value)
+
+    @TypeConverter
+    fun jsonToPhotoMetaData(value: String): PhotoMetaData? =
+        Gson().fromJson(value, PhotoMetaData::class.java)
 }

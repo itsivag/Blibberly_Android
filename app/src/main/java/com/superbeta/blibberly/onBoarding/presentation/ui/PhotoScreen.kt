@@ -5,18 +5,16 @@ import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,20 +22,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,7 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -72,6 +63,9 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.ui.theme.components.SwipeButton
+import com.superbeta.blibberly.user.data.model.PhotoMetaData
+import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly.utils.supabase
@@ -80,10 +74,29 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
+enum class BG_COLORS {
+    BLUE,
+    WHITE,
+    RED,
+    GRAY,
+    CYAN,
+    BLACK,
+    DARKGRAY,
+    GREEN,
+    MAGENTA,
+    YELLOW
+
+}
+
 @SuppressLint("Range")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
+fun PhotoScreen(
+    modifier: Modifier,
+    navController: NavHostController,
+    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+) {
     var showBottomSheet by remember { mutableStateOf(true) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false,
@@ -91,23 +104,27 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
             true
         }
     )
+    val scope = rememberCoroutineScope()
+
 
     val isButtonEnabled by remember {
         mutableStateOf(true)
     }
-    val scope = rememberCoroutineScope()
-    val avatarBGColorsList = listOf(
-        Color.Blue,
-        Color.White,
-        Color.Red,
-        Color.Gray,
-        Color.Cyan,
-        Color.Black,
-        Color.DarkGray,
-        Color.Green,
-        Color.Magenta,
-        Color.Yellow
+
+    val avatarBGColorsMap = mapOf<String, Color>(
+        BG_COLORS.BLUE.toString() to Color.Blue,
+        BG_COLORS.WHITE.toString() to Color.White,
+        BG_COLORS.RED.toString() to Color.Red,
+        BG_COLORS.GRAY.toString() to Color.Gray,
+        BG_COLORS.CYAN.toString() to Color.Cyan,
+        BG_COLORS.BLACK.toString() to Color.Black,
+        BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
+        BG_COLORS.GREEN.toString() to Color.Green,
+        BG_COLORS.MAGENTA.toString() to Color.Magenta,
+        BG_COLORS.YELLOW.toString() to Color.Yellow
     )
+
+    val avatarBgColorList = avatarBGColorsMap.entries.toList()
 
     val avatarBGEmojiList = listOf(
         "\uD83E\uDD70", "🧁", "🍰", "🎁", "🎂", "🎈", "🎺",
@@ -118,12 +135,12 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
         mutableStateOf(listOf<String>())
     }
 
-    var selectedAvatarBGColor by remember {
-        mutableStateOf(avatarBGColorsList[0])
+    var selectedBGColor by remember {
+        mutableStateOf(BG_COLORS.BLUE.toString())
     }
 
 
-    var selectedAvatarBGEmoji by remember {
+    var selectedBGEmoji by remember {
         mutableStateOf(avatarBGEmojiList[0])
     }
 
@@ -152,6 +169,17 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
         }
     }
 
+    LaunchedEffect(key1 = Unit) {
+        scope.launch {
+            viewModel.getUser()
+            val userData: UserDataModel? = viewModel.userState.value
+            if (userData != null && userData.photoMetaData.blibmojiUrl.isNotEmpty() && userData.photoMetaData.bgEmoji.isNotEmpty() && userData.photoMetaData.bgColor.isNotEmpty()) {
+                selectedBlibmoji = userData.photoMetaData.blibmojiUrl
+                selectedBGEmoji = userData.photoMetaData.bgEmoji
+                selectedBGColor = userData.photoMetaData.bgColor
+            }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -165,8 +193,8 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
             }
         })
 
-        Box(
-            modifier = Modifier
+        avatarBGColorsMap[selectedBGColor]?.let {
+            Modifier
                 .fillMaxWidth()
                 .animateContentSize(
                     animationSpec = SpringSpec(
@@ -175,41 +203,60 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
                     )
                 )
                 .fillMaxHeight(fraction = if (showBottomSheet) 0.5f else 0.75f)
-                .background(color = selectedAvatarBGColor),
-            contentAlignment = Alignment.BottomCenter
-        ) {
+                .background(color = it)
+        }?.let {
             Box(
-                modifier = Modifier
-                    .rotate(45f)
-                    .fillMaxSize()
-                    .scale(2f)
+                modifier = it,
+                contentAlignment = Alignment.BottomCenter
             ) {
-                LazyHorizontalStaggeredGrid(
-                    rows = StaggeredGridCells.Adaptive(minSize = 44.dp),
+                Box(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    userScrollEnabled = false
+                        .rotate(45f)
+                        .fillMaxSize()
+                        .scale(2f)
                 ) {
-                    items(count = 300) {
-                        Text(
-                            text = selectedAvatarBGEmoji,
-                            fontFamily = FontProvider.notoEmojiFontFamily,
-                            fontSize = 16.sp,
-                            modifier = Modifier.padding(4.dp)
-                        )
+                    LazyHorizontalStaggeredGrid(
+                        rows = StaggeredGridCells.Adaptive(minSize = 44.dp),
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        userScrollEnabled = false
+                    ) {
+                        items(count = 300) {
+                            Text(
+                                text = selectedBGEmoji,
+                                fontFamily = FontProvider.notoEmojiFontFamily,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(4.dp)
+                            )
+                        }
                     }
                 }
-            }
 
-            SubcomposeAsyncImage(
-                model = selectedBlibmoji,
-                contentDescription = "",
-            ) {
-                val state = painter.state
-                if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                    CircularProgressIndicator()
-                } else {
-                    SubcomposeAsyncImageContent()
+                SubcomposeAsyncImage(
+                    model = selectedBlibmoji,
+                    contentDescription = "",
+                ) {
+                    val state = painter.state
+                    if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                        CircularProgressIndicator()
+                    } else {
+                        SubcomposeAsyncImageContent()
+                    }
+                }
+
+                IconButton(
+                    onClick = {
+                        showBottomSheet = true
+                    },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                        .background(color = Color.White, shape = CircleShape)
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.edit),
+                        contentDescription = "Edit Blibmoji"
+                    )
                 }
             }
         }
@@ -217,9 +264,10 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
         val (isComplete, setIsComplete) = remember {
             mutableStateOf(false)
         }
-
+        Spacer(modifier = Modifier)
         SwipeButton(
-            text = "Swipe to Vibe",
+            modifier = Modifier.padding(top = 16.dp),
+            text = "Swipe to Find a Date",
             isComplete = isComplete,
             onSwipe = {
                 scope.launch {
@@ -230,7 +278,6 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
                 }
             },
         )
-
         if (showBottomSheet) {
             ModalBottomSheet(
                 scrimColor = Color.Transparent,
@@ -245,12 +292,14 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
                     item {
                         Text(text = "Bg Color", modifier = Modifier.padding(8.dp))
                         LazyRow {
-                            items(count = avatarBGColorsList.size) { color ->
+                            items(count = avatarBGColorsMap.size) { i ->
+                                val (key: String, value: Color) = avatarBgColorList[i]
+
                                 Box(modifier = Modifier
                                     .padding(10.dp)
                                     .size(48.dp)
                                     .background(
-                                        color = avatarBGColorsList[color],
+                                        color = value,
                                         shape = CircleShape
                                     )
                                     .border(
@@ -264,7 +313,7 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
                                         )
                                     )
                                     .clickable {
-                                        selectedAvatarBGColor = avatarBGColorsList[color]
+                                        selectedBGColor = key
                                     })
                             }
                         }
@@ -289,7 +338,7 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
                                             )
                                         )
                                         .clickable {
-                                            selectedAvatarBGEmoji = avatarBGEmojiList[emoji]
+                                            selectedBGEmoji = avatarBGEmojiList[emoji]
                                         }, contentAlignment = Alignment.Center
                                 ) {
                                     Text(text = avatarBGEmojiList[emoji])
@@ -365,7 +414,17 @@ fun PhotoScreen(modifier: Modifier, navController: NavHostController) {
                                 isButtonEnabled = isButtonEnabled
                             ) {
                                 showBottomSheet = false
-//                                navController.navigate(Screen.CurateProfile.route)
+                                scope.launch {
+                                    viewModel.updatePhotoMetaData(
+                                        PhotoMetaData(
+                                            blibmojiUrl = selectedBlibmoji,
+                                            bgEmoji = selectedBGEmoji,
+                                            bgColor = selectedBGColor
+                                        )
+                                    )
+                                }.invokeOnCompletion {
+                                    navController.navigate(Screen.CurateProfile.route)
+                                }
                             }
                         }
                     }

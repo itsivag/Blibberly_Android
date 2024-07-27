@@ -16,7 +16,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.user.data.UserLocalDbService
+import com.superbeta.blibberly.onBoarding.presentation.ui.PhotoScreen
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.RoomInstanceProvider
 
@@ -39,7 +39,8 @@ fun ProfileScreen(
         }
 
         item {
-            ProfilePhotoScreen()
+//            ProfilePhotoScreen()
+            PhotoScreen(modifier = modifier, navController = navController)
         }
         item {
             ProfileBioScreen()

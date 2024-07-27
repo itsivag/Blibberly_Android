@@ -1,6 +1,7 @@
 package com.superbeta.blibberly.user.repo
 
 import com.superbeta.blibberly.user.data.UserLocalDao
+import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 
 
@@ -37,7 +38,9 @@ class MUserRepositoryImpl(private val db: UserLocalDao) : MUserRepository {
         return db.updateInterests(newInterests)
     }
 
-    override suspend fun updatePhotoUri(newPhotoUri: String) {
-        return db.updatePhotoUri(newPhotoUri)
+    override suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData) {
+        return db.updatePhotoMetaData(photoMetaData)
     }
+
+
 }
