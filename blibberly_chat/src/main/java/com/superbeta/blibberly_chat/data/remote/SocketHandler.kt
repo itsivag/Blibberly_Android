@@ -5,7 +5,7 @@ import io.socket.client.Socket
 import kotlinx.coroutines.flow.StateFlow
 
 interface SocketHandler {
-    fun getMessageList(): StateFlow<ArrayList<MessageDataModel>>
+    fun getMessageList(): StateFlow<List<MessageDataModel>>
     fun getSocket(): Socket
     fun sendMessage(data: MessageDataModel)
     fun registerSocketListener()

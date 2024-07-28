@@ -23,19 +23,22 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            getMessages()
             messagesRepo.subscribeToMessages()
+        }
+
+        viewModelScope.launch {
+            collectMessages()
         }
     }
 
-    private suspend fun getMessages() {
-        Log.i("MessageViewModel", "Calling getMessages from repository")
+    suspend fun collectMessages() {
         messagesRepo.getMessages().collect { messages ->
             Log.i("MessageViewModel", "Collecting messages from repository: $messages")
             _messageState.value = messages
             Log.i("Collect Message from ViewModel", _messageState.value.toString())
         }
     }
+
 
     fun sendMessage(data: MessageDataModel) {
         viewModelScope.launch {

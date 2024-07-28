@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 object SocketHandlerImpl : SocketHandler {
     private lateinit var socket: Socket
 
-    private val _messageList = MutableStateFlow(arrayListOf<MessageDataModel>())
+    private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
 
     init {
         try {
@@ -32,6 +32,7 @@ object SocketHandlerImpl : SocketHandler {
                     val data = Gson().fromJson(msg[0].toString(), MessageDataModel::class.java)
                     _messageList.value += data
                     Log.i("Message from server", _messageList.value.toString())
+//                    Log.i("Message from server 2", data.toString())
                 } catch (e: Exception) {
                     Log.e("Invalid JSON", e.toString())
                 }
@@ -39,7 +40,7 @@ object SocketHandlerImpl : SocketHandler {
         }
     }
 
-    override fun getMessageList(): StateFlow<ArrayList<MessageDataModel>> {
+    override fun getMessageList(): StateFlow<List<MessageDataModel>> {
         return _messageList.asStateFlow()
     }
 

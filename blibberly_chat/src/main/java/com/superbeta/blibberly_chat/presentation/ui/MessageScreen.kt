@@ -1,5 +1,6 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.MoreVert
@@ -19,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -34,6 +37,7 @@ import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
 import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubble
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,6 +52,17 @@ fun MessageScreen(
     val scope = rememberCoroutineScope()
     val messages by viewModel.messageState.collectAsState()
     val currUser = "1"
+    val MessageLazyListState = rememberLazyListState()
+
+    LaunchedEffect(true) {
+        scope.launch {
+            viewModel.collectMessages()
+        }
+    }
+
+    LaunchedEffect(messages) {
+        MessageLazyListState.scrollToItem(MessageLazyListState.layoutInfo.totalItemsCount)
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(
@@ -91,7 +106,8 @@ fun MessageScreen(
         ) {
             LazyColumn(
                 verticalArrangement = Arrangement.Bottom,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                state = MessageLazyListState
             ) {
                 items(count = messages.size) { i ->
                     val currMessage = messages[i]
