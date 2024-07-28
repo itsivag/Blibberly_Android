@@ -1,6 +1,6 @@
 package com.superbeta.blibberly.user.repo
 
-import com.superbeta.blibberly.user.data.UserLocalDao
+import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 

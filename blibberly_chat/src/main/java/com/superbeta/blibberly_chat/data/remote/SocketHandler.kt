@@ -1,0 +1,14 @@
+package com.superbeta.blibberly_chat.data.remote
+
+import com.superbeta.blibberly_chat.data.model.MessageDataModel
+import io.socket.client.Socket
+import kotlinx.coroutines.flow.StateFlow
+
+interface SocketHandler {
+    fun getMessageList(): StateFlow<ArrayList<MessageDataModel>>
+    fun getSocket(): Socket
+    fun sendMessage(data: MessageDataModel)
+    fun registerSocketListener()
+    fun disconnectSocket()
+
+}

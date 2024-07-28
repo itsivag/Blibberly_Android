@@ -21,14 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.superbeta.blibberly_chat.R
-import com.superbeta.blibberly_chat.data.Message
+import com.superbeta.blibberly_chat.data.model.MessageDataModel
 
 @Composable
-fun SenderChatBubble(currMessage: Message) {
+fun SenderChatBubble(currMessageDataModel: MessageDataModel) {
 
     var isMessageRead by remember {
         mutableStateOf(false)
@@ -55,13 +54,13 @@ fun SenderChatBubble(currMessage: Message) {
                 )
                 .padding(8.dp), horizontalAlignment = Alignment.End
         ) {
-            Text(text = currMessage.content, color = Color.White, fontSize = 14.sp)
+            Text(text = currMessageDataModel.content, color = Color.White, fontSize = 14.sp)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
             ) {
                 Text(
-                    text = currMessage.timeStamp,
+                    text = currMessageDataModel.timeStamp,
                     fontSize = 12.sp,
                     color = Color.White,
                 )

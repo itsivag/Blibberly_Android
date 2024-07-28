@@ -3,7 +3,7 @@ package com.superbeta.blibberly.utils
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.superbeta.blibberly.user.data.UserLocalDao
+import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.model.Converters
 import com.superbeta.blibberly.user.data.model.UserDataModel
 

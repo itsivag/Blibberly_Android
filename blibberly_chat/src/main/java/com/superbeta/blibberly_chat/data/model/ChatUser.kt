@@ -1,4 +1,4 @@
-package com.superbeta.blibberly_chat.data
+package com.superbeta.blibberly_chat.data.model
 
 data class ChatUser(
     val userId: String,

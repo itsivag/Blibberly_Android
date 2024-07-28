@@ -22,7 +22,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.superbeta.blibberly_chat.data.ChatUser
+import com.superbeta.blibberly_chat.data.model.ChatUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,8 +1,4 @@
-package com.superbeta.blibberly.user.data
-
-import com.superbeta.blibberly.user.data.model.PhotoMetaData
-import com.superbeta.blibberly.user.data.model.UserDataModel
-import com.superbeta.blibberly.utils.BlibberlyDatabase
+package com.superbeta.blibberly.user.data.local
 
 //class UserLocalDbService(private val db: BlibberlyDatabase) : UserLocalDao {
 //    override suspend fun getUser(): UserDataModel {

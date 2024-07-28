@@ -6,34 +6,40 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.superbeta.blibberly_chat.data.Message
-import com.superbeta.blibberly_chat.utils.SocketHandler
-import com.superbeta.blibberly_chat.utils.SocketHandlerImpl
+import com.superbeta.blibberly_chat.data.local.MessageRoomInstanceProvider
+import com.superbeta.blibberly_chat.data.model.MessageDataModel
+import com.superbeta.blibberly_chat.data.remote.SocketHandlerImpl
+import com.superbeta.blibberly_chat.domain.MessagesRepo
+import com.superbeta.blibberly_chat.domain.MessagesRepoImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MessageViewModel(private val socketHandler: SocketHandler) : ViewModel() {
-    private val _messageState = MutableStateFlow<List<Message>>(emptyList())
-    val messageState: StateFlow<List<Message>> = _messageState.asStateFlow()
+class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
+    private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
+    val messageState: StateFlow<List<MessageDataModel>> =
+        _messageState.asStateFlow()
 
     init {
-        getMessages()
-    }
-
-    private fun getMessages() {
         viewModelScope.launch {
-            socketHandler.getMessageList().collect { messages ->
-                _messageState.value = messages
-//                Log.i("Collect Message from server", _messageState.value.toString())
-            }
+            getMessages()
+            messagesRepo.subscribeToMessages()
         }
     }
 
-    fun sendMessage(data: Message) {
+    private suspend fun getMessages() {
+        Log.i("MessageViewModel", "Calling getMessages from repository")
+        messagesRepo.getMessages().collect { messages ->
+            Log.i("MessageViewModel", "Collecting messages from repository: $messages")
+            _messageState.value = messages
+            Log.i("Collect Message from ViewModel", _messageState.value.toString())
+        }
+    }
+
+    fun sendMessage(data: MessageDataModel) {
         viewModelScope.launch {
-            socketHandler.sendMessage(data)
+            messagesRepo.sendMessage(data)
             _messageState.value += data
         }
     }
@@ -47,10 +53,10 @@ class MessageViewModel(private val socketHandler: SocketHandler) : ViewModel() {
             ): T {
                 val application =
                     extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-//                val db = RoomInstanceProvider.getDb(application.applicationContext)
-//                val mUserRepository = MUserRepositoryImpl(db.userLocalDao())
+                val db = MessageRoomInstanceProvider.getDb(application.applicationContext)
+                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), SocketHandlerImpl)
 
-                return MessageViewModel(SocketHandlerImpl) as T
+                return MessageViewModel(messagesRepo) as T
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.user.data
+package com.superbeta.blibberly.user.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert

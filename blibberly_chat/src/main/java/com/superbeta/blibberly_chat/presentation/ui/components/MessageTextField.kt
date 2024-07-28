@@ -25,7 +25,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.superbeta.blibberly_chat.R
-import com.superbeta.blibberly_chat.data.Message
+import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
 
@@ -39,7 +39,7 @@ fun MessageTextField(
         mutableStateOf(TextFieldValue())
     }
 
-    val data = Message(
+    val data = MessageDataModel(
         messageId = "1",
         content = message.text,
         senderID = "1",

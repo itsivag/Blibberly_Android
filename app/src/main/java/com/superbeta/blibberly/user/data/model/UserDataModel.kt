@@ -1,6 +1,5 @@
 package com.superbeta.blibberly.user.data.model
 
-import android.provider.ContactsContract.Contacts.Photo
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable

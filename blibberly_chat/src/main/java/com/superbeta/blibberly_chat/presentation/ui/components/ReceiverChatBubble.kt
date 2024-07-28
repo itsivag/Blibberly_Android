@@ -12,13 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.superbeta.blibberly_chat.data.Message
+import com.superbeta.blibberly_chat.data.model.MessageDataModel
 
 @Composable
-fun ReceiverChatBubble(currMessage: Message) {
+fun ReceiverChatBubble(currMessageDataModel: MessageDataModel) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,9 +34,9 @@ fun ReceiverChatBubble(currMessage: Message) {
                 )
                 .padding(8.dp), horizontalAlignment = Alignment.End
         ) {
-            Text(text = currMessage.content, color = Color.Black, fontSize = 14.sp)
+            Text(text = currMessageDataModel.content, color = Color.Black, fontSize = 14.sp)
             Text(
-                text = currMessage.timeStamp,
+                text = currMessageDataModel.timeStamp,
                 fontSize = 12.sp,
                 color = Color.DarkGray,
             )

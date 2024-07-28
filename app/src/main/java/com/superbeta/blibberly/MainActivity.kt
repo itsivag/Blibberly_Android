@@ -33,7 +33,7 @@ import com.superbeta.blibberly.ui.theme.BlibberlyTheme
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly_chat.utils.SocketHandlerImpl
+import com.superbeta.blibberly_chat.data.remote.SocketHandlerImpl
 
 
 class MainActivity : ComponentActivity() {
