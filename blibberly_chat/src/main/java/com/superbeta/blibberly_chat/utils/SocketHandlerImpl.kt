@@ -7,6 +7,7 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 object SocketHandlerImpl : SocketHandler {
     private lateinit var socket: Socket
@@ -25,19 +26,22 @@ object SocketHandlerImpl : SocketHandler {
     }
 
     override fun registerSocketListener() {
-//        val msgList = arrayListOf<String>()
+        Log.i("Message from server", "Started Listening")
         socket.on("broadcast") { msg ->
             if (!msg.isNullOrEmpty()) {
                 Log.i("Message from server", msg[0].toString() + " size -> " + msg.size)
-                val data = Gson().fromJson(msg[0].toString(), Message::class.java)
-                _messageList.value = ArrayList(_messageList.value + data)
+                try {
+                    val data = Gson().fromJson(msg[0].toString(), Message::class.java)
+                    _messageList.value = ArrayList(_messageList.value + data)
+                } catch (e: Exception) {
+                    Log.e("Invalid JSON", e.toString())
+                }
             }
         }
-//        return msgList
     }
 
-    override fun getMessageList(): MutableStateFlow<ArrayList<Message>> {
-        return _messageList
+    override fun getMessageList(): StateFlow<ArrayList<Message>> {
+        return _messageList.asStateFlow()
     }
 
     override fun getSocket(): Socket {

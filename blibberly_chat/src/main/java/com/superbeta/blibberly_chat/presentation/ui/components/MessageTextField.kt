@@ -35,8 +35,6 @@ fun MessageTextField(
         factory = MessageViewModel.Factory
     )
 ) {
-
-
     var message by remember {
         mutableStateOf(TextFieldValue())
     }
@@ -57,7 +55,7 @@ fun MessageTextField(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(4.dp)
+            .padding(8.dp)
             .fillMaxWidth(),
     ) {
 

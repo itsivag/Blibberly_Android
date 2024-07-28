@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface SocketHandler {
-    fun getMessageList(): MutableStateFlow<ArrayList<Message>>
+    fun getMessageList(): StateFlow<ArrayList<Message>>
     fun getSocket(): Socket
     fun sendMessage(data: Message)
     fun registerSocketListener()

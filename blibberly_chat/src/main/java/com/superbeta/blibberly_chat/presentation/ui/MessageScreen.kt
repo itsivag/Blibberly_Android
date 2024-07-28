@@ -1,7 +1,9 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -90,12 +92,15 @@ fun MessageScreen(
             colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
         )
     }) { it ->
-        Box(
+        Column(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
         ) {
-            LazyColumn {
+            LazyColumn(
+                verticalArrangement = Arrangement.Bottom,
+                modifier = Modifier.weight(1f)
+            ) {
                 items(count = messages.size) { i ->
                     val currMessage = messages[i]
                     if (currMessage.senderID == currUser) {
@@ -105,13 +110,7 @@ fun MessageScreen(
                     }
                 }
             }
-            Row(
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomCenter)
-                    .padding(bottom = 8.dp)
-            ) {
-                MessageTextField()
-            }
+            MessageTextField()
         }
     }
 }
