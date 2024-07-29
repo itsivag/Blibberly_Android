@@ -14,7 +14,8 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
 
     override suspend fun subscribeToMessages() {
         socketHandler.getMessageList().collect { messages ->
-            _messageState.value = messages
+//            _messageState.value = messages
+            saveMessages(messages)
             Log.i("Collect Message from server", _messageState.value.toString())
         }
     }
@@ -29,6 +30,7 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
     }
 
     override suspend fun saveMessages(messages: List<MessageDataModel>) {
-        TODO("Not yet implemented")
+        db.saveMessages(messages)
+        _messageState.value = db.getMessages()
     }
 }
