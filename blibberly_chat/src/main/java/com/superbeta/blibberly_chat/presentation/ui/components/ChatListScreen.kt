@@ -22,16 +22,16 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.superbeta.blibberly_chat.data.model.ChatUser
+import com.superbeta.blibberly_chat.data.model.ChatUserDataModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(modifier: Modifier, navController: NavHostController) {
-    val chats = listOf<ChatUser>(
-        ChatUser(userId = "1", name = "anna", photoUri = "", isOnline = false),
-        ChatUser(userId = "2", name = "banana", photoUri = "", isOnline = false),
-        ChatUser(userId = "3", name = "carrot", photoUri = "", isOnline = false),
-        ChatUser(userId = "4", name = "donald", photoUri = "", isOnline = false),
+    val chats = listOf<ChatUserDataModel>(
+        ChatUserDataModel(userId = "1", name = "anna", photoUri = "", isOnline = false),
+        ChatUserDataModel(userId = "2", name = "banana", photoUri = "", isOnline = false),
+        ChatUserDataModel(userId = "3", name = "carrot", photoUri = "", isOnline = false),
+        ChatUserDataModel(userId = "4", name = "donald", photoUri = "", isOnline = false),
     )
 
     LazyColumn(modifier = modifier) {
@@ -45,7 +45,7 @@ fun ChatListScreen(modifier: Modifier, navController: NavHostController) {
 }
 
 @Composable
-fun ChatListItem(chatUser: ChatUser, navController: NavHostController) {
+fun ChatListItem(chatUserDataModel: ChatUserDataModel, navController: NavHostController) {
     Row(
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 12.dp)
@@ -63,7 +63,7 @@ fun ChatListItem(chatUser: ChatUser, navController: NavHostController) {
         )
         Text(
             fontSize = 20.sp,
-            text = chatUser.name.capitalize(Locale.current),
+            text = chatUserDataModel.name.capitalize(Locale.current),
             modifier = Modifier.padding(start = 8.dp)
         )
 
