@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.superbeta.blibberly_chat.data.local.MessageRoomInstanceProvider
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
+import com.superbeta.blibberly_chat.data.model.SocketUserDataModel
 import com.superbeta.blibberly_chat.data.remote.SocketHandlerImpl
 import com.superbeta.blibberly_chat.domain.MessagesRepo
 import com.superbeta.blibberly_chat.domain.MessagesRepoImpl
@@ -44,6 +45,16 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         viewModelScope.launch {
             messagesRepo.sendMessage(data)
             _messageState.value += data
+        }
+    }
+
+    fun getUsers(): StateFlow<SocketUserDataModel> {
+        return messagesRepo.getUsers()
+    }
+
+    suspend fun getNewUserConnected() {
+        viewModelScope.launch {
+            messagesRepo.getNewUserConnected()
         }
     }
 

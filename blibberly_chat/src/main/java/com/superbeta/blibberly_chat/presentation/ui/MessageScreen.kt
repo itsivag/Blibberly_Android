@@ -1,6 +1,5 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,7 +51,7 @@ fun MessageScreen(
     val scope = rememberCoroutineScope()
     val messages by viewModel.messageState.collectAsState()
     val currUser = "1"
-    val MessageLazyListState = rememberLazyListState()
+    val messageLazyListState = rememberLazyListState()
 
     LaunchedEffect(true) {
         scope.launch {
@@ -61,7 +60,7 @@ fun MessageScreen(
     }
 
     LaunchedEffect(messages) {
-        MessageLazyListState.scrollToItem(MessageLazyListState.layoutInfo.totalItemsCount)
+        messageLazyListState.scrollToItem(messageLazyListState.layoutInfo.totalItemsCount)
     }
 
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
@@ -107,7 +106,7 @@ fun MessageScreen(
             LazyColumn(
                 verticalArrangement = Arrangement.Bottom,
                 modifier = Modifier.weight(1f),
-                state = MessageLazyListState
+                state = messageLazyListState
             ) {
                 items(count = messages.size) { i ->
                     val currMessage = messages[i]

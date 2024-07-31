@@ -10,7 +10,9 @@ interface SocketHandler {
     fun getSocket(): Socket
     fun sendMessage(data: MessageDataModel)
     fun registerSocketListener()
-    fun getConnectedUsers()
+    fun registerUsersListener()
+    fun registerNewUserConnectedListener()
+    fun getUsers(): StateFlow<SocketUserDataModel>
     fun disconnectSocket()
 
 }

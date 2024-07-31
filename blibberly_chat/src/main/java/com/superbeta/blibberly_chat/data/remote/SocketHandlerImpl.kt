@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModel
+import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import io.socket.client.IO
 import io.socket.client.IO.Options
 import io.socket.client.Socket
@@ -15,6 +16,7 @@ object SocketHandlerImpl : SocketHandler {
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
+    private val _usersList = MutableStateFlow(SocketUserDataModel())
 
     init {
         try {
@@ -28,7 +30,8 @@ object SocketHandlerImpl : SocketHandler {
             e.printStackTrace()
         }
         registerSocketListener()
-        getConnectedUsers()
+        registerUsersListener()
+//        registerNewUserConnectedListener()
     }
 
     override fun registerSocketListener() {
@@ -47,13 +50,13 @@ object SocketHandlerImpl : SocketHandler {
         }
     }
 
-    override fun getConnectedUsers() {
+    override fun registerUsersListener() {
         socket.on("users") { users ->
             if (!users.isNullOrEmpty()) {
                 try {
                     val data = Gson().fromJson(users[0].toString(), SocketUserDataModel::class.java)
+                    _usersList.value = data
                     Log.i("Connected Users", data.toString())
-//                    Log.i("Message from server 2", data.toString())
                 } catch (e: Exception) {
                     Log.e("Invalid Users JSON", e.toString())
                 }
@@ -61,9 +64,29 @@ object SocketHandlerImpl : SocketHandler {
         }
     }
 
+    override fun registerNewUserConnectedListener() {
+        socket.on("user connected") { newUser ->
+            if (!newUser.isNullOrEmpty()) {
+                try {
+                    val data =
+                        Gson().fromJson(newUser[0].toString(), SocketUserDataModelItem::class.java)
+                    _usersList.value += data
+                    Log.i("New user connected", data.toString())
+                } catch (e: Exception) {
+                    Log.e("Invalid new User JSON", e.toString())
+                }
+            }
+        }
+    }
+
+    override fun getUsers(): StateFlow<SocketUserDataModel> {
+        return _usersList.asStateFlow()
+    }
+
     override fun getMessageList(): StateFlow<List<MessageDataModel>> {
         return _messageList.asStateFlow()
     }
+
 
     override fun getSocket(): Socket {
         return socket

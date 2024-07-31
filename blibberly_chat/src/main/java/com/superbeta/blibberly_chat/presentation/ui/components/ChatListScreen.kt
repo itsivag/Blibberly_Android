@@ -14,6 +14,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,30 +26,44 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.superbeta.blibberly_chat.data.model.ChatUserDataModel
+import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
+import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatListScreen(modifier: Modifier, navController: NavHostController) {
-    val chats = listOf<ChatUserDataModel>(
-        ChatUserDataModel(userId = "1", name = "anna", photoUri = "", isOnline = false),
-        ChatUserDataModel(userId = "2", name = "banana", photoUri = "", isOnline = false),
-        ChatUserDataModel(userId = "3", name = "carrot", photoUri = "", isOnline = false),
-        ChatUserDataModel(userId = "4", name = "donald", photoUri = "", isOnline = false),
+fun ChatListScreen(
+    modifier: Modifier,
+    navController: NavHostController,
+    viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = MessageViewModel.Factory
     )
+) {
+//    val chats = listOf<ChatUserDataModel>(
+//        ChatUserDataModel(userId = "1", name = "anna", photoUri = "", isOnline = false),
+//        ChatUserDataModel(userId = "2", name = "banana", photoUri = "", isOnline = false),
+//        ChatUserDataModel(userId = "3", name = "carrot", photoUri = "", isOnline = false),
+//        ChatUserDataModel(userId = "4", name = "donald", photoUri = "", isOnline = false),
+//    )
+
+    val chats by viewModel.getUsers().collectAsState()
+    val scope = rememberCoroutineScope()
 
     LazyColumn(modifier = modifier) {
         item {
             TopAppBar(title = { Text(text = "Saved Chats") })
         }
-        items(chats.size) {
-            ChatListItem(chats[it], navController)
+        items(chats.size) { i ->
+            ChatListItem(chats[i], navController)
         }
     }
 }
 
 @Composable
-fun ChatListItem(chatUserDataModel: ChatUserDataModel, navController: NavHostController) {
+fun ChatListItem(
+    socketUserDataModelItem: SocketUserDataModelItem,
+    navController: NavHostController
+) {
     Row(
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 12.dp)
@@ -63,7 +81,7 @@ fun ChatListItem(chatUserDataModel: ChatUserDataModel, navController: NavHostCon
         )
         Text(
             fontSize = 20.sp,
-            text = chatUserDataModel.name.capitalize(Locale.current),
+            text = socketUserDataModelItem.username.toString().capitalize(Locale.current),
             modifier = Modifier.padding(start = 8.dp)
         )
 
