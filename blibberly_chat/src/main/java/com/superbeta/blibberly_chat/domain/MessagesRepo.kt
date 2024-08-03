@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface MessagesRepo {
     suspend fun subscribeToMessages()
     suspend fun getMessages(): StateFlow<List<MessageDataModel>>
-    suspend fun sendMessage(message: MessageDataModel)
+    suspend fun sendMessage(userId: String, message: MessageDataModel)
     fun getUsers(): StateFlow<List<SocketUserDataModelItem>>
     suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>)
 }

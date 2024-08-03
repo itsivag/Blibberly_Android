@@ -43,6 +43,8 @@ import kotlinx.coroutines.launch
 fun MessageScreen(
     modifier: Modifier,
     navController: NavHostController,
+    userId: String?,
+    userName: String?,
     viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
     )
@@ -81,7 +83,7 @@ fun MessageScreen(
                         modifier = Modifier.size(48.dp)
                     )
                     Text(
-                        text = "John lawda",
+                        text = userName ?: "Default User",
                         fontSize = 18.sp,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
@@ -117,7 +119,7 @@ fun MessageScreen(
                     }
                 }
             }
-            MessageTextField()
+            userId?.let { it1 -> MessageTextField(it1) }
         }
     }
 }

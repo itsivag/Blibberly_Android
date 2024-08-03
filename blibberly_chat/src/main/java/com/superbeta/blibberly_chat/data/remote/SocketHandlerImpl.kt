@@ -21,7 +21,7 @@ object SocketHandlerImpl : SocketHandler {
         try {
 
             val options = Options()
-            options.auth = mapOf("username" to "sivacbrf2@gmail.com")
+            options.auth = mapOf("username" to "silaki dum dum")
             socket = IO.socket("http://192.168.29.216:3000/", options)
             socket.connect()
 
@@ -36,7 +36,7 @@ object SocketHandlerImpl : SocketHandler {
 
     override fun registerSocketListener() {
         Log.i("Message from server", "Started Listening")
-        socket.on("broadcast") { msg ->
+        socket.on("private message") { msg ->
             if (!msg.isNullOrEmpty()) {
                 try {
                     val data = Gson().fromJson(msg[0].toString(), MessageDataModel::class.java)
@@ -101,6 +101,7 @@ object SocketHandlerImpl : SocketHandler {
                     val newUserList = _usersList.value.toMutableList()
                     newUserList.remove(data)
                     _usersList.value = newUserList
+                    Log.i("user disconnected list", _usersList.value.toString())
 
                     Log.i("user disconnected", data.toString())
                 } catch (e: Exception) {
@@ -119,9 +120,14 @@ object SocketHandlerImpl : SocketHandler {
         return socket
     }
 
-    override fun sendMessage(data: MessageDataModel) {
-        val dataJson = Gson().toJson(data)
-        socket.emit("broadcast", dataJson)
+    override fun sendMessage(userId: String, data: MessageDataModel) {
+        data class PrivateMessage(val content: String, val to: String)
+
+        val message = PrivateMessage(data.content, userId)
+        val jsonMessage = Gson().toJson(message)
+
+        Log.i("private message", jsonMessage)
+        socket.emit("private message", "message")
     }
 
     override fun disconnectSocket() {

@@ -45,9 +45,9 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     }
 
 
-    fun sendMessage(data: MessageDataModel) {
+    fun sendMessage(userId: String, data: MessageDataModel) {
         viewModelScope.launch {
-            messagesRepo.sendMessage(data)
+            messagesRepo.sendMessage(userId, data)
             _messageState.value += data
         }
     }
@@ -57,16 +57,6 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
             Log.i("MessageViewModel", "Collecting users from Viewmodel: $users")
             _usersState.value = users
         }
-    }
-
-    suspend fun getNewUserConnected() {
-//        messagesRepo.getNewUserConnected().collect { newUser ->
-//            if (newUser != null) {
-//                Log.i("MessageViewModel", "Collecting new user from Viewmodel: $newUser")
-//                _usersState.value += newUser
-//            }
-
-//        }
     }
 
     companion object {

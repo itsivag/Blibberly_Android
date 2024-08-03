@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MessageTextField(
+    userId: String,
     viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
     )
@@ -78,7 +79,7 @@ fun MessageTextField(
         IconButton(
             onClick = {
                 scope.launch {
-                    viewModel.sendMessage(data)
+                    viewModel.sendMessage(userId = userId, data = data)
                     message = TextFieldValue("")
                 }
             },

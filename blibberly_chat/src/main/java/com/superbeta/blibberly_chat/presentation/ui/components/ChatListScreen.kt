@@ -45,7 +45,6 @@ fun ChatListScreen(
     LaunchedEffect(key1 = true) {
         scope.launch {
             viewModel.getUsers()
-            viewModel.getNewUserConnected()
         }
     }
 
@@ -69,7 +68,7 @@ fun ChatListItem(
             .padding(horizontal = 8.dp, vertical = 12.dp)
             .fillMaxWidth()
             .clickable {
-                navController.navigate("messages")
+                navController.navigate("messages/" + socketUserDataModelItem.userID + "/" + socketUserDataModelItem.username)
             },
         verticalAlignment = Alignment.CenterVertically
     ) {

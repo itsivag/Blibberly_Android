@@ -25,8 +25,8 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
         return _messageState.asStateFlow()
     }
 
-    override suspend fun sendMessage(message: MessageDataModel) {
-        socketHandler.sendMessage(message)
+    override suspend fun sendMessage(userId: String, message: MessageDataModel) {
+        socketHandler.sendMessage(userId, message)
         _messageState.value += message
     }
 

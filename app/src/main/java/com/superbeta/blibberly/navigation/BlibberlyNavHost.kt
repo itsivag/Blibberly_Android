@@ -3,8 +3,10 @@ package com.superbeta.blibberly.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.superbeta.blibberly.auth.OTPScreen
 import com.superbeta.blibberly.auth.presentation.SignInScreen
 import com.superbeta.blibberly.auth.presentation.SignUpScreen
@@ -73,8 +75,19 @@ fun BlibberlyNavHost(
             ChatListScreen(modifier, navController)
         }
 
-        composable(Screen.Message.route) {
-            MessageScreen(modifier, navController)
+        composable(
+            Screen.Message.route + "/{userId}/{userName}",
+            arguments = listOf(
+                navArgument("userId", builder = { type = NavType.StringType }),
+                navArgument("userName", builder = { type = NavType.StringType })
+            )
+        ) { backStackEntry ->
+            MessageScreen(
+                modifier,
+                navController,
+                backStackEntry.arguments?.getString("userId"),
+                backStackEntry.arguments?.getString("userName")
+            )
         }
         composable(Screen.Filter.route) {
             FilterScreen(modifier, navController)
