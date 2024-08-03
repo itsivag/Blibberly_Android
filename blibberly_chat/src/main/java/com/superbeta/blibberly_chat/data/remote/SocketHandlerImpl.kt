@@ -32,6 +32,7 @@ object SocketHandlerImpl : SocketHandler {
         registerSocketListener()
         registerUsersListener()
         registerNewUserConnectedListener()
+        userDisconnected()
     }
 
     override fun registerSocketListener() {
@@ -72,7 +73,11 @@ object SocketHandlerImpl : SocketHandler {
                 try {
                     val data =
                         Gson().fromJson(newUser[0].toString(), SocketUserDataModelItem::class.java)
-                    _usersList.value += data
+
+                    val newUserList = _usersList.value.toMutableList()
+                    newUserList.add(data)
+                    _usersList.value = newUserList
+
                     Log.i("New user connected", data.toString())
                 } catch (e: Exception) {
                     Log.e("Invalid new User JSON", e.toString())
@@ -87,6 +92,27 @@ object SocketHandlerImpl : SocketHandler {
 
     override fun getNewUser(): StateFlow<SocketUserDataModelItem?> {
         return _newUserConnected.asStateFlow()
+    }
+
+    override fun userDisconnected() {
+        socket.on("user disconnected") { disconnectedUser ->
+            if (!disconnectedUser.isNullOrEmpty()) {
+                try {
+                    val data =
+                        Gson().fromJson(
+                            disconnectedUser[0].toString(),
+                            SocketUserDataModelItem::class.java
+                        )
+                    val newUserList = _usersList.value.toMutableList()
+                    newUserList.remove(data)
+                    _usersList.value = newUserList
+
+                    Log.i("user disconnected", data.toString())
+                } catch (e: Exception) {
+                    Log.e("Invalid disconnected User JSON", e.toString())
+                }
+            }
+        }
     }
 
     override fun getMessageList(): StateFlow<List<MessageDataModel>> {
