@@ -12,9 +12,8 @@ interface SocketHandler {
     fun registerSocketListener()
     fun registerUsersListener()
     fun registerNewUserConnectedListener()
+    fun registerUserDisconnectedListener()
     fun getUsers(): StateFlow<List<SocketUserDataModelItem>>
-    fun getNewUser(): StateFlow<SocketUserDataModelItem?>
-    fun userDisconnected()
     fun disconnectSocket()
 
 }

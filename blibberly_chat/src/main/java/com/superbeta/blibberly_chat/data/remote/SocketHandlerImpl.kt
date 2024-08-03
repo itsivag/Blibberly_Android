@@ -16,7 +16,6 @@ object SocketHandlerImpl : SocketHandler {
 
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
     private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
-    private val _newUserConnected = MutableStateFlow<SocketUserDataModelItem?>(null)
 
     init {
         try {
@@ -32,7 +31,7 @@ object SocketHandlerImpl : SocketHandler {
         registerSocketListener()
         registerUsersListener()
         registerNewUserConnectedListener()
-        userDisconnected()
+        registerUserDisconnectedListener()
     }
 
     override fun registerSocketListener() {
@@ -90,11 +89,7 @@ object SocketHandlerImpl : SocketHandler {
         return _usersList.asStateFlow()
     }
 
-    override fun getNewUser(): StateFlow<SocketUserDataModelItem?> {
-        return _newUserConnected.asStateFlow()
-    }
-
-    override fun userDisconnected() {
+    override fun registerUserDisconnectedListener() {
         socket.on("user disconnected") { disconnectedUser ->
             if (!disconnectedUser.isNullOrEmpty()) {
                 try {

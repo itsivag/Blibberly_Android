@@ -34,9 +34,9 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
         return socketHandler.getUsers()
     }
 
-    override suspend fun getNewUserConnected(): StateFlow<SocketUserDataModelItem?> {
-        return socketHandler.getNewUser()
-    }
+//    override suspend fun getNewUserConnected(): StateFlow<SocketUserDataModelItem?> {
+//        return socketHandler.getNewUser()
+//    }
 
     override suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>) {
         db.saveMessages(messages)
