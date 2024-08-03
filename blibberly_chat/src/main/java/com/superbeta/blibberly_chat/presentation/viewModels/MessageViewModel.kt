@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.superbeta.blibberly_chat.data.local.MessageRoomInstanceProvider
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModel
+import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.data.remote.SocketHandlerImpl
 import com.superbeta.blibberly_chat.domain.MessagesRepo
 import com.superbeta.blibberly_chat.domain.MessagesRepoImpl
@@ -22,6 +22,10 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     val messageState: StateFlow<List<MessageDataModel>> =
         _messageState.asStateFlow()
 
+    private val _usersState = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
+    val usersState: StateFlow<List<SocketUserDataModelItem>> =
+        _usersState.asStateFlow()
+
     init {
         viewModelScope.launch {
             messagesRepo.subscribeToMessages()
@@ -34,7 +38,7 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
 
     suspend fun collectMessages() {
         messagesRepo.getMessages().collect { messages ->
-            Log.i("MessageViewModel", "Collecting messages from repository: $messages")
+            Log.i("MessageViewModel", "Collecting messages from Viewmodel: $messages")
             _messageState.value = messages
             Log.i("Collect Message from ViewModel", _messageState.value.toString())
         }
@@ -48,14 +52,21 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
-    fun getUsers(): StateFlow<SocketUserDataModel> {
-        return messagesRepo.getUsers()
+    suspend fun getUsers() {
+        messagesRepo.getUsers().collect { users ->
+            Log.i("MessageViewModel", "Collecting users from Viewmodel: $users")
+            _usersState.value = users
+        }
     }
 
     suspend fun getNewUserConnected() {
-        viewModelScope.launch {
-            messagesRepo.getNewUserConnected()
-        }
+//        messagesRepo.getNewUserConnected().collect { newUser ->
+//            if (newUser != null) {
+//                Log.i("MessageViewModel", "Collecting new user from Viewmodel: $newUser")
+//                _usersState.value += newUser
+//            }
+
+//        }
     }
 
     companion object {

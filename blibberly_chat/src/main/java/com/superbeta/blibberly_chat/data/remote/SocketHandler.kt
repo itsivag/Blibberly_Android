@@ -1,8 +1,9 @@
 package com.superbeta.blibberly_chat.data.remote
 
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModel
+import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import io.socket.client.Socket
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface SocketHandler {
@@ -12,7 +13,8 @@ interface SocketHandler {
     fun registerSocketListener()
     fun registerUsersListener()
     fun registerNewUserConnectedListener()
-    fun getUsers(): StateFlow<SocketUserDataModel>
+    fun getUsers(): StateFlow<List<SocketUserDataModelItem>>
+    fun getNewUser(): StateFlow<SocketUserDataModelItem?>
     fun disconnectSocket()
 
 }

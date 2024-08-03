@@ -3,7 +3,7 @@ package com.superbeta.blibberly_chat.domain
 import android.util.Log
 import com.superbeta.blibberly_chat.data.local.MessagesDao
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModel
+import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.data.remote.SocketHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,12 +30,12 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
         _messageState.value += message
     }
 
-    override fun getUsers(): StateFlow<SocketUserDataModel> {
+    override fun getUsers(): StateFlow<List<SocketUserDataModelItem>> {
         return socketHandler.getUsers()
     }
 
-    override suspend fun getNewUserConnected() {
-        socketHandler.registerNewUserConnectedListener()
+    override suspend fun getNewUserConnected(): StateFlow<SocketUserDataModelItem?> {
+        return socketHandler.getNewUser()
     }
 
     override suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>) {

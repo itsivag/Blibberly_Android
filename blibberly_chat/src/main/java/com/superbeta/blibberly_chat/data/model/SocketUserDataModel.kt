@@ -9,4 +9,4 @@ data class SocketUserDataModelItem(
     val username: String?
 )
 
-class SocketUserDataModel : ArrayList<SocketUserDataModelItem>()
+//class SocketUserDataModel : ArrayList<SocketUserDataModelItem>()

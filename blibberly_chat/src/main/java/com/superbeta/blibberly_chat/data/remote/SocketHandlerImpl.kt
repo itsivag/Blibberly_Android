@@ -3,7 +3,6 @@ package com.superbeta.blibberly_chat.data.remote
 import android.util.Log
 import com.google.gson.Gson
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModel
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import io.socket.client.IO
 import io.socket.client.IO.Options
@@ -16,7 +15,8 @@ object SocketHandlerImpl : SocketHandler {
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
-    private val _usersList = MutableStateFlow(SocketUserDataModel())
+    private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
+    private val _newUserConnected = MutableStateFlow<SocketUserDataModelItem?>(null)
 
     init {
         try {
@@ -31,7 +31,7 @@ object SocketHandlerImpl : SocketHandler {
         }
         registerSocketListener()
         registerUsersListener()
-//        registerNewUserConnectedListener()
+        registerNewUserConnectedListener()
     }
 
     override fun registerSocketListener() {
@@ -42,7 +42,6 @@ object SocketHandlerImpl : SocketHandler {
                     val data = Gson().fromJson(msg[0].toString(), MessageDataModel::class.java)
                     _messageList.value += data
                     Log.i("Message from server", _messageList.value.toString())
-//                    Log.i("Message from server 2", data.toString())
                 } catch (e: Exception) {
                     Log.e("Invalid Message JSON", e.toString())
                 }
@@ -54,9 +53,12 @@ object SocketHandlerImpl : SocketHandler {
         socket.on("users") { users ->
             if (!users.isNullOrEmpty()) {
                 try {
-                    val data = Gson().fromJson(users[0].toString(), SocketUserDataModel::class.java)
-                    _usersList.value = data
-                    Log.i("Connected Users", data.toString())
+                    val a = Gson().fromJson(
+                        users[0].toString(),
+                        Array<SocketUserDataModelItem>::class.java
+                    ).toList()
+                    Log.i("Connected Users", a.toString())
+                    _usersList.value = a
                 } catch (e: Exception) {
                     Log.e("Invalid Users JSON", e.toString())
                 }
@@ -79,8 +81,12 @@ object SocketHandlerImpl : SocketHandler {
         }
     }
 
-    override fun getUsers(): StateFlow<SocketUserDataModel> {
+    override fun getUsers(): StateFlow<List<SocketUserDataModelItem>> {
         return _usersList.asStateFlow()
+    }
+
+    override fun getNewUser(): StateFlow<SocketUserDataModelItem?> {
+        return _newUserConnected.asStateFlow()
     }
 
     override fun getMessageList(): StateFlow<List<MessageDataModel>> {

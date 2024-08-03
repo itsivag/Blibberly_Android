@@ -39,15 +39,15 @@ fun ChatListScreen(
         factory = MessageViewModel.Factory
     )
 ) {
-//    val chats = listOf<ChatUserDataModel>(
-//        ChatUserDataModel(userId = "1", name = "anna", photoUri = "", isOnline = false),
-//        ChatUserDataModel(userId = "2", name = "banana", photoUri = "", isOnline = false),
-//        ChatUserDataModel(userId = "3", name = "carrot", photoUri = "", isOnline = false),
-//        ChatUserDataModel(userId = "4", name = "donald", photoUri = "", isOnline = false),
-//    )
-
-    val chats by viewModel.getUsers().collectAsState()
+    val chats by viewModel.usersState.collectAsState()
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            viewModel.getUsers()
+            viewModel.getNewUserConnected()
+        }
+    }
 
     LazyColumn(modifier = modifier) {
         item {
