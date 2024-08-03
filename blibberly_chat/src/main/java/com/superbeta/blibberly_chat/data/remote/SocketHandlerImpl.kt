@@ -28,19 +28,19 @@ object SocketHandlerImpl : SocketHandler {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        registerSocketListener()
+        registerMessageListener()
         registerUsersListener()
         registerNewUserConnectedListener()
         registerUserDisconnectedListener()
     }
 
-    override fun registerSocketListener() {
+    override fun registerMessageListener() {
         Log.i("Message from server", "Started Listening")
         socket.on("private message") { msg ->
             if (!msg.isNullOrEmpty()) {
                 try {
-                    val data = Gson().fromJson(msg[0].toString(), MessageDataModel::class.java)
-                    _messageList.value += data
+                    val data = Gson().fromJson(msg[0].toString(), PrivateMessage::class.java)
+                    _messageList.value += data.content
                     Log.i("Message from server", _messageList.value.toString())
                 } catch (e: Exception) {
                     Log.e("Invalid Message JSON", e.toString())
@@ -121,13 +121,12 @@ object SocketHandlerImpl : SocketHandler {
     }
 
     override fun sendMessage(userId: String, data: MessageDataModel) {
-        data class PrivateMessage(val content: String, val to: String)
 
-        val message = PrivateMessage(data.content, userId)
+        val message = PrivateMessage(data, userId)
         val jsonMessage = Gson().toJson(message)
 
         Log.i("private message", jsonMessage)
-        socket.emit("private message", "message")
+        socket.emit("private message", jsonMessage)
     }
 
     override fun disconnectSocket() {
@@ -136,3 +135,5 @@ object SocketHandlerImpl : SocketHandler {
     }
 
 }
+
+data class PrivateMessage(val content: MessageDataModel, val to: String)

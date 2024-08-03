@@ -40,7 +40,7 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         messagesRepo.getMessages().collect { messages ->
             Log.i("MessageViewModel", "Collecting messages from Viewmodel: $messages")
             _messageState.value = messages
-            Log.i("Collect Message from ViewModel", _messageState.value.toString())
+//            Log.i("Collect Message from ViewModel", _messageState.value.toString())
         }
     }
 

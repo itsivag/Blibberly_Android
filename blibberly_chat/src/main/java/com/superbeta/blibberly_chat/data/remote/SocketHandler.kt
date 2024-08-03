@@ -7,13 +7,17 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface SocketHandler {
     fun getMessageList(): StateFlow<List<MessageDataModel>>
+    fun getUsers(): StateFlow<List<SocketUserDataModelItem>>
     fun getSocket(): Socket
-    fun sendMessage(userId: String, data: MessageDataModel)
-    fun registerSocketListener()
+
+
+    fun registerMessageListener()
     fun registerUsersListener()
     fun registerNewUserConnectedListener()
     fun registerUserDisconnectedListener()
-    fun getUsers(): StateFlow<List<SocketUserDataModelItem>>
+
+    fun sendMessage(userId: String, data: MessageDataModel)
+
     fun disconnectSocket()
 
 }

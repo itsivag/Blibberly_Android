@@ -15,9 +15,9 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
 
     override suspend fun subscribeToMessages() {
         socketHandler.getMessageList().collect { messages ->
-//            _messageState.value = messages
+            _messageState.value = messages
             saveMessagesToLocalDb(messages)
-            Log.i("Collect Message from server", _messageState.value.toString())
+//            Log.i("Collect Message from server", _messageState.value.toString())
         }
     }
 
