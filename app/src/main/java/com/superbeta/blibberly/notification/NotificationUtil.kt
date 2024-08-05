@@ -1,0 +1,35 @@
+package com.superbeta.blibberly.notification
+
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.os.Build
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+
+class NotificationUtil(
+    private val activity: Activity,
+    private val requestPermissionLauncher: ActivityResultLauncher<String>
+) {
+    fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.i("Notification Permission", "PERMISSION_GRANTED")
+                // FCM SDK (and your app) can post notifications.
+            } else {
+                Log.i("Notification Permission", "NO_PERMISSION")
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
+    }
+}

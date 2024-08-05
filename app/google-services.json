@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "680631497033",
+    "project_id": "blibberly-9d83b",
+    "storage_bucket": "blibberly-9d83b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680631497033:android:5f744e7ab767da6fd5ea98",
+        "android_client_info": {
+          "package_name": "com.superbeta.blibberly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOgiSRArkl1M4FfsJT1ARHcUNiKUqUxCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
