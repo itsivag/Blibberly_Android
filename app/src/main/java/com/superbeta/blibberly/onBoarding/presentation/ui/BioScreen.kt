@@ -98,6 +98,9 @@ fun BioScreen(
     var gender by remember {
         mutableStateOf("")
     }
+    var userFCMToken by remember {
+        mutableStateOf("")
+    }
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -124,6 +127,11 @@ fun BioScreen(
         }
     }
 
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            userFCMToken = viewModel.getUserFCMToken()
+        }
+    }
 
     isButtonEnabled = true
 //        !(name.text.isEmpty() || age.text.isEmpty() || height.text.isEmpty() || weight.text.isEmpty())
@@ -328,7 +336,8 @@ fun BioScreen(
                                 aboutMe = aboutMe,
                                 interests = interests,
                                 gender = gender,
-                                photoMetaData = PhotoMetaData("","","")
+                                photoMetaData = PhotoMetaData("", "", ""),
+                                fcmToken = userFCMToken
                             )
                         )
 

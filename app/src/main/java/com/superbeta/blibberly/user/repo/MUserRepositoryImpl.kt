@@ -3,12 +3,22 @@ package com.superbeta.blibberly.user.repo
 import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly_chat.notification.NotificationRepo
+import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 
 
-class MUserRepositoryImpl(private val db: UserLocalDao) : MUserRepository {
+class MUserRepositoryImpl(
+    private val db: UserLocalDao,
+    private val notificationRepo: NotificationRepo
+) : MUserRepository {
     override suspend fun getUser(): UserDataModel {
         return db.getUser()
     }
+
+    override suspend fun getUserFCMToken(): String {
+        return notificationRepo.getFCMToken()
+    }
+
 
     override suspend fun setUser(userDataModel: UserDataModel) {
         return db.setUser(userDataModel)

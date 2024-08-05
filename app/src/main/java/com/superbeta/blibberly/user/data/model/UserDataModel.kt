@@ -34,7 +34,9 @@ data class UserDataModel(
 
     @SerialName("interests") @ColumnInfo("interests") val interests: List<String>,
 
-    @SerialName("photoMetaData") @ColumnInfo("photoUri") val photoMetaData: PhotoMetaData
+    @SerialName("photoMetaData") @ColumnInfo("photoUri") val photoMetaData: PhotoMetaData,
+
+    @SerialName("fcmToken") @ColumnInfo("fcmToken") val fcmToken: String
 )
 
 @Serializable

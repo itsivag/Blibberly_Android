@@ -5,6 +5,7 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 
 interface MUserRepository {
     suspend fun getUser(): UserDataModel
+    suspend fun getUserFCMToken(): String
     suspend fun setUser(userDataModel: UserDataModel)
     suspend fun updateName(newName: String)
     suspend fun updateAge(newAge: Int)

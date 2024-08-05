@@ -12,6 +12,7 @@ import com.superbeta.blibberly.user.repo.MUserRepository
 import com.superbeta.blibberly.user.repo.MUserRepositoryImpl
 import com.superbeta.blibberly.utils.RoomInstanceProvider
 import com.superbeta.blibberly.utils.supabase
+import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -23,6 +24,10 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
 
     suspend fun getUser() {
         _userState.value = mUserRepository.getUser()
+    }
+
+    suspend fun getUserFCMToken(): String {
+        return mUserRepository.getUserFCMToken()
     }
 
     suspend fun setUser(userDataModel: UserDataModel) {
@@ -78,7 +83,8 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
                 val application =
                     extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
                 val db = RoomInstanceProvider.getDb(application.applicationContext)
-                val mUserRepository = MUserRepositoryImpl(db.userLocalDao())
+                val notificationRepo = NotificationRepoImpl()
+                val mUserRepository = MUserRepositoryImpl(db.userLocalDao(), notificationRepo)
                 return UserViewModel(
                     mUserRepository
                 ) as T

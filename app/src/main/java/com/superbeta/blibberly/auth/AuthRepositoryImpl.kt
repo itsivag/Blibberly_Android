@@ -9,6 +9,8 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.utils.supabase
+import com.superbeta.blibberly_chat.notification.NotificationRepo
+import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.Google
@@ -97,7 +99,7 @@ class AuthRepositoryImpl : AuthRepository {
                 val userData = findIfUserRegistered()
 
                 if (userData == null) {
-                    Log.i("Google Sign In", "User not registered")
+                    Log.i("Auth", "User not registered")
                     onUserNotRegistered()
                 } else {
                     onSignInSuccess()

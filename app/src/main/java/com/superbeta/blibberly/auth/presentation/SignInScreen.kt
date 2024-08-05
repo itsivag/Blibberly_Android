@@ -39,6 +39,7 @@ import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import kotlinx.coroutines.launch
 
 @Composable
@@ -130,6 +131,7 @@ fun SignInScreen(modifier: Modifier, navController: NavHostController) {
 //                        mEmail = email.text, mPassword = password.text
 //                    )
 
+//                    val notificationRepo = NotificationRepoImpl()
                     AuthRepositoryImpl().signInWithEmail(email.text, password.text)
 
                 }.invokeOnCompletion {
@@ -189,7 +191,8 @@ fun GoogleSignInButton(navController: NavHostController) {
         isButtonEnabled = true,
         onClickMethod = {
             coroutineScope.launch {
-                AuthRepositoryImpl().signInWithGoogle(credentialManager,
+                AuthRepositoryImpl().signInWithGoogle(
+                    credentialManager,
                     coroutineScope,
                     context,
                     { navController.navigate(Screen.Home.route) },

@@ -43,6 +43,7 @@ import com.superbeta.blibberly.auth.AuthRepositoryImpl
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
+import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -144,7 +145,10 @@ fun SignUpScreen(modifier: Modifier, navController: NavHostController) {
 //                        mEmail = email.text, mPassword = password.text
 //                    )
 
-                    AuthRepositoryImpl().createUser(email.text, password.text)
+                    AuthRepositoryImpl().createUser(
+                        email.text,
+                        password.text
+                    )
 
                 }
 //                navController.navigate("otp_enter")
