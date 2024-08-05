@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     kotlin("plugin.serialization") version "1.9.0"
     id("com.google.devtools.ksp")
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -72,6 +73,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //FCM
+//    implementation(libs.firebase.messaging)
+
     implementation("androidx.compose.material:material:1.6.7")
     implementation("androidx.compose.material:material-icons-extended")
     //compose animation
@@ -112,18 +116,5 @@ dependencies {
     implementation("io.socket:socket.io-client:2.0.0") {
         exclude(group = "org.json", module = "json")
     }
-
-//    //
-//    dependencies {
-//        implementation("androidx.credentials:credentials:1.2.2")
-//        implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
-//
-//        // optional - needed for credentials support from play services, for devices running
-//        // Android 13 and below.
-//        implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
-//    }
-//// optional - needed for credentials support from play services, for devices running
-//// Android 13 and below.
-//    implementation("androidx.credentials:credentials-play-services-auth:<latest version>")
 
 }

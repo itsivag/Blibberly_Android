@@ -1,5 +1,7 @@
 package com.superbeta.blibberly.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -13,6 +15,7 @@ import com.superbeta.blibberly.auth.presentation.SignUpScreen
 import com.superbeta.blibberly.home.main.presentation.ui.HomeScreen
 import com.superbeta.blibberly.home.filter.FilterScreen
 import com.superbeta.blibberly.home.notifications.NotificationScreen
+import com.superbeta.blibberly.notification.NotificationConsentScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.AboutMeScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.BioScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.CurateProfilesScreen
@@ -21,6 +24,7 @@ import com.superbeta.blibberly.onBoarding.presentation.ui.BlibmojiScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.SkillsAndInterestsScreen
 import com.superbeta.blibberly.profile.ProfileScreen
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_chat.notification.NotificationSampleScreen
 import com.superbeta.blibberly_chat.presentation.ui.MessageScreen
 import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
 
@@ -28,7 +32,7 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = Screen.ChatList.route
+    startDestination: String = "notification_sample"
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Screen.SignIn.route) {
@@ -64,6 +68,17 @@ fun BlibberlyNavHost(
         composable(Screen.CurateProfile.route) {
             CurateProfilesScreen(modifier, navController)
         }
+
+        composable(Screen.NotificationConsent.route) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationConsentScreen(modifier, navController)
+            }
+        }
+
+        composable("notification_sample") {
+            NotificationSampleScreen()
+        }
+
         composable(Screen.Notification.route) {
             NotificationScreen(modifier, navController)
         }
