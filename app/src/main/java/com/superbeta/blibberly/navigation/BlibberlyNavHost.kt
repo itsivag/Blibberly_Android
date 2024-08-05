@@ -32,8 +32,8 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-//    startDestination: String = "notification_sample"
-    startDestination: String = Screen.SignIn.route
+    startDestination: String = "notification_sample"
+//    startDestination: String = Screen.NotificationConsent.route
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Screen.SignIn.route) {

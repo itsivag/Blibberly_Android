@@ -17,8 +17,5 @@ class NotificationRepoImpl : NotificationRepo {
         return token
     }
 
-    override fun storeFCMToken(token: String) {
-        val email = supabase.auth.currentSessionOrNull()?.user?.email
-        Log.i("FCM STORE USER", email.toString())
-    }
+
 }
