@@ -1,8 +1,7 @@
-package com.superbeta.blibberly.auth.presentation
+package com.superbeta.blibberly.auth.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,13 +11,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,23 +27,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.credentials.CredentialManager
 import androidx.navigation.NavHostController
-import com.superbeta.blibberly.auth.AuthRepositoryImpl
+import com.superbeta.blibberly.R
+import com.superbeta.blibberly.auth.domain.AuthRepositoryImpl
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
-import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen(modifier: Modifier, navController: NavHostController) {
+fun SignUpScreen(modifier: Modifier, navController: NavHostController) {
 
 
     var email by remember {
@@ -66,13 +66,22 @@ fun SignInScreen(modifier: Modifier, navController: NavHostController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
         val internalModifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
+
+        TopAppBar(title = {}, navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.arrow_back),
+                    contentDescription = "Go back"
+                )
+            }
+        })
 
         Text(text = "Let's sign you in", style = MaterialTheme.typography.titleLarge)
 
@@ -123,7 +132,7 @@ fun SignInScreen(modifier: Modifier, navController: NavHostController) {
 
 
         PrimaryButton(modifier = internalModifier,
-            buttonText = "Sign In",
+            buttonText = "Sign Up",
             isButtonEnabled = isButtonEnabled,
             onClickMethod = {
                 scope.launch {
@@ -131,72 +140,14 @@ fun SignInScreen(modifier: Modifier, navController: NavHostController) {
 //                        mEmail = email.text, mPassword = password.text
 //                    )
 
-//                    val notificationRepo = NotificationRepoImpl()
-                    AuthRepositoryImpl().signInWithEmail(email.text, password.text)
+//                    AuthRepositoryImpl().createUser(
+//                        email.text,
+//                        password.text
+//                    )
 
-                }.invokeOnCompletion {
-                    navController.navigate(Screen.Home.route)
                 }
 //                navController.navigate("otp_enter")
             })
 
-
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HorizontalDivider(
-                modifier = Modifier.weight(1f)
-            )
-            Text(
-                text = "Or",
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            HorizontalDivider(
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        GoogleSignInButton(navController)
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "Don't have an account?")
-            TextButton(onClick = { navController.navigate(Screen.SignUp.route) }) {
-                Text(text = "Sign Up", color = Color.Blue)
-            }
-        }
     }
-}
-
-@Composable
-fun GoogleSignInButton(navController: NavHostController) {
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val credentialManager = CredentialManager.create(context)
-
-    PrimaryButton(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 8.dp),
-        buttonText = "Sign in with Google",
-        isButtonEnabled = true,
-        onClickMethod = {
-            coroutineScope.launch {
-                AuthRepositoryImpl().signInWithGoogle(
-                    credentialManager,
-                    coroutineScope,
-                    context,
-                    { navController.navigate(Screen.Home.route) },
-                    { navController.navigate(Screen.OnBoarding.route) })
-            }
-        })
 }

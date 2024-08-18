@@ -44,6 +44,8 @@ import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_chat.utils_chat.supabase
+import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
 
 enum class HeightUnit {
@@ -328,7 +330,8 @@ fun BioScreen(
                     try {
                         viewModel.setUser(
                             UserDataModel(
-                                email = "88383428234",
+                                email = supabase.auth.currentUserOrNull()?.email
+                                    ?: "error finding email",
                                 name = name.text,
                                 age = age.text.toInt(),
                                 height = height.text.toDouble(),

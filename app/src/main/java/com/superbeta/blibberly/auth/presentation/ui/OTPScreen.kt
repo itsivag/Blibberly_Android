@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.auth
+package com.superbeta.blibberly.auth.presentation.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

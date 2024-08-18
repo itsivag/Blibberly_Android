@@ -1,32 +1,58 @@
-package com.superbeta.blibberly.auth
+package com.superbeta.blibberly.auth.domain
 
 import android.content.Context
 import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.superbeta.blibberly.auth.utils.AuthState
+import com.superbeta.blibberly.auth.utils.UserDataPreferenceKeys
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.utils.supabase
-import com.superbeta.blibberly_chat.notification.NotificationRepo
-import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.Google
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.gotrue.providers.builtin.IDToken
-import io.github.jan.supabase.gotrue.providers.builtin.Phone
 import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
 
-class AuthRepositoryImpl : AuthRepository {
-    override suspend fun createUser(mEmail: String, mPassword: String) {
 
+
+
+class AuthRepositoryImpl(
+    private val context: Context,
+    private val credentialManager: CredentialManager
+) : AuthRepository {
+
+    private val _authState = MutableStateFlow<AuthState>(AuthState.IDLE)
+
+    private val Context.userPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(
+        name = "user"
+    )
+
+    override suspend fun getAuthState(): MutableStateFlow<AuthState> {
+        return _authState
+    }
+
+    override suspend fun createUser(mEmail: String, mPassword: String) {
+        _authState.value = AuthState.LOADING
         try {
             supabase.auth.signUpWith(Email) {
                 email = mEmail
@@ -38,6 +64,7 @@ class AuthRepositoryImpl : AuthRepository {
     }
 
     override suspend fun signInWithEmail(mEmail: String, mPassword: String) {
+        _authState.value = AuthState.LOADING
         try {
             supabase.auth.signInWith(Email) {
                 email = mEmail
@@ -48,14 +75,8 @@ class AuthRepositoryImpl : AuthRepository {
         }
     }
 
-    override suspend fun signInWithGoogle(
-        credentialManager: CredentialManager,
-        coroutineScope: CoroutineScope,
-        context: Context,
-        onSignInSuccess: () -> Unit,
-        onUserNotRegistered: () -> Unit
-    ) {
-
+    override suspend fun signInWithGoogle() {
+        _authState.value = AuthState.LOADING
         // Generate a nonce and hash it with sha-256
         // Providing a nonce is optional but recommended
         val rawNonce = UUID.randomUUID()
@@ -76,15 +97,15 @@ class AuthRepositoryImpl : AuthRepository {
         val request: GetCredentialRequest =
             GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
 
-        coroutineScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                val result = credentialManager.getCredential(
+                val credentialResponse = credentialManager.getCredential(
                     request = request,
                     context = context,
                 )
 
                 val googleIdTokenCredential =
-                    GoogleIdTokenCredential.createFrom(result.credential.data)
+                    GoogleIdTokenCredential.createFrom(credentialResponse.credential.data)
 
                 val googleIdToken = googleIdTokenCredential.idToken
 
@@ -95,17 +116,22 @@ class AuthRepositoryImpl : AuthRepository {
                 }
 
                 // Handle successful sign-in
-                Log.i("Google Sign In", "Sign In Successful")
-                val userData = findIfUserRegistered()
+//                Log.i("Google Sign In", "Sign In Successful")
 
-                if (userData == null) {
-                    Log.i("Auth", "User not registered")
-                    onUserNotRegistered()
-                } else {
-                    onSignInSuccess()
-                }
+                val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
+                Log.i("Google Sign In User Data => ", user.toString())
+                storeUserInDataStore(user)
 
+//                val userData = findIfUserRegistered()
 
+//                if (userData == null) {
+//                    Log.i("Auth", "User not registered")
+//                    onUserNotRegistered()
+//                } else {
+//                    onSignInSuccess()
+//                }
+
+                _authState.value = AuthState.SIGNED_IN
 //            } catch (e: GetCredentialException) {
 //                e.printStackTrace()
                 // Handle GetCredentialException thrown by `credentialManager.getCredential()`
@@ -122,8 +148,25 @@ class AuthRepositoryImpl : AuthRepository {
         }
     }
 
+    private suspend fun storeUserInDataStore(user: UserInfo) {
+        Log.i("Storing User Data In Data Store", user.toString())
+        context.userPreferencesDataStore.edit { preferences ->
+            preferences[UserDataPreferenceKeys.USER_ID] = user.id
+            preferences[UserDataPreferenceKeys.USER_EMAIL] = user.email ?: ""
+        }
+    }
+
+    override suspend fun getUsersFromDataStore(): Flow<String?> {
+        return context.userPreferencesDataStore.data.map { preferences ->
+            preferences[UserDataPreferenceKeys.USER_EMAIL]
+        }
+    }
+
+
     override suspend fun getUserData(): UserInfo {
-        return supabase.auth.retrieveUserForCurrentSession(updateSession = true)
+        val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
+        Log.i("Google Sign In User Data => ", user.toString())
+        return user
     }
 
     override suspend fun findIfUserRegistered(): UserDataModel? {

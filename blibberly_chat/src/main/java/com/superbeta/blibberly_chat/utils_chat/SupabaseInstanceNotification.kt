@@ -2,6 +2,7 @@ package com.superbeta.blibberly_chat.utils_chat
 
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.Postgrest
 
 val supabase = createSupabaseClient(

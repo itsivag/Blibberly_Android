@@ -19,9 +19,9 @@ object SocketHandlerImpl : SocketHandler {
 
     init {
         try {
-
+//            val email = getUserEmail()
             val options = Options()
-            options.auth = mapOf("username" to "silaki dum dum")
+            options.auth = mapOf("username" to "default")
             socket = IO.socket("http://192.168.29.216:3000/", options)
             socket.connect()
 

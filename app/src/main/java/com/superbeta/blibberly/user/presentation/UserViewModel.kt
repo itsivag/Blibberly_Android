@@ -62,6 +62,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
             if (u != null) {
                 try {
                     supabase.from("Users").insert(u)
+
                     Log.i("Database Upload Successful", "")
                 } catch (e: Exception) {
                     Log.e("Database Upload Error", e.toString())
@@ -77,8 +78,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras
+                modelClass: Class<T>, extras: CreationExtras
             ): T {
                 val application =
                     extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application

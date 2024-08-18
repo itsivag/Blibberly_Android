@@ -12,7 +12,12 @@
           "package_name": "com.superbeta.blibberly"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "680631497033-8g1f3m0dfskk9cc3g4a5g3panbvbiedc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCOgiSRArkl1M4FfsJT1ARHcUNiKUqUxCA"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680631497033-8g1f3m0dfskk9cc3g4a5g3panbvbiedc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

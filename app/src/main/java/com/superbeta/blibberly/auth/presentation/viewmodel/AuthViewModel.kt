@@ -1,0 +1,61 @@
+package com.superbeta.blibberly.auth.presentation.viewmodel
+
+import android.app.Application
+import android.util.Log
+import androidx.credentials.CredentialManager
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import com.superbeta.blibberly.auth.domain.AuthRepository
+import com.superbeta.blibberly.auth.domain.AuthRepositoryImpl
+import com.superbeta.blibberly.auth.utils.AuthState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+
+class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+    private var _authState = MutableStateFlow<AuthState>(AuthState.IDLE)
+    val authState: MutableStateFlow<AuthState> = _authState
+
+    init {
+        viewModelScope.launch {
+            _authState = authRepository.getAuthState()
+        }
+    }
+
+    suspend fun signInWithGoogle() {
+        viewModelScope.launch {
+            authRepository.signInWithGoogle()
+        }
+    }
+
+    suspend fun getUserEmailFromDataStore(): Flow<String?> {
+        return authRepository.getUsersFromDataStore()
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>, extras: CreationExtras
+            ): T {
+                val application =
+                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+
+//                CoroutineScope(IO).launch {
+                val credentialManager = CredentialManager.create(application)
+//                    val credentialManagerResponse = credentialManager.getCredential(
+//                        request = request,
+//                        context = application,
+//                    )
+//                }
+                val authRepositoryImpl = AuthRepositoryImpl(application, credentialManager)
+
+                return AuthViewModel(
+                    authRepositoryImpl
+                ) as T
+            }
+        }
+    }
+}

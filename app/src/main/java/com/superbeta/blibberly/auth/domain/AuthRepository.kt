@@ -1,24 +1,20 @@
-package com.superbeta.blibberly.auth
+package com.superbeta.blibberly.auth.domain
 
-import android.content.Context
-import androidx.credentials.CredentialManager
+import com.superbeta.blibberly.auth.utils.AuthState
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import io.github.jan.supabase.gotrue.user.UserInfo
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 interface AuthRepository {
+    suspend fun getAuthState(): MutableStateFlow<AuthState>
     suspend fun createUser(mEmail: String, mPassword: String)
     suspend fun signInWithEmail(mEmail: String, mPassword: String)
-    suspend fun signInWithGoogle(
-        credentialManager: CredentialManager,
-        coroutineScope: CoroutineScope,
-        context: Context,
-        onSignInSuccess: () -> Unit,
-        onUserNotRegistered: () -> Unit
-
-    )
+    suspend fun signInWithGoogle()
 
     suspend fun getUserData(): UserInfo
     suspend fun findIfUserRegistered(): UserDataModel?
     suspend fun forgotPassword()
+
+    suspend fun getUsersFromDataStore(): Flow<String?>
 }

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -30,6 +31,10 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,24 +50,44 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.home.main.presentation.viewModel.HomeViewModel
-import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
+import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier, navController: NavHostController,
-    viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = HomeViewModel.Factory)
-
+    viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = MessageViewModel.Factory
+    )
 ) {
 
+    val liveUsers by viewModel.usersState.collectAsState()
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            viewModel.getUsers()
+        }
+    }
+
     val pagerState = rememberPagerState(pageCount = {
-        10
+        liveUsers.size
     })
 
+    HorizontalPagerItem(pagerState, modifier, navController)
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun HorizontalPagerItem(
+    pagerState: PagerState,
+    modifier: Modifier,
+    navController: NavHostController
+) {
     HorizontalPager(
         state = pagerState, modifier = modifier.background(color = Color.White)
     ) { page ->

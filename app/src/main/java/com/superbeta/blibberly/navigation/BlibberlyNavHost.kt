@@ -1,7 +1,6 @@
 package com.superbeta.blibberly.navigation
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -9,9 +8,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.superbeta.blibberly.auth.OTPScreen
-import com.superbeta.blibberly.auth.presentation.SignInScreen
-import com.superbeta.blibberly.auth.presentation.SignUpScreen
+import com.superbeta.blibberly.auth.presentation.ui.OTPScreen
+import com.superbeta.blibberly.auth.presentation.ui.SignInScreen
+import com.superbeta.blibberly.auth.presentation.ui.SignUpScreen
 import com.superbeta.blibberly.home.main.presentation.ui.HomeScreen
 import com.superbeta.blibberly.home.filter.FilterScreen
 import com.superbeta.blibberly.home.notifications.NotificationScreen
@@ -32,8 +31,8 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
 fun BlibberlyNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    startDestination: String = "notification_sample"
-//    startDestination: String = Screen.NotificationConsent.route
+//    startDestination: String = "notification_sample"
+    startDestination: String = Screen.SignIn.route
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Screen.SignIn.route) {
@@ -47,6 +46,7 @@ fun BlibberlyNavHost(
         composable(Screen.OTPEnter.route) {
             OTPScreen(modifier, navController)
         }
+
         composable(Screen.OnBoarding.route) {
             OnBoardingScreen(modifier, navController)
         }
