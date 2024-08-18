@@ -34,14 +34,12 @@ import java.security.MessageDigest
 import java.util.UUID
 
 
-
-
 class AuthRepositoryImpl(
     private val context: Context,
     private val credentialManager: CredentialManager
 ) : AuthRepository {
 
-    private val _authState = MutableStateFlow<AuthState>(AuthState.IDLE)
+    private val _authState = MutableStateFlow(AuthState.IDLE)
 
     private val Context.userPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(
         name = "user"
@@ -77,6 +75,8 @@ class AuthRepositoryImpl(
 
     override suspend fun signInWithGoogle() {
         _authState.value = AuthState.LOADING
+        Log.i("Auth State", "Starting Google Sign In")
+
         // Generate a nonce and hash it with sha-256
         // Providing a nonce is optional but recommended
         val rawNonce = UUID.randomUUID()
@@ -120,29 +120,14 @@ class AuthRepositoryImpl(
 
                 val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
                 Log.i("Google Sign In User Data => ", user.toString())
-                storeUserInDataStore(user)
-
-//                val userData = findIfUserRegistered()
-
-//                if (userData == null) {
-//                    Log.i("Auth", "User not registered")
-//                    onUserNotRegistered()
-//                } else {
-//                    onSignInSuccess()
-//                }
-
                 _authState.value = AuthState.SIGNED_IN
-//            } catch (e: GetCredentialException) {
-//                e.printStackTrace()
-                // Handle GetCredentialException thrown by `credentialManager.getCredential()`
+                storeUserInDataStore(user)
+                Log.i("Auth State", "Ended Google Sign In => " + _authState.value.toString())
             } catch (e: GoogleIdTokenParsingException) {
-                // Handle GoogleIdTokenParsingException thrown by `GoogleIdTokenCredential.createFrom()`
                 e.printStackTrace()
             } catch (e: RestException) {
-                // Handle RestException thrown by Supabase
                 e.printStackTrace()
             } catch (e: Exception) {
-                // Handle unknown exceptions
                 e.printStackTrace()
             }
         }

@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,19 +55,22 @@ fun SignInScreen(
 
     val authState by viewModel.authState.collectAsStateWithLifecycle()
 
-    when (authState) {
-        AuthState.SIGNED_IN -> {
-            navController.navigate(Screen.Home.route)
-        }
+    LaunchedEffect(key1 = authState) {
+        Log.i("Auth State", authState.toString())
+        when (authState) {
+            AuthState.SIGNED_IN -> {
+                navController.navigate(Screen.Home.route)
+            }
 
-        AuthState.SIGNED_OUT -> TODO()
-        AuthState.USER_EMAIL_STORED -> TODO()
-        AuthState.USER_EMAIL_STORAGE_ERROR -> TODO()
-        AuthState.USER_NOT_REGISTERED -> TODO()
-        AuthState.ERROR -> TODO()
-        AuthState.LOADING -> TODO()
-        AuthState.IDLE -> TODO()
-        AuthState.USER_REGISTERED -> TODO()
+            AuthState.SIGNED_OUT -> {}
+            AuthState.USER_EMAIL_STORED -> {}
+            AuthState.USER_EMAIL_STORAGE_ERROR -> {}
+            AuthState.USER_NOT_REGISTERED -> {}
+            AuthState.ERROR -> {}
+            AuthState.LOADING -> {}
+            AuthState.IDLE -> {}
+            AuthState.USER_REGISTERED -> {}
+        }
     }
 
     var email by remember {

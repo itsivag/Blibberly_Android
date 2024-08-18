@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.superbeta.blibberly.auth.domain.AuthRepository
@@ -15,12 +16,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
-    private var _authState = MutableStateFlow<AuthState>(AuthState.IDLE)
+    private var _authState = MutableStateFlow(AuthState.IDLE)
     val authState: MutableStateFlow<AuthState> = _authState
 
     init {
         viewModelScope.launch {
-            _authState = authRepository.getAuthState()
+            authRepository.getAuthState().collect { state ->
+                _authState.value = state
+                Log.i("AuthViewModel", "Auth state updated: $state")
+            }
         }
     }
 
