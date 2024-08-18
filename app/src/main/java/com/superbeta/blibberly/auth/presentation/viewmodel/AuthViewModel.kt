@@ -47,13 +47,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 val application =
                     extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
 
-//                CoroutineScope(IO).launch {
                 val credentialManager = CredentialManager.create(application)
-//                    val credentialManagerResponse = credentialManager.getCredential(
-//                        request = request,
-//                        context = application,
-//                    )
-//                }
                 val authRepositoryImpl = AuthRepositoryImpl(application, credentialManager)
 
                 return AuthViewModel(

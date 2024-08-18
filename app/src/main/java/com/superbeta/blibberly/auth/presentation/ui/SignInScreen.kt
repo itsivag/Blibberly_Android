@@ -65,11 +65,17 @@ fun SignInScreen(
             AuthState.SIGNED_OUT -> {}
             AuthState.USER_EMAIL_STORED -> {}
             AuthState.USER_EMAIL_STORAGE_ERROR -> {}
-            AuthState.USER_NOT_REGISTERED -> {}
+            AuthState.USER_NOT_REGISTERED -> {
+                navController.navigate(Screen.OnBoarding.route)
+            }
+
+            AuthState.USER_REGISTERED -> {
+                navController.navigate(Screen.Home.route)
+            }
+
             AuthState.ERROR -> {}
             AuthState.LOADING -> {}
             AuthState.IDLE -> {}
-            AuthState.USER_REGISTERED -> {}
         }
     }
 

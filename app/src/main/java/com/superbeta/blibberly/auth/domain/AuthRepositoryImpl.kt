@@ -116,13 +116,19 @@ class AuthRepositoryImpl(
                 }
 
                 // Handle successful sign-in
-//                Log.i("Google Sign In", "Sign In Successful")
-
                 val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
                 Log.i("Google Sign In User Data => ", user.toString())
                 _authState.value = AuthState.SIGNED_IN
                 storeUserInDataStore(user)
                 Log.i("Auth State", "Ended Google Sign In => " + _authState.value.toString())
+                val isUserRegistered = findIfUserRegistered()
+
+                if (isUserRegistered) {
+                    _authState.value = AuthState.USER_REGISTERED
+                } else {
+                    _authState.value = AuthState.USER_NOT_REGISTERED
+                }
+
             } catch (e: GoogleIdTokenParsingException) {
                 e.printStackTrace()
             } catch (e: RestException) {
@@ -147,20 +153,20 @@ class AuthRepositoryImpl(
         }
     }
 
-
     override suspend fun getUserData(): UserInfo {
         val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
         Log.i("Google Sign In User Data => ", user.toString())
         return user
     }
 
-    override suspend fun findIfUserRegistered(): UserDataModel? {
+    override suspend fun findIfUserRegistered(): Boolean {
         val user = supabase.from("Users").select {
             filter {
                 getUserData().email?.let { eq("email", it) }
             }
         }.decodeSingleOrNull<UserDataModel>()
-        return user
+
+        return user != null
     }
 
     override suspend fun forgotPassword() {

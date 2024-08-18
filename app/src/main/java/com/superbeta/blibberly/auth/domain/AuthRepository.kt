@@ -13,7 +13,7 @@ interface AuthRepository {
     suspend fun signInWithGoogle()
 
     suspend fun getUserData(): UserInfo
-    suspend fun findIfUserRegistered(): UserDataModel?
+    suspend fun findIfUserRegistered(): Boolean
     suspend fun forgotPassword()
 
     suspend fun getUsersFromDataStore(): Flow<String?>
