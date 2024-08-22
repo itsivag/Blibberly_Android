@@ -161,6 +161,7 @@ class AuthRepositoryImpl(
             }
         }.decodeSingleOrNull<UserDataModel>()
 
+        Log.i("User Registration", "user registered is => ${user != null}")
         return user != null
     }
 

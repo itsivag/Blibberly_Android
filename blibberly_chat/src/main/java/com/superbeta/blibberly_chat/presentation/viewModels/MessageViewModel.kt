@@ -21,15 +21,13 @@ import kotlinx.coroutines.launch
 
 class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
-    val messageState: StateFlow<List<MessageDataModel>> =
-        _messageState.asStateFlow()
+    val messageState: StateFlow<List<MessageDataModel>> = _messageState.asStateFlow()
 
     private val _usersState = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
-    val usersState: StateFlow<List<SocketUserDataModelItem>> =
-        _usersState.asStateFlow()
+    val usersState: StateFlow<List<SocketUserDataModelItem>> = _usersState.asStateFlow()
 
     private val _userProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
-    private val userProfileState: StateFlow<List<UserDataModel>> = _userProfileState.asStateFlow()
+    val userProfileState: StateFlow<List<UserDataModel>> = _userProfileState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -68,19 +66,23 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         messagesRepo.getUsersProfile(
             listOf(
                 SocketUserDataModelItem(
-                    userID = "12",
-                    username = "sivacbrf2@gmail.com"
+                    userID = "12", username = "sivacbrf2@gmail.com"
                 )
             )
-        )
+        ).collect { liveUserProfiles ->
+            _userProfileState.value = liveUserProfiles
+            Log.i(
+                "MessageViewModel",
+                "Collecting live user profile from Viewmodel: $liveUserProfiles"
+            )
+        }
     }
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(
-                modelClass: Class<T>,
-                extras: CreationExtras
+                modelClass: Class<T>, extras: CreationExtras
             ): T {
                 val application =
                     extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application

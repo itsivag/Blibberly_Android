@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.google.gson.Gson
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
@@ -93,8 +94,8 @@ fun BioScreen(
         mutableStateOf("")
     }
 
-    val interests = remember {
-        mutableStateListOf<String>()
+    var interests by remember {
+        mutableStateOf("")
     }
 
     var gender by remember {
@@ -122,7 +123,7 @@ fun BioScreen(
                 height = TextFieldValue(userData.height.toString())
                 weight = TextFieldValue(userData.weight.toString())
                 aboutMe = userData.aboutMe
-                interests.addAll(userData.interests)
+                interests = Gson().toJson(userData.interests)
 //                photoUri = userData.photoMetaData
                 gender = userData.gender
             }

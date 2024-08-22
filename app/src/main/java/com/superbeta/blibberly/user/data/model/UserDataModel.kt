@@ -32,7 +32,7 @@ data class UserDataModel(
 
     @SerialName("aboutMe") @ColumnInfo("aboutMe") val aboutMe: String,
 
-    @SerialName("interests") @ColumnInfo("interests") val interests: List<String>,
+    @SerialName("interests") @ColumnInfo("interests") val interests: String,
 
     @SerialName("photoMetaData") @ColumnInfo("photoUri") val photoMetaData: PhotoMetaData,
 

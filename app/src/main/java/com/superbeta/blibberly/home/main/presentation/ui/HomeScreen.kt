@@ -52,7 +52,7 @@ import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
+import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -71,6 +71,7 @@ fun HomeScreen(
 
     val liveUsers by viewModel.usersState.collectAsState()
     val scope = rememberCoroutineScope()
+    val liveUserProfile by viewModel.userProfileState.collectAsState()
 
     LaunchedEffect(key1 = true) {
         scope.launch {
@@ -85,10 +86,10 @@ fun HomeScreen(
     }
 
     val pagerState = rememberPagerState(pageCount = {
-        liveUsers.size
+        liveUserProfile.size
     })
 
-    HorizontalPagerItem(pagerState, modifier, navController, liveUsers)
+    HorizontalPagerItem(pagerState, modifier, navController, liveUserProfile)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -97,7 +98,7 @@ fun HorizontalPagerItem(
     pagerState: PagerState,
     modifier: Modifier,
     navController: NavHostController,
-    liveUsers: List<SocketUserDataModelItem>
+    liveUsers: List<UserDataModel>
 ) {
     HorizontalPager(
         state = pagerState, modifier = modifier.background(color = Color.White)
@@ -119,12 +120,9 @@ fun HorizontalPagerItem(
                     .background(color = MaterialTheme.colorScheme.background)
                     .fillMaxWidth(),
             ) {
-                item {
-                    Text(text = liveUsers[page].username.toString())
-                }
-                item { PhotoCard { navController.navigate(Screen.ChatList.route) } }
-                item { AboutCard() }
-                item { LanguageCard() }
+                item { PhotoCard(user = liveUsers[page]) { navController.navigate(Screen.ChatList.route) } }
+                item { AboutCard(user = liveUsers[page]) }
+                item { LanguageCard(user = liveUsers[page]) }
 //                item { ScoreCard() }
             }
         }
@@ -133,7 +131,7 @@ fun HorizontalPagerItem(
 
 
 @Composable
-fun PhotoCard(navigateToChat: () -> Unit) {
+fun PhotoCard(user: UserDataModel, navigateToChat: () -> Unit) {
 
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
@@ -160,7 +158,7 @@ fun PhotoCard(navigateToChat: () -> Unit) {
             Row {
                 Text(
                     modifier = Modifier.padding(8.dp),
-                    text = "Eve Maria",
+                    text = user.name,
                     fontFamily = FontProvider.bebasFontFamily,
                     fontSize = 28.sp,
                     color = overLayTextColor
@@ -176,8 +174,8 @@ fun PhotoCard(navigateToChat: () -> Unit) {
             }
             Spacer(modifier = Modifier.weight(1f))
             Row(modifier = Modifier.padding(8.dp)) {
-                Text(text = "22", fontSize = 28.sp, color = overLayTextColor)
-                Text(text = " F", color = overLayTextColor)
+                Text(text = user.age.toString(), fontSize = 28.sp, color = overLayTextColor)
+                Text(text = user.gender, color = overLayTextColor)
 
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(
@@ -195,7 +193,7 @@ fun PhotoCard(navigateToChat: () -> Unit) {
 }
 
 @Composable
-fun AboutCard() {
+fun AboutCard(user: UserDataModel) {
     val internalPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp)
     Text(
         text = "About",
@@ -203,7 +201,7 @@ fun AboutCard() {
         style = MaterialTheme.typography.titleLarge,
     )
     Text(
-        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        text = user.aboutMe,
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier.padding(internalPadding)
     )
@@ -211,7 +209,7 @@ fun AboutCard() {
 }
 
 @Composable
-fun LanguageCard() {
+fun LanguageCard(user: UserDataModel) {
     val langList = listOf("Tamil", "English")
     LazyRow(
         modifier = Modifier

@@ -18,13 +18,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SocketHandlerImpl(userPreferencesDataStore: DataStore<Preferences>) : SocketHandler {
+class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferences>) :
+    SocketHandler {
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
     private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
 
     init {
+        try {
+            connectWithSocketBackend()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun connectWithSocketBackend() {
         try {
             val options = Options()
             CoroutineScope(Dispatchers.IO).launch {
@@ -48,53 +57,71 @@ class SocketHandlerImpl(userPreferencesDataStore: DataStore<Preferences>) : Sock
     }
 
     override fun registerMessageListener() {
-        Log.i("Message from server", "Started Listening")
-        socket.on("private message") { msg ->
-            if (!msg.isNullOrEmpty()) {
-                try {
-                    val data = Gson().fromJson(msg[0].toString(), PrivateMessage::class.java)
-                    _messageList.value += data.content
-                    Log.i("Message from server", _messageList.value.toString())
-                } catch (e: Exception) {
-                    Log.e("Invalid Message JSON", e.toString())
+        try {
+
+            Log.i("Message from server", "Started Listening")
+            socket.on("private message") { msg ->
+                if (!msg.isNullOrEmpty()) {
+                    try {
+                        val data = Gson().fromJson(msg[0].toString(), PrivateMessage::class.java)
+                        _messageList.value += data.content
+                        Log.i("Message from server", _messageList.value.toString())
+                    } catch (e: Exception) {
+                        Log.e("Invalid Message JSON", e.toString())
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     override fun registerUsersListener() {
-        socket.on("users") { users ->
-            if (!users.isNullOrEmpty()) {
-                try {
-                    val a = Gson().fromJson(
-                        users[0].toString(),
-                        Array<SocketUserDataModelItem>::class.java
-                    ).toList()
-                    Log.i("Connected Users", a.toString())
-                    _usersList.value = a
-                } catch (e: Exception) {
-                    Log.e("Invalid Users JSON", e.toString())
+        try {
+
+            socket.on("users") { users ->
+                if (!users.isNullOrEmpty()) {
+                    try {
+                        val a = Gson().fromJson(
+                            users[0].toString(),
+                            Array<SocketUserDataModelItem>::class.java
+                        ).toList()
+                        Log.i("Connected Users", a.toString())
+                        _usersList.value = a
+                    } catch (e: Exception) {
+                        Log.e("Invalid Users JSON", e.toString())
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     override fun registerNewUserConnectedListener() {
-        socket.on("user connected") { newUser ->
-            if (!newUser.isNullOrEmpty()) {
-                try {
-                    val data =
-                        Gson().fromJson(newUser[0].toString(), SocketUserDataModelItem::class.java)
+        try {
 
-                    val newUserList = _usersList.value.toMutableList()
-                    newUserList.add(data)
-                    _usersList.value = newUserList
+            socket.on("user connected") { newUser ->
+                if (!newUser.isNullOrEmpty()) {
+                    try {
+                        val data =
+                            Gson().fromJson(
+                                newUser[0].toString(),
+                                SocketUserDataModelItem::class.java
+                            )
 
-                    Log.i("New user connected", data.toString())
-                } catch (e: Exception) {
-                    Log.e("Invalid new User JSON", e.toString())
+                        val newUserList = _usersList.value.toMutableList()
+                        newUserList.add(data)
+                        _usersList.value = newUserList
+
+                        Log.i("New user connected", data.toString())
+                    } catch (e: Exception) {
+                        Log.e("Invalid new User JSON", e.toString())
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -103,26 +130,32 @@ class SocketHandlerImpl(userPreferencesDataStore: DataStore<Preferences>) : Sock
     }
 
     override fun registerUserDisconnectedListener() {
-        socket.on("user disconnected") { disconnectedUser ->
-            if (!disconnectedUser.isNullOrEmpty()) {
-                try {
-                    val data =
-                        Gson().fromJson(
-                            disconnectedUser[0].toString(),
-                            SocketUserDataModelItem::class.java
-                        )
-                    val newUserList = _usersList.value.toMutableList()
-                    newUserList.remove(data)
-                    _usersList.value = newUserList
-                    Log.i("user disconnected list", _usersList.value.toString())
+        try {
 
-                    Log.i("user disconnected", data.toString())
-                } catch (e: Exception) {
-                    Log.e("Invalid disconnected User JSON", e.toString())
+            socket.on("user disconnected") { disconnectedUser ->
+                if (!disconnectedUser.isNullOrEmpty()) {
+                    try {
+                        val data =
+                            Gson().fromJson(
+                                disconnectedUser[0].toString(),
+                                SocketUserDataModelItem::class.java
+                            )
+                        val newUserList = _usersList.value.toMutableList()
+                        newUserList.remove(data)
+                        _usersList.value = newUserList
+                        Log.i("user disconnected list", _usersList.value.toString())
+
+                        Log.i("user disconnected", data.toString())
+                    } catch (e: Exception) {
+                        Log.e("Invalid disconnected User JSON", e.toString())
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
+
 
     override fun getMessageList(): StateFlow<List<MessageDataModel>> {
         return _messageList.asStateFlow()

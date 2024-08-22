@@ -47,11 +47,10 @@ fun CurateProfilesScreen(
 
     LaunchedEffect(key1 = true) {
         scope.launch {
-            delay(3000)
             viewModel.uploadUserToDB()
         }.invokeOnCompletion {
             Log.i("User", "Email -> ${userState.value?.email}")
-//            navController.navigate(Screen.Home.route)
+            navController.navigate(Screen.Home.route)
         }
     }
 

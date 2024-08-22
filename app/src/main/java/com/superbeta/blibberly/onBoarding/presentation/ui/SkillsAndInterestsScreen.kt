@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.google.gson.Gson
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
@@ -101,10 +102,19 @@ fun SkillsAndInterestsScreen(
     LaunchedEffect(key1 = userData) {
         scope.launch {
             if (userData != null) {
-                for (i: String in userData.interests) {
-                    if (i.isNotEmpty()) {
-                        selectedInterests.add(i)
+                try {
+
+                    val interestsList: Array<String>? =
+                        Gson().fromJson(userData.interests, Array<String>::class.java)
+                    if (interestsList != null) {
+                        for (i in interestsList) {
+                            if (i.isNotEmpty()) {
+                                selectedInterests.add(i)
+                            }
+                        }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
