@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.data.local.MessageRoomInstanceProvider
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
@@ -69,8 +70,10 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
                 val application =
                     extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
                 val db = MessageRoomInstanceProvider.getDb(application.applicationContext)
-                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), SocketHandlerImpl(application.applicationContext))
+                val socketHandlerImpl =
+                    SocketHandlerImpl(application.applicationContext.userPreferencesDataStore)
 
+                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), socketHandlerImpl)
                 return MessageViewModel(messagesRepo) as T
             }
         }

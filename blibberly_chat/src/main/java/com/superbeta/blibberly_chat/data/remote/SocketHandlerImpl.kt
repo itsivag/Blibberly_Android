@@ -1,14 +1,12 @@
 package com.superbeta.blibberly_chat.data.remote
 
-import android.content.Context
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
-import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
+import com.superbeta.blibberly_chat.data.model.PrivateMessage
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import io.socket.client.IO
 import io.socket.client.IO.Options
@@ -18,16 +16,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class SocketHandlerImpl(context: Context) : SocketHandler {
+class SocketHandlerImpl(userPreferencesDataStore: DataStore<Preferences>) : SocketHandler {
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
     private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
 
-    private val userPreferencesDataStore = context.userPreferencesDataStore
+//    private val userPreferencesDataStore = context.userPreferencesDataStore
 
 
     init {
@@ -36,19 +33,21 @@ class SocketHandlerImpl(context: Context) : SocketHandler {
             CoroutineScope(Dispatchers.IO).launch {
                 userPreferencesDataStore.data.collect { preferences ->
                     val email = preferences[stringPreferencesKey("user_email")]
-                    options.auth = mapOf("username" to "email222")
+                    if (email != null) {
+                        options.auth = mapOf("username" to email)
+                        socket = IO.socket("http://192.168.29.216:3000/", options)
+                        socket.connect()
+                    }
+
+                    registerMessageListener()
+                    registerUsersListener()
+                    registerNewUserConnectedListener()
+                    registerUserDisconnectedListener()
                 }
             }
-            socket = IO.socket("http://192.168.29.216:3000/", options)
-            socket.connect()
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        registerMessageListener()
-        registerUsersListener()
-        registerNewUserConnectedListener()
-        registerUserDisconnectedListener()
     }
 
     override fun registerMessageListener() {
@@ -153,4 +152,3 @@ class SocketHandlerImpl(context: Context) : SocketHandler {
 
 }
 
-data class PrivateMessage(val content: MessageDataModel, val to: String)

@@ -78,9 +78,6 @@ class MainActivity : ComponentActivity() {
             requestPermissionLauncher = requestPermissionLauncher
         ).askNotificationPermission()
 
-        //socket
-        val socket: SocketHandler = SocketHandlerImpl(this.applicationContext)
-        socket.getSocket()
 
         val bottomNavScreens = listOf(
             Screen.Profile,

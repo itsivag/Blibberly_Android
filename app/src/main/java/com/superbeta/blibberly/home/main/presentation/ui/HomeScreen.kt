@@ -48,8 +48,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.compose.ui.util.trace
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.home.main.presentation.viewModel.HomeViewModel
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
@@ -62,12 +64,20 @@ fun HomeScreen(
     modifier: Modifier, navController: NavHostController,
     viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
-    )
+    ),
+//    homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+//        factory = HomeViewModel.Factory
+//    )
 ) {
 
     val liveUsers by viewModel.usersState.collectAsState()
     val scope = rememberCoroutineScope()
 
+//    LaunchedEffect(key1 = true) {
+//        scope.launch {
+//            homeViewModel.socket
+//        }
+//    }
     LaunchedEffect(key1 = true) {
         scope.launch {
             viewModel.getUsers()
