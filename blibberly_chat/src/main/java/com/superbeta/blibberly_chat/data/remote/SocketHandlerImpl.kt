@@ -24,9 +24,6 @@ class SocketHandlerImpl(userPreferencesDataStore: DataStore<Preferences>) : Sock
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
     private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
 
-//    private val userPreferencesDataStore = context.userPreferencesDataStore
-
-
     init {
         try {
             val options = Options()

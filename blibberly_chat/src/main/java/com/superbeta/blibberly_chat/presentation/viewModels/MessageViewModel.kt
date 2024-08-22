@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.data.local.MessageRoomInstanceProvider
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
@@ -26,6 +27,9 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     private val _usersState = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
     val usersState: StateFlow<List<SocketUserDataModelItem>> =
         _usersState.asStateFlow()
+
+    private val _userProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
+    private val userProfileState: StateFlow<List<UserDataModel>> = _userProfileState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -58,6 +62,17 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
             Log.i("MessageViewModel", "Collecting users from Viewmodel: $users")
             _usersState.value = users
         }
+    }
+
+    suspend fun getUserProfile() {
+        messagesRepo.getUsersProfile(
+            listOf(
+                SocketUserDataModelItem(
+                    userID = "12",
+                    username = "sivacbrf2@gmail.com"
+                )
+            )
+        )
     }
 
     companion object {

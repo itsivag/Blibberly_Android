@@ -48,12 +48,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
-import androidx.compose.ui.util.trace
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.home.main.presentation.viewModel.HomeViewModel
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -73,14 +72,15 @@ fun HomeScreen(
     val liveUsers by viewModel.usersState.collectAsState()
     val scope = rememberCoroutineScope()
 
-//    LaunchedEffect(key1 = true) {
-//        scope.launch {
-//            homeViewModel.socket
-//        }
-//    }
     LaunchedEffect(key1 = true) {
         scope.launch {
             viewModel.getUsers()
+        }
+    }
+
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            viewModel.getUserProfile()
         }
     }
 
@@ -88,7 +88,7 @@ fun HomeScreen(
         liveUsers.size
     })
 
-    HorizontalPagerItem(pagerState, modifier, navController)
+    HorizontalPagerItem(pagerState, modifier, navController, liveUsers)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -96,7 +96,8 @@ fun HomeScreen(
 fun HorizontalPagerItem(
     pagerState: PagerState,
     modifier: Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    liveUsers: List<SocketUserDataModelItem>
 ) {
     HorizontalPager(
         state = pagerState, modifier = modifier.background(color = Color.White)
@@ -118,15 +119,14 @@ fun HorizontalPagerItem(
                     .background(color = MaterialTheme.colorScheme.background)
                     .fillMaxWidth(),
             ) {
-
+                item {
+                    Text(text = liveUsers[page].username.toString())
+                }
                 item { PhotoCard { navController.navigate(Screen.ChatList.route) } }
                 item { AboutCard() }
                 item { LanguageCard() }
 //                item { ScoreCard() }
-
-
             }
-//            }
         }
     }
 }
