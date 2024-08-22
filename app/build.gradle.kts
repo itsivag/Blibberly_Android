@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(project(":blibberly_chat"))
     implementation(libs.androidx.compose.material)
+    implementation(project(":blibberly_supabase"))
+    implementation(project(":blibberly_auth"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

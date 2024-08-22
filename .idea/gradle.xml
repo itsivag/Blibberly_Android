@@ -10,7 +10,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/blibberly_auth" />
             <option value="$PROJECT_DIR$/blibberly_chat" />
+            <option value="$PROJECT_DIR$/blibberly_supabase" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

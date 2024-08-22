@@ -69,7 +69,7 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
                 val application =
                     extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
                 val db = MessageRoomInstanceProvider.getDb(application.applicationContext)
-                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), SocketHandlerImpl)
+                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), SocketHandlerImpl(application.applicationContext))
 
                 return MessageViewModel(messagesRepo) as T
             }

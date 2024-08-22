@@ -3,8 +3,6 @@ package com.superbeta.blibberly_chat.notification
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.superbeta.blibberly_chat.utils_chat.supabase
-import io.github.jan.supabase.gotrue.auth
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {

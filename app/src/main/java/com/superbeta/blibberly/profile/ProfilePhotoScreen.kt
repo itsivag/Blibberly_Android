@@ -75,7 +75,7 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly.utils.supabase
+import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch

@@ -11,8 +11,8 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.repo.MUserRepository
 import com.superbeta.blibberly.user.repo.MUserRepositoryImpl
 import com.superbeta.blibberly.utils.RoomInstanceProvider
-import com.superbeta.blibberly.utils.supabase
 import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
+import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

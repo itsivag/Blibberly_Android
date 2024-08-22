@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(project(":blibberly_auth"))
 //    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -99,5 +100,8 @@ dependencies {
     implementation(platform("io.github.jan-tennert.supabase:bom:2.4.2"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.github.jan-tennert.supabase:compose-auth")
+
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
 }

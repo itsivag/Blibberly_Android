@@ -1,27 +1,44 @@
 package com.superbeta.blibberly_chat.data.remote
 
+import android.content.Context
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
+import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import io.socket.client.IO
 import io.socket.client.IO.Options
 import io.socket.client.Socket
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
-object SocketHandlerImpl : SocketHandler {
+class SocketHandlerImpl(context: Context) : SocketHandler {
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
     private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
 
+    private val userPreferencesDataStore = context.userPreferencesDataStore
+
+
     init {
         try {
-//            val email = getUserEmail()
             val options = Options()
-            options.auth = mapOf("username" to "default")
+            CoroutineScope(Dispatchers.IO).launch {
+                userPreferencesDataStore.data.collect { preferences ->
+                    val email = preferences[stringPreferencesKey("user_email")]
+                    options.auth = mapOf("username" to "email222")
+                }
+            }
             socket = IO.socket("http://192.168.29.216:3000/", options)
             socket.connect()
 

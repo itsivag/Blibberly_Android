@@ -45,8 +45,8 @@ import com.superbeta.blibberly.ui.theme.BlibberlyTheme
 import com.superbeta.blibberly.ui.theme.ColorDisabled
 import com.superbeta.blibberly.ui.theme.ColorPrimary
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_chat.data.remote.SocketHandler
 import com.superbeta.blibberly_chat.data.remote.SocketHandlerImpl
-
 
 
 class MainActivity : ComponentActivity() {
@@ -79,7 +79,8 @@ class MainActivity : ComponentActivity() {
         ).askNotificationPermission()
 
         //socket
-        SocketHandlerImpl.getSocket()
+        val socket: SocketHandler = SocketHandlerImpl(this.applicationContext)
+        socket.getSocket()
 
         val bottomNavScreens = listOf(
             Screen.Profile,
@@ -230,7 +231,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        SocketHandlerImpl.disconnectSocket()
+//        socket.disconnectSocket()
     }
 }
 

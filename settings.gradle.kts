@@ -25,3 +25,5 @@ dependencyResolutionManagement {
 rootProject.name = "Blibberly"
 include(":app")
 include(":blibberly_chat")
+include(":blibberly_auth")
+include(":blibberly_supabase")

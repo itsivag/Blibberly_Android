@@ -8,8 +8,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.superbeta.blibberly.auth.presentation.ui.OTPScreen
-import com.superbeta.blibberly.auth.presentation.ui.SignInScreen
 import com.superbeta.blibberly.auth.presentation.ui.SignUpScreen
 import com.superbeta.blibberly.home.main.presentation.ui.HomeScreen
 import com.superbeta.blibberly.home.filter.FilterScreen
@@ -23,6 +21,8 @@ import com.superbeta.blibberly.onBoarding.presentation.ui.BlibmojiScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.SkillsAndInterestsScreen
 import com.superbeta.blibberly.profile.ProfileScreen
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_auth.presentation.ui.OTPScreen
+import com.superbeta.blibberly_auth.presentation.ui.SignInScreen
 import com.superbeta.blibberly_chat.notification.NotificationSampleScreen
 import com.superbeta.blibberly_chat.presentation.ui.MessageScreen
 import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
