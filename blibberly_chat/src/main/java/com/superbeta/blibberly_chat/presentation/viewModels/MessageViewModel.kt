@@ -39,7 +39,7 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
-    private fun connectSocketWithBackend() {
+    private fun getCurrentUserEmail() {
         viewModelScope.launch {
             messagesRepo.connectSocketToBackend()
         }

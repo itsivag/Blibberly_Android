@@ -24,28 +24,34 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun MessageTextField(
-    userId: String,
-    viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    receiverUserId: String,
+    viewModel: MessageViewModel = viewModel(
         factory = MessageViewModel.Factory
-    )
+    ),
+    currUserId: String
 ) {
     var message by remember {
         mutableStateOf(TextFieldValue())
     }
 
+    val currentTimeStamp = Clock.System.now()
+
     val data = MessageDataModel(
         messageId = "1",
         content = message.text,
-        senderID = "1",
-        receiverID = "2",
-        timeStamp = "10:23 pm",
+        senderID = currUserId,
+        receiverID = receiverUserId,
+        timeStamp = currentTimeStamp.toString(),
         isDelivered = false,
         isRead = false
     )
@@ -79,7 +85,7 @@ fun MessageTextField(
         IconButton(
             onClick = {
                 scope.launch {
-                    viewModel.sendMessage(userId = userId, data = data)
+                    viewModel.sendMessage(userId = receiverUserId, data = data)
                     message = TextFieldValue("")
                 }
             },

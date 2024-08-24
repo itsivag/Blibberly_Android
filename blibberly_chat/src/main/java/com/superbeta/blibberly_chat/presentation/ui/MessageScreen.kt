@@ -23,14 +23,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavHostController
+import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
 import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubble
@@ -43,7 +49,7 @@ import kotlinx.coroutines.launch
 fun MessageScreen(
     modifier: Modifier,
     navController: NavHostController,
-    userId: String?,
+    recieverUserId: String?,
     userName: String?,
     viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
@@ -51,9 +57,23 @@ fun MessageScreen(
 ) {
 
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     val messages by viewModel.messageState.collectAsState()
-    val currUser = "1"
+    val userPreferencesDataStore = context.userPreferencesDataStore
     val messageLazyListState = rememberLazyListState()
+
+    var currUser by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            userPreferencesDataStore.data.collect { preferences ->
+                currUser = preferences[stringPreferencesKey("user_email")]
+            }
+        }
+    }
 
     LaunchedEffect(true) {
         scope.launch {
@@ -119,7 +139,7 @@ fun MessageScreen(
                     }
                 }
             }
-            userId?.let { it1 -> MessageTextField(it1) }
+            recieverUserId?.let { it1 -> currUser?.let { it2 -> MessageTextField(it1, currUserId = it2) } }
         }
     }
 }

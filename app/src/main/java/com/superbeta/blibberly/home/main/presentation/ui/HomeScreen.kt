@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -64,7 +63,7 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.avatarBGColorsMap
 import com.superbeta.blibberly.utils.FontProvider
-import com.superbeta.blibberly_auth.user.data.model.PhotoMetaData
+import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
@@ -117,6 +116,7 @@ fun HorizontalPagerItem(
         state = pagerState, modifier = modifier.background(color = Color.White)
     ) { page ->
 
+        val currUser = liveUsers[page]
         Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
             shape = RectangleShape,
             modifier = Modifier
@@ -133,10 +133,13 @@ fun HorizontalPagerItem(
                     .background(color = MaterialTheme.colorScheme.background)
                     .fillMaxWidth(),
             ) {
-                item { BlibMojiCard(photoMetaData = liveUsers[page].photoMetaData) }
+                item {
+                    BlibMojiCard(userDataModel = currUser,
+                        navigateToChat = { navController.navigate(Screen.Message.route + "/${currUser.email}/${currUser.name}") })
+                }
 //                item { PhotoCard(user = liveUsers[page]) { navController.navigate(Screen.ChatList.route) } }
-                item { AboutCard(user = liveUsers[page]) }
-                item { LanguageCard(user = liveUsers[page]) }
+                item { AboutCard(user = currUser) }
+                item { LanguageCard(user = currUser) }
 //                item { ScoreCard() }
             }
         }
@@ -299,61 +302,112 @@ fun ScoreCard() {
 }
 
 @Composable
-fun BlibMojiCard(photoMetaData: PhotoMetaData) {
+fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
+
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
+    val overLayTextColor = Color.White
 
-    avatarBGColorsMap[photoMetaData.bgColor]?.let {
-        Modifier
-            .fillMaxWidth()
-            .animateContentSize(
-                animationSpec = SpringSpec(
-                    stiffness = Spring.StiffnessLow,
-                    dampingRatio = Spring.DampingRatioLowBouncy
+    Box(modifier = Modifier.height(screenHeight / 2)) {
+        avatarBGColorsMap[userDataModel.photoMetaData.bgColor]?.let {
+            Modifier
+                .fillMaxWidth()
+                .animateContentSize(
+                    animationSpec = SpringSpec(
+                        stiffness = Spring.StiffnessLow, dampingRatio = Spring.DampingRatioLowBouncy
+                    )
                 )
-            )
-            .height(screenHeight / 2)
-            .background(color = it)
-    }?.let {
-        Box(
-            modifier = it,
-            contentAlignment = Alignment.BottomCenter
-        ) {
+                .height(screenHeight / 2)
+                .background(color = it)
+        }?.let {
             Box(
-                modifier = Modifier
-                    .rotate(45f)
-                    .fillMaxSize()
-                    .scale(2f)
+                modifier = it, contentAlignment = Alignment.BottomCenter
             ) {
-                LazyHorizontalStaggeredGrid(
-                    rows = StaggeredGridCells.Adaptive(minSize = 44.dp),
+                Box(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    userScrollEnabled = false
+                        .rotate(45f)
+                        .fillMaxSize()
+                        .scale(2f)
                 ) {
-                    items(count = 300) {
-                        Text(
-                            text = photoMetaData.bgEmoji,
-                            fontFamily = FontProvider.notoEmojiFontFamily,
-                            fontSize = 16.sp,
-                            modifier = Modifier.padding(4.dp)
-                        )
+                    LazyHorizontalStaggeredGrid(
+                        rows = StaggeredGridCells.Adaptive(minSize = 44.dp),
+                        modifier = Modifier.fillMaxSize(),
+                        userScrollEnabled = false
+                    ) {
+                        items(count = 300) {
+                            Text(
+                                text = userDataModel.photoMetaData.bgEmoji,
+                                fontFamily = FontProvider.notoEmojiFontFamily,
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(4.dp)
+                            )
+                        }
                     }
                 }
-            }
 
-            SubcomposeAsyncImage(
-                model = photoMetaData.blibmojiUrl,
-                contentDescription = "",
-            ) {
-                val state = painter.state
-                if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                    CircularProgressIndicator()
-                } else {
-                    SubcomposeAsyncImageContent()
+                SubcomposeAsyncImage(
+                    model = userDataModel.photoMetaData.blibmojiUrl,
+                    contentDescription = "",
+                ) {
+                    val state = painter.state
+                    if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                        CircularProgressIndicator()
+                    } else {
+                        SubcomposeAsyncImageContent()
+                    }
+                }
+
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
+            Row {
+                //name
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = userDataModel.name,
+                    fontFamily = FontProvider.bebasFontFamily,
+                    fontSize = 28.sp,
+                    color = overLayTextColor,
+
+                    )
+                Spacer(modifier = Modifier.weight(1f))
+                //profile options
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "Profile Menu",
+                        tint = overLayTextColor,
+                    )
                 }
             }
+            Spacer(modifier = Modifier.weight(1f))
+            Row(modifier = Modifier.padding(8.dp)) {
+                //age and gender
+                Text(
+                    text = userDataModel.age.toString(), fontSize = 28.sp, color = overLayTextColor
+                )
+                Text(text = userDataModel.gender, color = overLayTextColor)
 
+                Spacer(modifier = Modifier.weight(1f))
+
+                //chat button
+                IconButton(
+                    onClick = {
+                        navigateToChat()
+                    }, colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White)
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.chat),
+                        contentDescription = "Chat",
+                    )
+                }
+            }
         }
+
     }
 }
