@@ -19,6 +19,10 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
 
     private val supabaseUsersDb = supabase.from("Users")
 
+    override suspend fun connectSocketToBackend() {
+        socketHandler.connectWithSocketBackend()
+    }
+
     override suspend fun subscribeToMessages() {
         socketHandler.getMessageList().collect { messages ->
             _messageState.value = messages

@@ -33,7 +33,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
         }
     }
 
-    override fun connectWithSocketBackend() {
+     override  fun connectWithSocketBackend() {
         try {
             val options = Options()
             CoroutineScope(Dispatchers.IO).launch {

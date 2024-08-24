@@ -16,3 +16,33 @@ val ColorSecondary = Color(0xFFE3C6FF)
 val ColorTertiary = Color(0xFF695E93)
 
 val ColorDisabled = Color(0xffd3d3d3)
+
+
+enum class BLIBMOJI_BG_COLORS {
+    BLUE,
+    WHITE,
+    RED,
+    GRAY,
+    CYAN,
+    BLACK,
+    DARKGRAY,
+    GREEN,
+    MAGENTA,
+    YELLOW
+
+}
+
+
+
+val avatarBGColorsMap = mapOf<String, Color>(
+    BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
+    BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
+    BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
+    BLIBMOJI_BG_COLORS.GRAY.toString() to Color.Gray,
+    BLIBMOJI_BG_COLORS.CYAN.toString() to Color.Cyan,
+    BLIBMOJI_BG_COLORS.BLACK.toString() to Color.Black,
+    BLIBMOJI_BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
+    BLIBMOJI_BG_COLORS.GREEN.toString() to Color.Green,
+    BLIBMOJI_BG_COLORS.MAGENTA.toString() to Color.Magenta,
+    BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
+)

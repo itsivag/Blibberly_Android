@@ -57,7 +57,7 @@ fun SignInScreen(
         Log.i("Auth State", authState.toString())
         when (authState) {
             AuthState.SIGNED_IN -> {
-                navController.navigate(Screen.Home.route)
+                navController.navigate(Screen.OnBoarding.route)
             }
 
             AuthState.SIGNED_OUT -> {}

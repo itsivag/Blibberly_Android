@@ -222,8 +222,9 @@ fun SkillsAndInterestsScreen(
             ) {
                 scope.launch {
                     viewModel.updateInterests(selectedInterests)
+                }.invokeOnCompletion {
+                    navController.navigate(Screen.Photo.route)
                 }
-                navController.navigate(Screen.Photo.route)
             }
 
         }

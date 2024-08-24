@@ -59,6 +59,8 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.ui.theme.BLIBMOJI_BG_COLORS
+import com.superbeta.blibberly.ui.theme.avatarBGColorsMap
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.ui.theme.components.SwipeButton
@@ -74,32 +76,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-enum class BG_COLORS {
-    BLUE,
-    WHITE,
-    RED,
-    GRAY,
-    CYAN,
-    BLACK,
-    DARKGRAY,
-    GREEN,
-    MAGENTA,
-    YELLOW
-
-}
-
-val avatarBGColorsMap = mapOf<String, Color>(
-    BG_COLORS.BLUE.toString() to Color.Blue,
-    BG_COLORS.WHITE.toString() to Color.White,
-    BG_COLORS.RED.toString() to Color.Red,
-    BG_COLORS.GRAY.toString() to Color.Gray,
-    BG_COLORS.CYAN.toString() to Color.Cyan,
-    BG_COLORS.BLACK.toString() to Color.Black,
-    BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
-    BG_COLORS.GREEN.toString() to Color.Green,
-    BG_COLORS.MAGENTA.toString() to Color.Magenta,
-    BG_COLORS.YELLOW.toString() to Color.Yellow
-)
 
 @SuppressLint("Range")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,7 +112,7 @@ fun BlibmojiScreen(
     }
 
     var selectedBGColor by remember {
-        mutableStateOf(BG_COLORS.BLUE.toString())
+        mutableStateOf(BLIBMOJI_BG_COLORS.BLUE.toString())
     }
 
 
@@ -271,7 +247,7 @@ fun BlibmojiScreen(
             isComplete = isComplete,
             onSwipe = {
                 scope.launch {
-                    delay(2000)
+//                    delay(2000)
                     setIsComplete(true)
                 }.invokeOnCompletion {
                     navController.navigate(Screen.CurateProfile.route)

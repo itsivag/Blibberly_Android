@@ -64,9 +64,9 @@ import coil.compose.SubcomposeAsyncImageContent
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.onBoarding.presentation.ui.BG_COLORS
-import com.superbeta.blibberly.onBoarding.presentation.ui.avatarBGColorsMap
+import com.superbeta.blibberly.ui.theme.BLIBMOJI_BG_COLORS
 import com.superbeta.blibberly.ui.theme.ColorDisabled
+import com.superbeta.blibberly.ui.theme.avatarBGColorsMap
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.ui.theme.extensions.dashedBorder
@@ -102,7 +102,7 @@ fun ProfilePhotoScreen(
     }
 
     var selectedBGColor by remember {
-        mutableStateOf(BG_COLORS.BLUE.toString())
+        mutableStateOf(BLIBMOJI_BG_COLORS.BLUE.toString())
     }
 
 

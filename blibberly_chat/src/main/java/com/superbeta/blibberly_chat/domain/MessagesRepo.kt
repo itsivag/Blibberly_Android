@@ -6,6 +6,7 @@ import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import kotlinx.coroutines.flow.StateFlow
 
 interface MessagesRepo {
+    suspend fun connectSocketToBackend()
     suspend fun subscribeToMessages()
     suspend fun getMessages(): StateFlow<List<MessageDataModel>>
     suspend fun sendMessage(userId: String, message: MessageDataModel)

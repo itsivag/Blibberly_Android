@@ -39,6 +39,12 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
+    private fun connectSocketWithBackend() {
+        viewModelScope.launch {
+            messagesRepo.connectSocketToBackend()
+        }
+    }
+
     suspend fun collectMessages() {
         messagesRepo.getMessages().collect { messages ->
             Log.i("MessageViewModel", "Collecting messages from Viewmodel: $messages")
@@ -63,13 +69,7 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     }
 
     suspend fun getUserProfile() {
-        messagesRepo.getUsersProfile(
-            listOf(
-                SocketUserDataModelItem(
-                    userID = "12", username = "sivacbrf2@gmail.com"
-                )
-            )
-        ).collect { liveUserProfiles ->
+        messagesRepo.getUsersProfile(_usersState.value).collect { liveUserProfiles ->
             _userProfileState.value = liveUserProfiles
             Log.i(
                 "MessageViewModel",

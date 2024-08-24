@@ -1,5 +1,8 @@
 package com.superbeta.blibberly.home.main.presentation.ui
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,14 +19,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -37,6 +44,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
@@ -49,9 +58,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.ui.theme.avatarBGColorsMap
 import com.superbeta.blibberly.utils.FontProvider
-import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_auth.user.data.model.PhotoMetaData
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
@@ -104,9 +117,9 @@ fun HorizontalPagerItem(
         state = pagerState, modifier = modifier.background(color = Color.White)
     ) { page ->
 
-        Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-            shape = RectangleShape, modifier = Modifier
+        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+            shape = RectangleShape,
+            modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer {
                     val pageOffset =
@@ -120,7 +133,8 @@ fun HorizontalPagerItem(
                     .background(color = MaterialTheme.colorScheme.background)
                     .fillMaxWidth(),
             ) {
-                item { PhotoCard(user = liveUsers[page]) { navController.navigate(Screen.ChatList.route) } }
+                item { BlibMojiCard(photoMetaData = liveUsers[page].photoMetaData) }
+//                item { PhotoCard(user = liveUsers[page]) { navController.navigate(Screen.ChatList.route) } }
                 item { AboutCard(user = liveUsers[page]) }
                 item { LanguageCard(user = liveUsers[page]) }
 //                item { ScoreCard() }
@@ -281,5 +295,65 @@ fun ScoreCard() {
         }
 
 
+    }
+}
+
+@Composable
+fun BlibMojiCard(photoMetaData: PhotoMetaData) {
+    val config = LocalConfiguration.current
+    val screenHeight = config.screenHeightDp.dp
+
+    avatarBGColorsMap[photoMetaData.bgColor]?.let {
+        Modifier
+            .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = SpringSpec(
+                    stiffness = Spring.StiffnessLow,
+                    dampingRatio = Spring.DampingRatioLowBouncy
+                )
+            )
+            .height(screenHeight / 2)
+            .background(color = it)
+    }?.let {
+        Box(
+            modifier = it,
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Box(
+                modifier = Modifier
+                    .rotate(45f)
+                    .fillMaxSize()
+                    .scale(2f)
+            ) {
+                LazyHorizontalStaggeredGrid(
+                    rows = StaggeredGridCells.Adaptive(minSize = 44.dp),
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    userScrollEnabled = false
+                ) {
+                    items(count = 300) {
+                        Text(
+                            text = photoMetaData.bgEmoji,
+                            fontFamily = FontProvider.notoEmojiFontFamily,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(4.dp)
+                        )
+                    }
+                }
+            }
+
+            SubcomposeAsyncImage(
+                model = photoMetaData.blibmojiUrl,
+                contentDescription = "",
+            ) {
+                val state = painter.state
+                if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                    CircularProgressIndicator()
+                } else {
+                    SubcomposeAsyncImageContent()
+                }
+            }
+
+        }
     }
 }
