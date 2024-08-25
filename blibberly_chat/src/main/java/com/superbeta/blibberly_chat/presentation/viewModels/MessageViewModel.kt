@@ -69,12 +69,16 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     }
 
     suspend fun getUserProfile() {
-        messagesRepo.getUsersProfile(_usersState.value).collect { liveUserProfiles ->
-            _userProfileState.value = liveUserProfiles
-            Log.i(
-                "MessageViewModel",
-                "Collecting live user profile from Viewmodel: $liveUserProfiles"
-            )
+        viewModelScope.launch {
+            _usersState.collect { liveUsers ->
+                messagesRepo.getUsersProfile(liveUsers).collect { liveUserProfiles ->
+                    _userProfileState.value = liveUserProfiles
+                    Log.i(
+                        "MessageViewModel",
+                        "Collecting live user profile from Viewmodel: $liveUserProfiles"
+                    )
+                }
+            }
         }
     }
 

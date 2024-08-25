@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.home.main.presentation.ui
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
@@ -40,7 +41,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -69,6 +73,13 @@ import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
+enum class HomeScreenState {
+    //    Loading,
+//    Success,
+//    Error,
+    LIVE_USERS_RETRIEVAL_SUCCESS, LIVE_USERS_RETRIEVAL_LOADING, LIVE_USERS_RETRIEVAL_ERROR, LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS, LIVE_USERS_PROFILE_RETRIEVAL_LOADING, LIVE_USERS_PROFILE_RETRIEVAL_ERROR,
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
@@ -80,33 +91,59 @@ fun HomeScreen(
 //        factory = HomeViewModel.Factory
 //    )
 ) {
-
+    var homeScreenState by remember {
+        mutableStateOf(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
+    }
     val liveUsers by viewModel.usersState.collectAsState()
     val scope = rememberCoroutineScope()
     val liveUserProfile by viewModel.userProfileState.collectAsState()
-
-    LaunchedEffect(key1 = true) {
-        scope.launch {
-            viewModel.getUsers()
-        }
-    }
-
-    LaunchedEffect(key1 = true) {
-        scope.launch {
-            viewModel.getUserProfile()
-        }
-    }
-
     val pagerState = rememberPagerState(pageCount = {
         liveUserProfile.size
     })
 
-    HorizontalPagerItem(pagerState, modifier, navController, liveUserProfile)
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            try {
+                viewModel.getUsers()
+                Log.i(
+                    "MessageViewModel", "Collecting live user from compose"
+                )
+                homeScreenState = HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
+
+            } catch (e: Exception) {
+                homeScreenState = HomeScreenState.LIVE_USERS_RETRIEVAL_ERROR
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            try {
+                homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_LOADING
+                viewModel.getUserProfile()
+                Log.i(
+                    "MessageViewModel", "Collecting live user profile from compose"
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_ERROR
+            }
+        }.invokeOnCompletion {
+            homeScreenState = HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
+        }
+    }
+    if (homeScreenState == HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS) {
+        BlibberlyHorizontalPager(pagerState, modifier, navController, liveUserProfile)
+    } else {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HorizontalPagerItem(
+fun BlibberlyHorizontalPager(
     pagerState: PagerState,
     modifier: Modifier,
     navController: NavHostController,
