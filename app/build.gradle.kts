@@ -122,4 +122,7 @@ dependencies {
     //datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
+    //shimmer effect
+    implementation(libs.compose.shimmer)
+
 }

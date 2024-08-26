@@ -131,7 +131,7 @@ fun ProfilePhotoScreen(
                 val urls = files.map { bucket.publicUrl(it.name) }
                 blibmojiUrlList = urls
 
-                Log.i("Storage Files", urls.toString())
+                Log.i("Blibmoji's from Storage", urls.toString())
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -140,7 +140,7 @@ fun ProfilePhotoScreen(
     }
 
     LaunchedEffect(key1 = Unit) {
-        scope.launch {
+        scope.launch(IO) {
             viewModel.getUser()
             val userData: UserDataModel? = viewModel.userState.value
             if (userData != null && userData.photoMetaData.blibmojiUrl.isNotEmpty() && userData.photoMetaData.bgEmoji.isNotEmpty() && userData.photoMetaData.bgColor.isNotEmpty()) {

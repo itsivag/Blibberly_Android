@@ -5,12 +5,10 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -53,10 +51,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
@@ -64,19 +61,19 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import com.google.gson.Gson
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.theme.avatarBGColorsMap
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
+import com.valentinilk.shimmer.shimmer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 enum class HomeScreenState {
-    //    Loading,
-//    Success,
-//    Error,
     LIVE_USERS_RETRIEVAL_SUCCESS, LIVE_USERS_RETRIEVAL_LOADING, LIVE_USERS_RETRIEVAL_ERROR, LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS, LIVE_USERS_PROFILE_RETRIEVAL_LOADING, LIVE_USERS_PROFILE_RETRIEVAL_ERROR,
 }
 
@@ -87,19 +84,21 @@ fun HomeScreen(
     viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
     ),
-//    homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-//        factory = HomeViewModel.Factory
-//    )
 ) {
+    val config = LocalConfiguration.current
+    val screenHeight = config.screenHeightDp.dp
+
     var homeScreenState by remember {
         mutableStateOf(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
     }
     val liveUsers by viewModel.usersState.collectAsState()
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope { Dispatchers.IO }
     val liveUserProfile by viewModel.userProfileState.collectAsState()
     val pagerState = rememberPagerState(pageCount = {
         liveUserProfile.size
     })
+
+    Log.i("HomeScreen state", homeScreenState.toString())
 
     LaunchedEffect(key1 = true) {
         scope.launch {
@@ -119,25 +118,21 @@ fun HomeScreen(
     LaunchedEffect(key1 = true) {
         scope.launch {
             try {
-                homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_LOADING
                 viewModel.getUserProfile()
                 Log.i(
                     "MessageViewModel", "Collecting live user profile from compose"
                 )
+                homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS
             } catch (e: Exception) {
                 e.printStackTrace()
                 homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_ERROR
             }
-        }.invokeOnCompletion {
-            homeScreenState = HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
         }
     }
     if (homeScreenState == HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS) {
         BlibberlyHorizontalPager(pagerState, modifier, navController, liveUserProfile)
     } else {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
+        HomeScreenShimmerEffect(modifier, screenHeight)
     }
 }
 
@@ -150,7 +145,8 @@ fun BlibberlyHorizontalPager(
     liveUsers: List<UserDataModel>
 ) {
     HorizontalPager(
-        state = pagerState, modifier = modifier.background(color = Color.White)
+        state = pagerState,
+        modifier = modifier.background(color = MaterialTheme.colorScheme.background)
     ) { page ->
 
         val currUser = liveUsers[page]
@@ -174,114 +170,69 @@ fun BlibberlyHorizontalPager(
                     BlibMojiCard(userDataModel = currUser,
                         navigateToChat = { navController.navigate(Screen.Message.route + "/${currUser.email}/${currUser.name}") })
                 }
-//                item { PhotoCard(user = liveUsers[page]) { navController.navigate(Screen.ChatList.route) } }
                 item { AboutCard(user = currUser) }
                 item { LanguageCard(user = currUser) }
-//                item { ScoreCard() }
+                item { InterestsCard(interests = currUser.interests) }
             }
         }
     }
 }
 
-
-@Composable
-fun PhotoCard(user: UserDataModel, navigateToChat: () -> Unit) {
-
-    val config = LocalConfiguration.current
-    val screenHeight = config.screenHeightDp.dp
-    val overLayTextColor = Color.White
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(screenHeight / 2f)
-    ) {
-
-        Image(
-            contentScale = ContentScale.Crop,
-            painter = painterResource(id = R.drawable.placeholder),
-            contentDescription = "Profile Picture",
-            modifier = Modifier.fillMaxSize()
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            Row {
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = user.name,
-                    fontFamily = FontProvider.bebasFontFamily,
-                    fontSize = 28.sp,
-                    color = overLayTextColor
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = "Profile Menu",
-                        tint = overLayTextColor,
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Row(modifier = Modifier.padding(8.dp)) {
-                Text(text = user.age.toString(), fontSize = 28.sp, color = overLayTextColor)
-                Text(text = user.gender, color = overLayTextColor)
-
-                Spacer(modifier = Modifier.weight(1f))
-                IconButton(
-                    onClick = navigateToChat,
-                    colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White)
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.chat),
-                        contentDescription = "Chat",
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun AboutCard(user: UserDataModel) {
-    val internalPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp)
-    Text(
-        text = "About",
-        modifier = Modifier.padding(internalPadding),
-        style = MaterialTheme.typography.titleLarge,
-    )
-    Text(
-        text = user.aboutMe,
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.padding(internalPadding)
-    )
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Text(
+            text = "About me",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(8.dp)
+        )
 
+        Text(
+            text = user.aboutMe,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp, top = 4.dp)
+        )
+    }
 }
 
 @Composable
 fun LanguageCard(user: UserDataModel) {
     val langList = listOf("Tamil", "English")
-    LazyRow(
+
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
     ) {
-        items(count = langList.size) { index ->
-            Text(
-                text = langList[index],
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(4.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    .padding(vertical = 4.dp, horizontal = 8.dp)
-            )
+        Text(
+            text = "Text's on",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(8.dp)
+        )
+
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+        ) {
+            items(count = langList.size) { index ->
+                Text(
+                    text = langList[index],
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(vertical = 4.dp, horizontal = 8.dp)
+                )
+            }
         }
     }
 }
@@ -448,3 +399,67 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
 
     }
 }
+
+@Composable
+fun InterestsCard(interests: String) {
+    val interestsList = Gson().fromJson(interests, Array<String>::class.java)
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Text(
+            text = "Interests",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(8.dp)
+        )
+
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+        ) {
+            items(count = interestsList.size) { index ->
+                Text(
+                    text = interestsList[index],
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(vertical = 4.dp, horizontal = 8.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeScreenShimmerEffect(modifier: Modifier, screenHeight: Dp) {
+    LazyColumn(modifier = modifier) {
+        item {
+            Card(
+                modifier = Modifier
+                    .height(screenHeight / 2)
+                    .fillMaxWidth()
+                    .shimmer()
+                    .padding(16.dp),
+            ) {}
+        }
+        items(count = 5) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shimmer()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Spacer(modifier = Modifier.padding(vertical = 40.dp))
+            }
+        }
+    }
+
+}
+
