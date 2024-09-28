@@ -21,6 +21,7 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
 
     override suspend fun connectSocketToBackend() {
         socketHandler.connectWithSocketBackend()
+//        Log.i("SOCKET CONNECT", socketHandler.getSocket().connected().toString())
     }
 
     override suspend fun subscribeToMessages() {

@@ -9,47 +9,56 @@ import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.PrivateMessage
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import io.socket.client.IO
-import io.socket.client.IO.Options
 import io.socket.client.Socket
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferences>) :
+class SocketHandlerImpl private constructor(private val userPreferencesDataStore: DataStore<Preferences>) :
     SocketHandler {
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
     private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
 
-    init {
-        try {
-            connectWithSocketBackend()
-        } catch (e: Exception) {
-            e.printStackTrace()
+    companion object {
+        @Volatile
+        private var instance: SocketHandlerImpl? = null
+
+        fun getInstance(userPreferencesDataStore: DataStore<Preferences>): SocketHandlerImpl {
+            return instance ?: synchronized(this) {
+                instance ?: SocketHandlerImpl(userPreferencesDataStore).also { instance = it }
+            }
         }
     }
 
-     override  fun connectWithSocketBackend() {
-        try {
-            val options = Options()
-            CoroutineScope(Dispatchers.IO).launch {
-                userPreferencesDataStore.data.collect { preferences ->
-                    val email = preferences[stringPreferencesKey("user_email")]
-                    if (email != null) {
-                        options.auth = mapOf("username" to email)
-                        socket = IO.socket("http://192.168.29.216:3000/", options)
-                        socket.connect()
-                    }
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            connectWithSocketBackend()
+        }
+    }
 
-                    registerMessageListener()
-                    registerUsersListener()
-                    registerNewUserConnectedListener()
-                    registerUserDisconnectedListener()
-                }
+    override suspend fun connectWithSocketBackend() {
+        try {
+            val options = IO.Options()
+            val preferences = userPreferencesDataStore.data.first()
+            val email = preferences[stringPreferencesKey("user_email")]
+
+            if (email != null) {
+                options.auth = mapOf("username" to email)
+                socket = IO.socket("http://192.168.29.216:3000/", options)
+                socket.connect()
+
+                registerMessageListener()
+                registerUsersListener()
+                registerNewUserConnectedListener()
+                registerUserDisconnectedListener()
+            } else {
+                Log.e("SocketHandlerImpl", "Email is null, cannot connect to socket")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -58,7 +67,6 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
     override fun registerMessageListener() {
         try {
-
             Log.i("Message from server", "Started Listening")
             socket.on("private message") { msg ->
                 if (!msg.isNullOrEmpty()) {
@@ -78,16 +86,15 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
     override fun registerUsersListener() {
         try {
-
             socket.on("users") { users ->
                 if (!users.isNullOrEmpty()) {
                     try {
-                        val a = Gson().fromJson(
+                        val userList = Gson().fromJson(
                             users[0].toString(),
                             Array<SocketUserDataModelItem>::class.java
                         ).toList()
-                        Log.i("Connected Users", a.toString())
-                        _usersList.value = a
+                        Log.i("Connected Users", userList.toString())
+                        _usersList.value = userList
                     } catch (e: Exception) {
                         Log.e("Invalid Users JSON", e.toString())
                     }
@@ -100,20 +107,16 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
     override fun registerNewUserConnectedListener() {
         try {
-
             socket.on("user connected") { newUser ->
                 if (!newUser.isNullOrEmpty()) {
                     try {
-                        val data =
-                            Gson().fromJson(
-                                newUser[0].toString(),
-                                SocketUserDataModelItem::class.java
-                            )
-
+                        val data = Gson().fromJson(
+                            newUser[0].toString(),
+                            SocketUserDataModelItem::class.java
+                        )
                         val newUserList = _usersList.value.toMutableList()
                         newUserList.add(data)
                         _usersList.value = newUserList
-
                         Log.i("New user connected", data.toString())
                     } catch (e: Exception) {
                         Log.e("Invalid new User JSON", e.toString())
@@ -125,26 +128,19 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
         }
     }
 
-    override fun getUsers(): StateFlow<List<SocketUserDataModelItem>> {
-        return _usersList.asStateFlow()
-    }
-
     override fun registerUserDisconnectedListener() {
         try {
-
             socket.on("user disconnected") { disconnectedUser ->
                 if (!disconnectedUser.isNullOrEmpty()) {
                     try {
-                        val data =
-                            Gson().fromJson(
-                                disconnectedUser[0].toString(),
-                                SocketUserDataModelItem::class.java
-                            )
+                        val data = Gson().fromJson(
+                            disconnectedUser[0].toString(),
+                            SocketUserDataModelItem::class.java
+                        )
                         val newUserList = _usersList.value.toMutableList()
                         newUserList.remove(data)
                         _usersList.value = newUserList
                         Log.i("user disconnected list", _usersList.value.toString())
-
                         Log.i("user disconnected", data.toString())
                     } catch (e: Exception) {
                         Log.e("Invalid disconnected User JSON", e.toString())
@@ -156,29 +152,39 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
         }
     }
 
+    override fun getUsers(): StateFlow<List<SocketUserDataModelItem>> = _usersList.asStateFlow()
 
-    override fun getMessageList(): StateFlow<List<MessageDataModel>> {
-        return _messageList.asStateFlow()
-    }
+    override fun getMessageList(): StateFlow<List<MessageDataModel>> = _messageList.asStateFlow()
 
+    override fun getSocket(): Socket = socket
 
-    override fun getSocket(): Socket {
-        return socket
-    }
+//    override fun sendMessage(userId: String, data: MessageDataModel) {
+//        val message = mapOf("content" to data, "to" to userId)
+//        val jsonMessage = Gson().toJson(message)
+//
+//        // Logging the generated JSON message
+//        Log.i("private message", jsonMessage)
+//
+//        // Emitting the message via the socket
+//        socket.emit("private message", jsonMessage)
+//    }
 
     override fun sendMessage(userId: String, data: MessageDataModel) {
-
-        val message = PrivateMessage(data, userId)
+        val message = mapOf(
+            "content" to data,
+            "to" to userId
+        )
         val jsonMessage = Gson().toJson(message)
 
         Log.i("private message", jsonMessage)
+
         socket.emit("private message", jsonMessage)
     }
 
+
     override fun disconnectSocket() {
+        Log.i("Socket", "DISCONNECTED")
         socket.disconnect()
         socket.off()
     }
-
 }
-

@@ -40,12 +40,9 @@ fun ChatListScreen(
     )
 ) {
     val chats by viewModel.usersState.collectAsState()
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
-        scope.launch {
-            viewModel.getUsers()
-        }
+        viewModel.getUsers()
     }
 
     LazyColumn(modifier = modifier) {

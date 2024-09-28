@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 fun MessageScreen(
     modifier: Modifier,
     navController: NavHostController,
-    recieverUserId: String?,
+    receiverUserId: String?,
     userName: String?,
     viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
@@ -139,7 +139,7 @@ fun MessageScreen(
                     }
                 }
             }
-            recieverUserId?.let { it1 -> currUser?.let { it2 -> MessageTextField(it1, currUserId = it2) } }
+            receiverUserId?.let { it1 -> currUser?.let { it2 -> MessageTextField(it1, currUserId = it2) } }
         }
     }
 }

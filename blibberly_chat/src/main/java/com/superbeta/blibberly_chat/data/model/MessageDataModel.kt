@@ -1,18 +1,17 @@
 package com.superbeta.blibberly_chat.data.model
 
 import androidx.annotation.Keep
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
+import com.google.errorprone.annotations.Immutable
 import com.google.gson.Gson
 
 @Keep
 @Entity("message")
 @Immutable
-@Stable
+//@Stable
 
 data class MessageDataModel(
     @PrimaryKey @ColumnInfo("messageId") val messageId: String,

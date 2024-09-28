@@ -6,7 +6,7 @@ import io.socket.client.Socket
 import kotlinx.coroutines.flow.StateFlow
 
 interface SocketHandler {
-    fun connectWithSocketBackend()
+    suspend fun connectWithSocketBackend()
 
     fun getMessageList(): StateFlow<List<MessageDataModel>>
     fun getUsers(): StateFlow<List<SocketUserDataModelItem>>

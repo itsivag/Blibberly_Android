@@ -86,6 +86,18 @@ fun ProfilePhotoScreen(
     viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
 ) {
 
+    val avatarBGColorsMap = mapOf<String, Color>(
+        BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
+        BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
+        BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
+        BLIBMOJI_BG_COLORS.GRAY.toString() to Color.Gray,
+        BLIBMOJI_BG_COLORS.CYAN.toString() to Color.Cyan,
+        BLIBMOJI_BG_COLORS.BLACK.toString() to Color.Black,
+        BLIBMOJI_BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
+        BLIBMOJI_BG_COLORS.GREEN.toString() to Color.Green,
+        BLIBMOJI_BG_COLORS.MAGENTA.toString() to Color.Magenta,
+        BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
+    )
     val avatarBgColorList = avatarBGColorsMap.entries.toList()
 
     val avatarBGEmojiList = listOf(

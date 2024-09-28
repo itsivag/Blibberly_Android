@@ -59,8 +59,6 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.ui.theme.BLIBMOJI_BG_COLORS
-import com.superbeta.blibberly.ui.theme.avatarBGColorsMap
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.ui.theme.components.SwipeButton
@@ -75,6 +73,32 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+enum class BLIBMOJI_BG_COLORS {
+    BLUE,
+    WHITE,
+    RED,
+    GRAY,
+    CYAN,
+    BLACK,
+    DARKGRAY,
+    GREEN,
+    MAGENTA,
+    YELLOW
+
+}
+
+val avatarBGColorsMap = mapOf<String, Color>(
+    BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
+    BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
+    BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
+    BLIBMOJI_BG_COLORS.GRAY.toString() to Color.Gray,
+    BLIBMOJI_BG_COLORS.CYAN.toString() to Color.Cyan,
+    BLIBMOJI_BG_COLORS.BLACK.toString() to Color.Black,
+    BLIBMOJI_BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
+    BLIBMOJI_BG_COLORS.GREEN.toString() to Color.Green,
+    BLIBMOJI_BG_COLORS.MAGENTA.toString() to Color.Magenta,
+    BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
+)
 
 
 @SuppressLint("Range")

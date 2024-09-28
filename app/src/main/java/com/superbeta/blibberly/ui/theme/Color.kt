@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.ui.theme
 
+import androidx.annotation.Keep
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -17,7 +18,6 @@ val ColorTertiary = Color(0xFF695E93)
 
 val ColorDisabled = Color(0xffd3d3d3)
 
-
 enum class BLIBMOJI_BG_COLORS {
     BLUE,
     WHITE,
@@ -31,7 +31,6 @@ enum class BLIBMOJI_BG_COLORS {
     YELLOW
 
 }
-
 
 
 val avatarBGColorsMap = mapOf<String, Color>(

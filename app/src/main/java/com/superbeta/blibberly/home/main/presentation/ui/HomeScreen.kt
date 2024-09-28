@@ -63,7 +63,6 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.google.gson.Gson
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.ui.theme.avatarBGColorsMap
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
@@ -74,16 +73,25 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 enum class HomeScreenState {
-    LIVE_USERS_RETRIEVAL_SUCCESS, LIVE_USERS_RETRIEVAL_LOADING, LIVE_USERS_RETRIEVAL_ERROR, LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS, LIVE_USERS_PROFILE_RETRIEVAL_LOADING, LIVE_USERS_PROFILE_RETRIEVAL_ERROR,
+    LIVE_USERS_RETRIEVAL_SUCCESS,
+    LIVE_USERS_RETRIEVAL_LOADING,
+    LIVE_USERS_RETRIEVAL_ERROR,
+    LIVE_USERS_EMPTY,
+    LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS,
+    LIVE_USERS_PROFILE_RETRIEVAL_LOADING,
+    LIVE_USERS_PROFILE_RETRIEVAL_ERROR,
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier, navController: NavHostController,
-    viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    messageViewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
     ),
+//    homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+//        factory = HomeViewModel.Factory
+//    ),
 ) {
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
@@ -91,9 +99,9 @@ fun HomeScreen(
     var homeScreenState by remember {
         mutableStateOf(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
     }
-    val liveUsers by viewModel.usersState.collectAsState()
+    val liveUsers by messageViewModel.usersState.collectAsState()
     val scope = rememberCoroutineScope { Dispatchers.IO }
-    val liveUserProfile by viewModel.userProfileState.collectAsState()
+    val liveUserProfile by messageViewModel.userProfileState.collectAsState()
     val pagerState = rememberPagerState(pageCount = {
         liveUserProfile.size
     })
@@ -103,12 +111,16 @@ fun HomeScreen(
     LaunchedEffect(key1 = true) {
         scope.launch {
             try {
-                viewModel.getUsers()
+                messageViewModel.getUsers()
                 Log.i(
                     "MessageViewModel", "Collecting live user from compose"
                 )
-                homeScreenState = HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
+                homeScreenState = if (liveUsers.isEmpty()) {
+                    HomeScreenState.LIVE_USERS_EMPTY
+                } else {
+                    HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
 
+                }
             } catch (e: Exception) {
                 homeScreenState = HomeScreenState.LIVE_USERS_RETRIEVAL_ERROR
             }
@@ -118,7 +130,8 @@ fun HomeScreen(
     LaunchedEffect(key1 = true) {
         scope.launch {
             try {
-                viewModel.getUserProfile()
+                homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_LOADING
+                messageViewModel.getUserProfile()
                 Log.i(
                     "MessageViewModel", "Collecting live user profile from compose"
                 )
@@ -249,7 +262,8 @@ fun ScoreCard() {
     ) {
 
         LinearProgressIndicator(
-            progress = 0.8f, modifier = Modifier.fillMaxSize()
+            progress = { 0.8f },
+            modifier = Modifier.fillMaxSize(),
         )
 
         Text(
@@ -289,12 +303,40 @@ fun ScoreCard() {
     }
 }
 
+enum class BLIBMOJI_BG_COLORS {
+    BLUE,
+    WHITE,
+    RED,
+    GRAY,
+    CYAN,
+    BLACK,
+    DARKGRAY,
+    GREEN,
+    MAGENTA,
+    YELLOW
+
+}
+
 @Composable
 fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
 
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
     val overLayTextColor = Color.White
+
+
+    val avatarBGColorsMap = mapOf<String, Color>(
+        BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
+        BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
+        BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
+        BLIBMOJI_BG_COLORS.GRAY.toString() to Color.Gray,
+        BLIBMOJI_BG_COLORS.CYAN.toString() to Color.Cyan,
+        BLIBMOJI_BG_COLORS.BLACK.toString() to Color.Black,
+        BLIBMOJI_BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
+        BLIBMOJI_BG_COLORS.GREEN.toString() to Color.Green,
+        BLIBMOJI_BG_COLORS.MAGENTA.toString() to Color.Magenta,
+        BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
+    )
 
     Box(modifier = Modifier.height(screenHeight / 2)) {
         avatarBGColorsMap[userDataModel.photoMetaData.bgColor]?.let {
