@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
@@ -66,21 +67,12 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_chat.presentation.viewModels.HomeScreenState
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
-
-enum class HomeScreenState {
-    LIVE_USERS_RETRIEVAL_SUCCESS,
-    LIVE_USERS_RETRIEVAL_LOADING,
-    LIVE_USERS_RETRIEVAL_ERROR,
-    LIVE_USERS_EMPTY,
-    LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS,
-    LIVE_USERS_PROFILE_RETRIEVAL_LOADING,
-    LIVE_USERS_PROFILE_RETRIEVAL_ERROR,
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -96,12 +88,10 @@ fun HomeScreen(
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
 
-    var homeScreenState by remember {
-        mutableStateOf(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
-    }
-    val liveUsers by messageViewModel.usersState.collectAsState()
+    val homeScreenState by messageViewModel.homeScreenState.collectAsStateWithLifecycle()
+    val liveUsers by messageViewModel.usersState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope { Dispatchers.IO }
-    val liveUserProfile by messageViewModel.userProfileState.collectAsState()
+    val liveUserProfile by messageViewModel.userProfileState.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(pageCount = {
         liveUserProfile.size
     })
@@ -115,14 +105,8 @@ fun HomeScreen(
                 Log.i(
                     "MessageViewModel", "Collecting live user from compose"
                 )
-                homeScreenState = if (liveUsers.isEmpty()) {
-                    HomeScreenState.LIVE_USERS_EMPTY
-                } else {
-                    HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
-
-                }
             } catch (e: Exception) {
-                homeScreenState = HomeScreenState.LIVE_USERS_RETRIEVAL_ERROR
+                e.printStackTrace()
             }
         }
     }
@@ -130,22 +114,33 @@ fun HomeScreen(
     LaunchedEffect(key1 = true) {
         scope.launch {
             try {
-                homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_LOADING
                 messageViewModel.getUserProfile()
                 Log.i(
                     "MessageViewModel", "Collecting live user profile from compose"
                 )
-                homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS
             } catch (e: Exception) {
                 e.printStackTrace()
-                homeScreenState = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_ERROR
             }
         }
     }
-    if (homeScreenState == HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS) {
-        BlibberlyHorizontalPager(pagerState, modifier, navController, liveUserProfile)
-    } else {
-        HomeScreenShimmerEffect(modifier, screenHeight)
+    when (homeScreenState) {
+        HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS -> {
+            BlibberlyHorizontalPager(pagerState, modifier, navController, liveUserProfile)
+        }
+
+        HomeScreenState.LIVE_USERS_EMPTY -> {
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = "No Live User Found")
+            }
+        }
+
+        else -> {
+            HomeScreenShimmerEffect(modifier, screenHeight)
+        }
     }
 }
 
