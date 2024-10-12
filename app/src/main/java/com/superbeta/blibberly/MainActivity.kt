@@ -38,8 +38,8 @@ import androidx.navigation.compose.rememberNavController
 import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.notification.NotificationUtil
 import com.superbeta.blibberly.ui.theme.BlibberlyTheme
-import com.superbeta.blibberly.ui.theme.ColorDisabled
-import com.superbeta.blibberly.ui.theme.ColorPrimary
+import com.superbeta.blibberly_auth.theme.ColorDisabled
+import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly.utils.Screen
 
 

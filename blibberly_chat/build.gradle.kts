@@ -51,7 +51,8 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(project(":blibberly_auth"))
     implementation(project(":blibberly_supabase"))
-//    implementation(libs.firebase.firestore)
+    //profile likes, dislikes, reports and matches
+    implementation(project(":blibberly_likes"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -104,5 +105,6 @@ dependencies {
 
     //datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
 
 }

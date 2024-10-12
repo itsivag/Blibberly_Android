@@ -39,8 +39,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.utils.AuthState
-import com.superbeta.blibberly.ui.theme.ColorDisabled
-import com.superbeta.blibberly.ui.theme.ColorPrimary
+import com.superbeta.blibberly_auth.theme.ColorDisabled
+import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.theme.components.PrimaryButton
 import com.superbeta.blibberly_auth.utils.Screen
 import kotlinx.coroutines.launch

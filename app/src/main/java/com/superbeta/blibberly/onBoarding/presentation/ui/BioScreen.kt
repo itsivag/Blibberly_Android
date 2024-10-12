@@ -21,7 +21,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,8 +36,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.ui.theme.ColorDisabled
-import com.superbeta.blibberly.ui.theme.ColorPrimary
+import com.superbeta.blibberly_auth.theme.ColorDisabled
+import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly.ui.theme.components.PrimaryButton
 import com.superbeta.blibberly.ui.theme.components.TextFieldWithLabel
 import com.superbeta.blibberly.user.data.model.PhotoMetaData

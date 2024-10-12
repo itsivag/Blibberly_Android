@@ -1,16 +1,21 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -36,8 +42,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavHostController
+import com.superbeta.blibberly_auth.theme.ColorDisabled
+import com.superbeta.blibberly_auth.theme.ColorPrimary
+import com.superbeta.blibberly_auth.theme.ColorSecondary
+import com.superbeta.blibberly_auth.theme.ColorTertiary
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.R
+import com.superbeta.blibberly_chat.presentation.ui.components.BlibberlyIconButton
 import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
 import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubble
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
@@ -130,6 +141,30 @@ fun MessageScreen(
                 modifier = Modifier.weight(1f),
                 state = messageLazyListState
             ) {
+                item {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .background(color = ColorSecondary, shape = RoundedCornerShape(8.dp))
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        BlibberlyIconButton(
+                            icon = Icons.Outlined.Close,
+                            contentDescription = "Close",
+                            onClick = {},
+                            bgColor = Color.White
+                        )
+
+                        BlibberlyIconButton(
+                            icon = Icons.Outlined.Favorite,
+                            contentDescription = "Like",
+                            onClick = {},
+                            bgColor = Color.White
+                        )
+                    }
+                }
                 items(count = messages.size) { i ->
                     val currMessage = messages[i]
                     if (currMessage.senderID == currUser) {
@@ -139,7 +174,15 @@ fun MessageScreen(
                     }
                 }
             }
-            receiverUserId?.let { it1 -> currUser?.let { it2 -> MessageTextField(it1, currUserId = it2) } }
+            receiverUserId?.let { it1 ->
+                currUser?.let { it2 ->
+                    MessageTextField(
+                        it1,
+                        currUserId = it2
+                    )
+                }
+            }
         }
     }
 }
+
