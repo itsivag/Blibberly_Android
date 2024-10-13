@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -40,6 +43,8 @@ fun ChatListScreen(
     profileViewModel: ProfileOpsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = ProfileOpsViewModel.Factory)
 ) {
     val chats by messageViewModel.usersState.collectAsState()
+    val matchedProfiles by profileViewModel.matchedProfilesState.collectAsState()
+    val likedProfiles by profileViewModel.likedProfilesState.collectAsState()
 
     LaunchedEffect(key1 = true) {
         messageViewModel.getUsers()
@@ -49,12 +54,22 @@ fun ChatListScreen(
         profileViewModel.getMatchedProfiles()
     }
 
+    LaunchedEffect(key1 = true) {
+        profileViewModel.getLikedProfiles()
+    }
+
     LazyColumn(modifier = modifier) {
         item {
-            TopAppBar(title = { Text(text = "Saved Chats") })
+            TopAppBar(title = { Text(text = "Matched Chats") })
         }
         items(chats.size) { i ->
             ChatListItem(chats[i], navController)
+        }
+        item {
+            TopAppBar(title = { Text(text = "Liked Chats") })
+        }
+        items(likedProfiles.size) { i ->
+            Text(text = likedProfiles[i].userId, modifier = Modifier.padding(16.dp))
         }
     }
 }

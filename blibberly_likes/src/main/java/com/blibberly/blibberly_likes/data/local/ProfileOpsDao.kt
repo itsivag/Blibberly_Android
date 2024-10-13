@@ -14,6 +14,9 @@ interface ProfileOpsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setProfileOps(profileOps: ProfileOpsDataModel)
 
-    @Query("SELECT userId FROM profile_ops WHERE isMatched = 1")
-    suspend fun getMatchedProfiles()
+    @Query("SELECT * FROM profile_ops WHERE isMatched = 1")
+    suspend fun getMatchedProfiles() : List<ProfileOpsDataModel>
+
+    @Query("SELECT * FROM profile_ops WHERE isLiked = 1 and isMatched = 0")
+    suspend fun getLikedProfiles() : List<ProfileOpsDataModel>
 }

@@ -7,4 +7,5 @@ interface ProfileOpsRepo {
     suspend fun getProfileOps(userId: String): StateFlow<ProfileOpsDataModel?>
     suspend fun setProfileOps(profileOpsDataModel: ProfileOpsDataModel)
     suspend fun getMatchedProfiles(): StateFlow<List<ProfileOpsDataModel>>
+    suspend fun getLikedProfiles(): StateFlow<List<ProfileOpsDataModel>>
 }

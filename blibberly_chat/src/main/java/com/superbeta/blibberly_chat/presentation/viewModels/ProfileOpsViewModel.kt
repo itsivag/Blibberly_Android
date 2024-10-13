@@ -23,6 +23,8 @@ class ProfileOpsViewModel(private val profileOpsRepo: ProfileOpsRepo) : ViewMode
     val matchedProfilesState: StateFlow<List<ProfileOpsDataModel>> =
         _matchedProfilesState.asStateFlow()
 
+    private val _likedProfilesState = MutableStateFlow<List<ProfileOpsDataModel>>(emptyList())
+    val likedProfilesState: StateFlow<List<ProfileOpsDataModel>> = _likedProfilesState.asStateFlow()
 
     fun getProfileOps(userId: String) {
         viewModelScope.launch {
@@ -40,6 +42,13 @@ class ProfileOpsViewModel(private val profileOpsRepo: ProfileOpsRepo) : ViewMode
         viewModelScope.launch {
             _matchedProfilesState.value = profileOpsRepo.getMatchedProfiles().value
             Log.i("Matched Profiles : ", _matchedProfilesState.value.toString())
+        }
+    }
+
+    fun getLikedProfiles() {
+        viewModelScope.launch {
+            _likedProfilesState.value = profileOpsRepo.getLikedProfiles().value
+            Log.i("Liked Profiles : ", _likedProfilesState.value.toString())
         }
     }
 
