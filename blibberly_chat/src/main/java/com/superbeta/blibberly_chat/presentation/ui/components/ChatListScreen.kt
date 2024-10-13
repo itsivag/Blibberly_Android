@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,21 +27,26 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
-import kotlinx.coroutines.launch
+import com.superbeta.blibberly_chat.presentation.viewModels.ProfileOpsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
     modifier: Modifier,
     navController: NavHostController,
-    viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    messageViewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
-    )
+    ),
+    profileViewModel: ProfileOpsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = ProfileOpsViewModel.Factory)
 ) {
-    val chats by viewModel.usersState.collectAsState()
+    val chats by messageViewModel.usersState.collectAsState()
 
     LaunchedEffect(key1 = true) {
-        viewModel.getUsers()
+        messageViewModel.getUsers()
+    }
+
+    LaunchedEffect(key1 = true) {
+        profileViewModel.getMatchedProfiles()
     }
 
     LazyColumn(modifier = modifier) {

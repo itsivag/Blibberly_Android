@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ProfileOpsRepoImpl(private val db: ProfileOpsDao) : ProfileOpsRepo {
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
+    private val _matchedProfilesState = MutableStateFlow<List<ProfileOpsDataModel>>(emptyList())
 
     override suspend fun getProfileOps(userId: String): StateFlow<ProfileOpsDataModel?> {
         try {
@@ -24,5 +25,14 @@ class ProfileOpsRepoImpl(private val db: ProfileOpsDao) : ProfileOpsRepo {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override suspend fun getMatchedProfiles(): StateFlow<List<ProfileOpsDataModel>> {
+        try {
+            db.getMatchedProfiles()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return _matchedProfilesState
     }
 }

@@ -1,5 +1,6 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,10 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavHostController
-import com.superbeta.blibberly_auth.theme.ColorDisabled
-import com.superbeta.blibberly_auth.theme.ColorPrimary
+import com.blibberly.blibberly_likes.data.model.ProfileOpsDataModel
 import com.superbeta.blibberly_auth.theme.ColorSecondary
-import com.superbeta.blibberly_auth.theme.ColorTertiary
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.presentation.ui.components.BlibberlyIconButton
@@ -53,7 +52,10 @@ import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
 import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubble
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
+import com.superbeta.blibberly_chat.presentation.viewModels.ProfileOpsViewModel
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,15 +64,17 @@ fun MessageScreen(
     navController: NavHostController,
     receiverUserId: String?,
     userName: String?,
-    viewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    messageViewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = MessageViewModel.Factory
-    )
+    ),
+    profileViewModel: ProfileOpsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = ProfileOpsViewModel.Factory)
+
 ) {
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    val messages by viewModel.messageState.collectAsState()
+    val messages by messageViewModel.messageState.collectAsState()
     val userPreferencesDataStore = context.userPreferencesDataStore
     val messageLazyListState = rememberLazyListState()
 
@@ -88,7 +92,7 @@ fun MessageScreen(
 
     LaunchedEffect(true) {
         scope.launch {
-            viewModel.collectMessages()
+            messageViewModel.collectMessages()
         }
     }
 
@@ -160,7 +164,19 @@ fun MessageScreen(
                         BlibberlyIconButton(
                             icon = Icons.Outlined.Favorite,
                             contentDescription = "Like",
-                            onClick = {},
+                            onClick = {
+                                Log.i("Profile Ops", "$receiverUserId is Liked")
+                                profileViewModel.setProfileOps(
+                                    ProfileOpsDataModel(
+                                        userId = receiverUserId.toString(),
+                                        isLiked = true,
+                                        isDisliked = false,
+                                        isMatched = false,
+                                        isReported = false,
+                                        likedTimestamp = Calendar.getInstance().time.toString()
+                                    )
+                                )
+                            },
                             bgColor = Color.White
                         )
                     }

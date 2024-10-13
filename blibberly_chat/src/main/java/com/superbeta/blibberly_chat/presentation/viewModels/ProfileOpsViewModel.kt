@@ -1,6 +1,7 @@
 package com.superbeta.blibberly_chat.presentation.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -18,6 +19,11 @@ class ProfileOpsViewModel(private val profileOpsRepo: ProfileOpsRepo) : ViewMode
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
     val profileOpsState: StateFlow<ProfileOpsDataModel?> = _profileOpsState.asStateFlow()
 
+    private val _matchedProfilesState = MutableStateFlow<List<ProfileOpsDataModel>>(emptyList())
+    val matchedProfilesState: StateFlow<List<ProfileOpsDataModel>> =
+        _matchedProfilesState.asStateFlow()
+
+
     fun getProfileOps(userId: String) {
         viewModelScope.launch {
             _profileOpsState.value = profileOpsRepo.getProfileOps(userId).value
@@ -27,6 +33,13 @@ class ProfileOpsViewModel(private val profileOpsRepo: ProfileOpsRepo) : ViewMode
     fun setProfileOps(profileOps: ProfileOpsDataModel) {
         viewModelScope.launch {
             profileOpsRepo.setProfileOps(profileOps)
+        }
+    }
+
+    fun getMatchedProfiles() {
+        viewModelScope.launch {
+            _matchedProfilesState.value = profileOpsRepo.getMatchedProfiles().value
+            Log.i("Matched Profiles : ", _matchedProfilesState.value.toString())
         }
     }
 

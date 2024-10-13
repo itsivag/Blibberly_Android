@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 @Entity("profile_ops")
 data class ProfileOpsDataModel(
     @PrimaryKey @ColumnInfo("userId") val userId: String,
-    @ColumnInfo("isLiked") val isLiked: String,
+    @ColumnInfo("isLiked") val isLiked: Boolean,
     @ColumnInfo("isDisliked") val isDisliked: Boolean,
     @ColumnInfo("isMatched") val isMatched: Boolean,
     @ColumnInfo("isReported") val isReported: Boolean,
@@ -18,4 +18,4 @@ data class ProfileOpsDataModel(
     @ColumnInfo("matchedTimestamp") val matchedTimestamp: String? = null,
     @ColumnInfo("dislikedTimestamp") val dislikedTimestamp: String? = null,
     @ColumnInfo("reportedTimestamp") val reportedTimestamp: String? = null,
-    )
+)
