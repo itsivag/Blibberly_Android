@@ -37,7 +37,7 @@ import com.google.gson.Gson
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly_auth.theme.ColorPrimary
-import com.superbeta.blibberly.ui.theme.components.PrimaryButton
+import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen

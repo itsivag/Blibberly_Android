@@ -37,7 +37,7 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
     }
 
     override suspend fun sendMessage(userId: String, message: MessageDataModel) {
-        socketHandler.sendMessage(userId, message)
+        socketHandler.emitMessage(userId, message)
         _messageState.value += message
     }
 
@@ -71,5 +71,13 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
     override suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>) {
         db.saveMessages(messages)
         _messageState.value = db.getMessages()
+    }
+
+    override fun disconnectUserFromSocket() {
+        try {
+            socketHandler.disconnectSocket()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,29 +56,28 @@ fun SignInScreen(
 
     val authState by authViewModel.authState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = authState) {
-        Log.i("Auth State", authState.toString())
-        when (authState) {
-            AuthState.SIGNED_IN -> {
-                navController.navigate(Screen.OnBoarding.route)
-            }
-
-            AuthState.SIGNED_OUT -> {}
-            AuthState.USER_EMAIL_STORED -> {}
-            AuthState.USER_EMAIL_STORAGE_ERROR -> {}
-            AuthState.USER_NOT_REGISTERED -> {
-                navController.navigate(Screen.OnBoarding.route)
-            }
-
-            AuthState.USER_REGISTERED -> {
-                navController.navigate(Screen.Home.route)
-            }
-
-            AuthState.ERROR -> {}
-            AuthState.LOADING -> {}
-            AuthState.IDLE -> {}
-        }
-    }
+//    LaunchedEffect(key1 = authState) {
+//        Log.i("Auth State", authState.toString())
+//        when (authState) {
+//            AuthState.SIGNED_IN -> {
+//                navController.navigate(Screen.Home.route)
+//            }
+//            AuthState.SIGNED_OUT -> {}
+//            AuthState.USER_EMAIL_STORED -> {}
+//            AuthState.USER_EMAIL_STORAGE_ERROR -> {}
+//            AuthState.USER_NOT_REGISTERED -> {
+//                navController.navigate(Screen.OnBoarding.route)
+//            }
+//
+//            AuthState.USER_REGISTERED -> {
+//                navController.navigate(Screen.Home.route)
+//            }
+//
+//            AuthState.ERROR -> {}
+//            AuthState.LOADING -> {}
+//            AuthState.IDLE -> {}
+//        }
+//    }
 
     var email by remember {
         mutableStateOf(TextFieldValue())

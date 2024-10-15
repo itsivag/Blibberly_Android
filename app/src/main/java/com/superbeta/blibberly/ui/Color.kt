@@ -1,6 +1,5 @@
-package com.superbeta.blibberly.ui.theme
+package com.superbeta.blibberly.ui
 
-import androidx.annotation.Keep
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)

@@ -59,9 +59,9 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.ui.theme.components.PrimaryButton
-import com.superbeta.blibberly.ui.theme.components.PrimaryButtonColorDisabled
-import com.superbeta.blibberly.ui.theme.components.SwipeButton
+import com.superbeta.blibberly.ui.components.PrimaryButton
+import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
+import com.superbeta.blibberly.ui.components.SwipeButton
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
@@ -70,7 +70,6 @@ import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 enum class BLIBMOJI_BG_COLORS {

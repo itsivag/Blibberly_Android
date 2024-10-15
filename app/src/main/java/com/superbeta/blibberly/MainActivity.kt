@@ -12,40 +12,38 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.superbeta.blibberly.root.BlibberlyBottomBar
+import com.superbeta.blibberly.root.BlibberlyTopAppBar
 import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.notification.NotificationUtil
-import com.superbeta.blibberly.ui.theme.BlibberlyTheme
-import com.superbeta.blibberly_auth.theme.ColorDisabled
-import com.superbeta.blibberly_auth.theme.ColorPrimary
+import com.superbeta.blibberly.ui.BlibberlyTheme
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
+import com.superbeta.blibberly_auth.utils.AuthState
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 
 class MainActivity : ComponentActivity() {
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    private val bottomNavScreens = listOf(
+        Screen.Profile,
+        Screen.Home,
+        Screen.ChatList,
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //notification permission
@@ -73,12 +71,6 @@ class MainActivity : ComponentActivity() {
         ).askNotificationPermission()
 
 
-        val bottomNavScreens = listOf(
-            Screen.Profile,
-            Screen.Home,
-            Screen.ChatList,
-        )
-
         var isTopBarVisible by mutableStateOf(false)
         var isBottomNavBarVisible by mutableStateOf(false)
 
@@ -87,6 +79,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
+
+                    val authViewModel = getViewModel<AuthViewModel>()
 
                     val scope = rememberCoroutineScope()
                     val navController = rememberNavController()
@@ -114,104 +108,39 @@ class MainActivity : ComponentActivity() {
 
                     }
 
-                    var selectedScreen by remember {
+                    val selectedScreen by remember {
                         mutableStateOf(Screen.Home.route)
                     }
 
                     Scaffold(topBar = {
                         if (isTopBarVisible) {
-                            CenterAlignedTopAppBar(title = { Text(text = "Blibberly") },
-                                navigationIcon = {
-                                    IconButton(onClick = { navController.navigate(Screen.Filter.route) }) {
-                                        Icon(
-                                            imageVector = ImageVector.vectorResource(R.drawable.filter),
-                                            contentDescription = "Filter"
-                                        )
-                                    }
-                                },
-                                actions = {
-                                    IconButton(onClick = { navController.navigate(Screen.Notification.route) }) {
-                                        Icon(
-                                            imageVector = ImageVector.vectorResource(R.drawable.notifications),
-                                            contentDescription = "Notifications"
-                                        )
-                                    }
-                                })
+                            BlibberlyTopAppBar(navController)
                         }
-//                        else {
-//                            CenterAlignedTopAppBar(
-//                                title = {
-//                                    Text(
-//                                        text = navController.currentBackStackEntryAsState().value?.destination?.route.toString()
-//                                            .capitalize(
-//                                                Locale.current
-//                                            )
-//                                    )
-//                                },
-//                                navigationIcon = {
-//                                    IconButton(onClick = { navController.popBackStack() }) {
-//                                        Icon(
-//                                            imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
-//                                            contentDescription = "Back"
-//                                        )
-//                                    }
-//                                },
-//                            )
-//                        }
                     }, bottomBar = {
-                        if (isBottomNavBarVisible) BottomNavigation(backgroundColor = MaterialTheme.colorScheme.background) {
-                            val mNavBackStackEntry by navController.currentBackStackEntryAsState()
-                            val currentDestination = mNavBackStackEntry?.destination
-
-                            bottomNavScreens.forEach { screen ->
-                                BottomNavigationItem(alwaysShowLabel = false,
-                                    selectedContentColor = MaterialTheme.colorScheme.primary,
-                                    unselectedContentColor = ColorDisabled,
-                                    icon = {
-                                        val iconDrawable = when (screen.route) {
-                                            Screen.Profile.route -> R.drawable.profile
-                                            Screen.ChatList.route -> R.drawable.chat_history
-                                            Screen.Home.route -> R.drawable.home
-
-                                            else -> {
-                                                R.drawable.home
-                                            }
-                                        }
-
-//                                        Box(
-//                                            modifier = if (selectedScreen == screen.route) Modifier
-//                                                .background(
-//                                                    color = ColorPrimary,
-//                                                    shape = RoundedCornerShape(12.dp)
-//                                                )
-//                                                .padding(8.dp)
-//                                            else Modifier
-//                                        ) {
-                                        Icon(
-                                            imageVector = ImageVector.vectorResource(id = iconDrawable),
-                                            contentDescription = screen.route,
-                                            tint = if (selectedScreen == screen.route) ColorPrimary else Color.LightGray
-                                        )
-//                                        }
-
-                                    },
-                                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                                    onClick = {
-                                        selectedScreen = screen.route
-                                        navController.navigate(screen.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    })
-                            }
+                        if (isBottomNavBarVisible) {
+                            BlibberlyBottomBar(navController, bottomNavScreens, selectedScreen)
                         }
 
                     }) {
+                        val authState = authViewModel.authState.collectAsState()
+                        val startNavRoute: String =
+                            when (authState.value) {
+                                AuthState.SIGNED_IN -> Screen.Home.route
+//                            AuthState.SIGNED_OUT -> Screen.SignIn.route
+//                            AuthState.USER_EMAIL_STORED -> {}
+//                            AuthState.USER_EMAIL_STORAGE_ERROR ->
+                                AuthState.USER_NOT_REGISTERED -> Screen.OnBoarding.route
+//                            AuthState.ERROR ->
+//                            AuthState.LOADING ->
+//                            AuthState.IDLE ->
+                                AuthState.USER_REGISTERED -> Screen.Home.route
+                                else -> Screen.SignIn.route
+                            }
+
                         BlibberlyNavHost(
-                            navController = navController, modifier = Modifier.padding(it)
+                            navController = navController,
+                            modifier = Modifier.padding(it),
+                            startDestination = startNavRoute
                         )
                     }
                 }
@@ -219,6 +148,7 @@ class MainActivity : ComponentActivity() {
 
         }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

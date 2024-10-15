@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.ui.theme.extensions
+package com.superbeta.blibberly.ui.extensions
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind

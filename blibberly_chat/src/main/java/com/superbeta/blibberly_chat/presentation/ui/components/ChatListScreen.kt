@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -55,6 +56,12 @@ fun ChatListScreen(
     }
 
     LazyColumn(modifier = modifier) {
+
+        item {
+            Button(onClick = {
+                messageViewModel.disconnectUserFromSocket()
+            }, content = { Text(text = "Disconnect") })
+        }
         item {
             TopAppBar(title = { Text(text = "Matched Chats") })
         }

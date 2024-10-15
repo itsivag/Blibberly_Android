@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.ui.theme.components
+package com.superbeta.blibberly.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize

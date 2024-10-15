@@ -4,9 +4,11 @@ import com.superbeta.blibberly_auth.utils.AuthState
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 interface AuthRepository {
-    suspend fun getAuthState(): MutableStateFlow<AuthState>
+    suspend fun updateAuthState()
+    fun getAuthState(): StateFlow<AuthState>
     suspend fun createUser(mEmail: String, mPassword: String)
     suspend fun signInWithEmail(mEmail: String, mPassword: String)
     suspend fun signInWithGoogle()

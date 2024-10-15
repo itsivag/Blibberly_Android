@@ -4,10 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -25,8 +22,10 @@ import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
@@ -39,10 +38,25 @@ class AuthRepositoryImpl(
 ) : AuthRepository {
 
     private val _authState = MutableStateFlow(AuthState.IDLE)
+    private val authState: StateFlow<AuthState> = _authState
 
-    override suspend fun getAuthState(): MutableStateFlow<AuthState> {
-        return _authState
+    init {
+        CoroutineScope(IO).launch {
+            updateAuthState()
+        }
     }
+
+    override suspend fun updateAuthState() {
+        getUsersFromDataStore().collect { user ->
+            if (!user.isNullOrEmpty()) {
+                Log.i("summa user", user.toString())
+                _authState.value = AuthState.SIGNED_IN
+            }
+            Log.i("AUTH STATE", _authState.value.toString())
+        }
+    }
+
+    override  fun getAuthState(): StateFlow<AuthState> = authState
 
     override suspend fun createUser(mEmail: String, mPassword: String) {
         _authState.value = AuthState.LOADING

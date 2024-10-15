@@ -115,6 +115,10 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
+    fun disconnectUserFromSocket(){
+        messagesRepo.disconnectUserFromSocket()
+    }
+
     //    companion object {
 //        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
 //            @Suppress("UNCHECKED_CAST")

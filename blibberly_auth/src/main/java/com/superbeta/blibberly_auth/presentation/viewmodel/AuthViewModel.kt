@@ -12,20 +12,30 @@ import com.superbeta.blibberly_auth.domain.AuthRepositoryImpl
 import com.superbeta.blibberly_auth.utils.AuthState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
-    private var _authState = MutableStateFlow(AuthState.IDLE)
-    val authState: MutableStateFlow<AuthState> = _authState
+    //    private var _authState = MutableStateFlow(AuthState.IDLE)
+//    val authState: StateFlow<AuthState> = _authState
+    val authState: StateFlow<AuthState> = authRepository.getAuthState()
 
-    init {
-        viewModelScope.launch {
-            authRepository.getAuthState().collect { state ->
-                _authState.value = state
-                Log.i("AuthViewModel", "Auth state updated: $state")
-            }
-        }
-    }
+    //    init {
+//        viewModelScope.launch {
+//            authRepository.getAuthState().collect { state ->
+//                _authState.value = state
+//                Log.i("AuthViewModel", "Auth state updated: $state")
+//            }
+//        }
+//    }
+//    suspend fun getAuthState() {
+//        viewModelScope.launch {
+//            authRepository.getAuthState().collect { state ->
+//                _authState.value = state
+//            }
+//        }
+
+//    }
 
     suspend fun signInWithGoogle() {
         viewModelScope.launch {
@@ -36,23 +46,4 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     suspend fun getUserEmailFromDataStore(): Flow<String?> {
         return authRepository.getUsersFromDataStore()
     }
-
-//    companion object {
-//        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-//            @Suppress("UNCHECKED_CAST")
-//            override fun <T : ViewModel> create(
-//                modelClass: Class<T>, extras: CreationExtras
-//            ): T {
-//                val application =
-//                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-//
-//                val credentialManager = CredentialManager.create(application)
-//                val authRepositoryImpl = AuthRepositoryImpl(application, credentialManager)
-//
-//                return AuthViewModel(
-//                    authRepositoryImpl
-//                ) as T
-//            }
-//        }
-//    }
 }

@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.ui.theme
+package com.superbeta.blibberly.ui
 
 import android.app.Activity
 import android.os.Build

@@ -25,17 +25,6 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
     private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
 
-//    companion object {
-//        @Volatile
-//        private var instance: SocketHandlerImpl? = null
-//
-//        fun getInstance(userPreferencesDataStore: DataStore<Preferences>): SocketHandlerImpl {
-//            return instance ?: synchronized(this) {
-//                instance ?: SocketHandlerImpl(userPreferencesDataStore).also { instance = it }
-//            }
-//        }
-//    }
-
     init {
         CoroutineScope(Dispatchers.IO).launch {
             connectWithSocketBackend()
@@ -158,18 +147,8 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
     override fun getSocket(): Socket = socket
 
-//    override fun sendMessage(userId: String, data: MessageDataModel) {
-//        val message = mapOf("content" to data, "to" to userId)
-//        val jsonMessage = Gson().toJson(message)
-//
-//        // Logging the generated JSON message
-//        Log.i("private message", jsonMessage)
-//
-//        // Emitting the message via the socket
-//        socket.emit("private message", jsonMessage)
-//    }
 
-    override fun sendMessage(userId: String, data: MessageDataModel) {
+    override fun emitMessage(userId: String, data: MessageDataModel) {
         val message = mapOf(
             "content" to data,
             "to" to userId
@@ -181,6 +160,9 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
         socket.emit("private message", jsonMessage)
     }
 
+    override fun emitUserDisconnected() {
+        TODO("Not yet implemented")
+    }
 
     override fun disconnectSocket() {
         Log.i("Socket", "DISCONNECTED")

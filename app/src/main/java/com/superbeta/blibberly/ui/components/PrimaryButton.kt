@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.ui.theme.components
+package com.superbeta.blibberly.ui.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape

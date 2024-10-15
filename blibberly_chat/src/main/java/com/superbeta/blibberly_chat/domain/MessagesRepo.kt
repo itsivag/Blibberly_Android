@@ -13,4 +13,5 @@ interface MessagesRepo {
     fun getUsers(): StateFlow<List<SocketUserDataModelItem>>
     suspend fun getUsersProfile(liveUsers: List<SocketUserDataModelItem>): StateFlow<List<UserDataModel>>
     suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>)
+    fun disconnectUserFromSocket()
 }
