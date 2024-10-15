@@ -8,6 +8,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -26,7 +29,10 @@ fun BlibberlyBottomBar(
     bottomNavScreens: List<Screen>,
     selectedScreen: String
 ) {
-    var selectedScreen1 = selectedScreen
+    var selectedScreen1 by rememberSaveable {
+        mutableStateOf(selectedScreen)
+    }
+
     BottomNavigation(backgroundColor = MaterialTheme.colorScheme.background) {
         val mNavBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = mNavBackStackEntry?.destination
