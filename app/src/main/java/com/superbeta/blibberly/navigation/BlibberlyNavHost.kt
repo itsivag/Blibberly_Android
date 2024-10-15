@@ -25,7 +25,7 @@ import com.superbeta.blibberly_auth.presentation.ui.OTPScreen
 import com.superbeta.blibberly_auth.presentation.ui.SignInScreen
 import com.superbeta.blibberly_chat.notification.NotificationSampleScreen
 import com.superbeta.blibberly_chat.presentation.ui.MessageScreen
-import com.superbeta.blibberly_chat.presentation.ui.components.ChatListScreen
+import com.superbeta.blibberly_chat.presentation.ui.ChatListScreen
 
 @Composable
 fun BlibberlyNavHost(

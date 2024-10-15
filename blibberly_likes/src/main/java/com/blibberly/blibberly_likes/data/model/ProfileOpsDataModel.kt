@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 @Entity("profile_ops")
 data class ProfileOpsDataModel(
     @PrimaryKey @ColumnInfo("userId") val userId: String,
+    @ColumnInfo("userName") val userEmail: String,
     @ColumnInfo("isLiked") val isLiked: Boolean,
     @ColumnInfo("isDisliked") val isDisliked: Boolean,
     @ColumnInfo("isMatched") val isMatched: Boolean,
