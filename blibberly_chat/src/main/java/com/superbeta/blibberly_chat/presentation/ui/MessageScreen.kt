@@ -52,9 +52,9 @@ import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
 import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubble
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
-import com.superbeta.blibberly_chat.presentation.viewModels.ProfileOpsViewModel
+import com.blibberly.blibberly_likes.presentation.ProfileOpsViewModel
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
+import org.koin.androidx.compose.koinViewModel
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,10 +64,8 @@ fun MessageScreen(
     navController: NavHostController,
     receiverUserId: String?,
     userName: String?,
-    messageViewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        factory = MessageViewModel.Factory
-    ),
-    profileViewModel: ProfileOpsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = ProfileOpsViewModel.Factory)
+    messageViewModel: MessageViewModel = koinViewModel(),
+    profileViewModel: ProfileOpsViewModel = koinViewModel()
 
 ) {
 
@@ -157,7 +155,19 @@ fun MessageScreen(
                         BlibberlyIconButton(
                             icon = Icons.Outlined.Close,
                             contentDescription = "Close",
-                            onClick = {},
+                            onClick = {
+                                Log.i("Profile Ops", "$receiverUserId is Disliked")
+                                profileViewModel.setProfileOps(
+                                    ProfileOpsDataModel(
+                                        userId = receiverUserId.toString(),
+                                        isLiked = false,
+                                        isDisliked = true,
+                                        isMatched = false,
+                                        isReported = false,
+                                        likedTimestamp = Calendar.getInstance().time.toString()
+                                    )
+                                )
+                            },
                             bgColor = Color.White
                         )
 

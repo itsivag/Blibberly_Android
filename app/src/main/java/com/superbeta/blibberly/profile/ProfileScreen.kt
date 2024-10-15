@@ -29,7 +29,6 @@ fun ProfileScreen(
         item {
             TopAppBar(title = { Text(text = "Profile") })
         }
-
         item {
             ProfilePhotoScreen(navController)
         }

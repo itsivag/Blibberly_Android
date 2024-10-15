@@ -15,13 +15,18 @@ import com.superbeta.blibberly.utils.RoomInstanceProvider
 import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() {
 
     private val _userState = MutableStateFlow<UserDataModel?>(null)
     val userState: MutableStateFlow<UserDataModel?> = _userState
+
+    private val _blibmojiUrls = MutableStateFlow<List<String>>(emptyList())
 
     suspend fun getUser() {
         _userState.value = mUserRepository.getUser()
@@ -74,6 +79,16 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
             }
         }
     }
+
+//    fun getBlibMojiUrlsFromStorage(): StateFlow<List<String>> {
+//        viewModelScope.launch {
+//            val bucket = supabase.storage.from("blibmoji")
+//            val files = bucket.list()
+//            _blibmojiUrls.value = files.map { bucket.publicUrl(it.name) }
+//        }
+//        return _blibmojiUrls.asStateFlow()
+//    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

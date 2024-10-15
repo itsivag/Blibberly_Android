@@ -22,6 +22,7 @@ workRuntimeKtx = "2.9.0"
 firebaseFirestore = "25.0.0"
 firebaseAuth = "23.0.0"
 media3CommonKtx = "1.4.1"
+koin-bom = "4.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,6 +54,10 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
 
+#koin
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-compose = {module = "io.insert-koin:koin-androidx-compose"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

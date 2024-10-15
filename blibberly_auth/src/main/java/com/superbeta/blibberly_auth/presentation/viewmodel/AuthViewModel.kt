@@ -37,22 +37,22 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         return authRepository.getUsersFromDataStore()
     }
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>, extras: CreationExtras
-            ): T {
-                val application =
-                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-
-                val credentialManager = CredentialManager.create(application)
-                val authRepositoryImpl = AuthRepositoryImpl(application, credentialManager)
-
-                return AuthViewModel(
-                    authRepositoryImpl
-                ) as T
-            }
-        }
-    }
+//    companion object {
+//        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+//            @Suppress("UNCHECKED_CAST")
+//            override fun <T : ViewModel> create(
+//                modelClass: Class<T>, extras: CreationExtras
+//            ): T {
+//                val application =
+//                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+//
+//                val credentialManager = CredentialManager.create(application)
+//                val authRepositoryImpl = AuthRepositoryImpl(application, credentialManager)
+//
+//                return AuthViewModel(
+//                    authRepositoryImpl
+//                ) as T
+//            }
+//        }
+//    }
 }

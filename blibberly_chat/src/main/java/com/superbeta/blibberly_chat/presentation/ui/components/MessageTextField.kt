@@ -31,13 +31,12 @@ import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MessageTextField(
     receiverUserId: String,
-    viewModel: MessageViewModel = viewModel(
-        factory = MessageViewModel.Factory
-    ),
+    viewModel: MessageViewModel = koinViewModel(),
     currUserId: String
 ) {
     var message by remember {

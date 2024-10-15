@@ -72,15 +72,14 @@ import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier, navController: NavHostController,
-    messageViewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        factory = MessageViewModel.Factory
-    ),
+    messageViewModel: MessageViewModel = koinViewModel(),
 //    homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
 //        factory = HomeViewModel.Factory
 //    ),
@@ -319,7 +318,6 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
     val screenHeight = config.screenHeightDp.dp
     val overLayTextColor = Color.White
 
-
     val avatarBGColorsMap = mapOf<String, Color>(
         BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
         BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
@@ -362,7 +360,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                         items(count = 300) {
                             Text(
                                 text = userDataModel.photoMetaData.bgEmoji,
-                                fontFamily = FontProvider.notoEmojiFontFamily,
+//                                fontFamily = FontProvider.notoEmojiFontFamily,
                                 fontSize = 16.sp,
                                 modifier = Modifier.padding(4.dp)
                             )

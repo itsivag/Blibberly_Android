@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(project(":blibberly_supabase"))
     implementation(project(":blibberly_auth"))
+    implementation(project(":blibberly_likes"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -125,4 +126,8 @@ dependencies {
     //shimmer effect
     implementation(libs.compose.shimmer)
 
+    //koin
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
 }

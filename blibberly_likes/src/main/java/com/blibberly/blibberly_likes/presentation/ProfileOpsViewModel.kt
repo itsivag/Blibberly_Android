@@ -1,15 +1,10 @@
-package com.superbeta.blibberly_chat.presentation.viewModels
+package com.blibberly.blibberly_likes.presentation
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.blibberly.blibberly_likes.data.model.ProfileOpsDataModel
 import com.blibberly.blibberly_likes.domain.ProfileOpsRepo
-import com.blibberly.blibberly_likes.domain.ProfileOpsRepoImpl
-import com.superbeta.blibberly_chat.data.local.BlibberlyRoomInstanceProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -52,19 +47,19 @@ class ProfileOpsViewModel(private val profileOpsRepo: ProfileOpsRepo) : ViewMode
         }
     }
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>, extras: CreationExtras
-            ): T {
-                val application =
-                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-                val db = BlibberlyRoomInstanceProvider.getMessagesDb(application.applicationContext)
-
-                val profileOpsRepoImpl = ProfileOpsRepoImpl(db.ProfileOpsDao())
-                return ProfileOpsViewModel(profileOpsRepoImpl) as T
-            }
-        }
-    }
+//    companion object {
+//        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+//            @Suppress("UNCHECKED_CAST")
+//            override fun <T : ViewModel> create(
+//                modelClass: Class<T>, extras: CreationExtras
+//            ): T {
+//                val application =
+//                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+//                val db = BlibberlyRoomInstanceProvider.getMessagesDb(application.applicationContext)
+//
+//                val profileOpsRepoImpl = ProfileOpsRepoImpl(db.ProfileOpsDao())
+//                return ProfileOpsViewModel(profileOpsRepoImpl) as T
+//            }
+//        }
+//    }
 }

@@ -115,21 +115,21 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(
-                modelClass: Class<T>, extras: CreationExtras
-            ): T {
-                val application =
-                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-                val db = BlibberlyRoomInstanceProvider.getMessagesDb(application.applicationContext)
-                val socketHandlerImpl =
-                    SocketHandlerImpl.getInstance(application.applicationContext.userPreferencesDataStore)
-
-                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), socketHandlerImpl)
-                return MessageViewModel(messagesRepo) as T
-            }
-        }
-    }
+    //    companion object {
+//        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+//            @Suppress("UNCHECKED_CAST")
+//            override fun <T : ViewModel> create(
+//                modelClass: Class<T>, extras: CreationExtras
+//            ): T {
+//                val application =
+//                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+//                val db = BlibberlyRoomInstanceProvider.getMessagesDb(application.applicationContext)
+//    val socketHandlerImpl =
+//        SocketHandlerImpl.getInstance(application.applicationContext.userPreferencesDataStore)
+//
+//                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), socketHandlerImpl)
+//                return MessageViewModel(messagesRepo) as T
+//            }
+//        }
+//    }
 }

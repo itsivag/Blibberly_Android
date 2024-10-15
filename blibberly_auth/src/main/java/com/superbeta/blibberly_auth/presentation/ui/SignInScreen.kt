@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.superbeta.blibberly_auth.presentation.ui.components.GoogleSignInButton
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.utils.AuthState
 import com.superbeta.blibberly_auth.theme.ColorDisabled
@@ -44,14 +45,15 @@ import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.theme.components.PrimaryButton
 import com.superbeta.blibberly_auth.utils.Screen
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignInScreen(
     modifier: Modifier, navController: NavHostController,
-    viewModel: AuthViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AuthViewModel.Factory)
+    authViewModel: AuthViewModel = koinViewModel()
 ) {
 
-    val authState by viewModel.authState.collectAsStateWithLifecycle()
+    val authState by authViewModel.authState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = authState) {
         Log.i("Auth State", authState.toString())
@@ -209,38 +211,3 @@ fun SignInScreen(
     }
 }
 
-@Composable
-fun GoogleSignInButton(
-    navController: NavHostController,
-    viewModel: AuthViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = AuthViewModel.Factory)
-) {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val credentialManager = CredentialManager.create(context)
-
-    PrimaryButton(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 8.dp),
-        buttonText = "Sign in with Google",
-        isButtonEnabled = true,
-        onClickMethod = {
-            scope.launch {
-                viewModel.signInWithGoogle()
-//                AuthRepositoryImpl().signInWithGoogle(
-//                    credentialManager,
-//                    coroutineScope,
-//                    context,
-//                    { navController.navigate(Screen.Home.route) },
-//                    { navController.navigate(Screen.OnBoarding.route) })
-//                    {}, {})
-            }
-
-            scope.launch {
-                viewModel.getUserEmailFromDataStore().collect { email ->
-                    Log.i("User Email From Data Store", email ?: "No email found")
-
-                }
-            }
-
-        })
-}

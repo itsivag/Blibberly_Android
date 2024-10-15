@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,6 +66,9 @@ import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
+const val DEFAULT_BLIBMOJI_URL =
+    "https://dxyahfscoumjwjuwlgje.supabase.co/storage/v1/object/public/blibmoji/boy_1.webp?t=2024-07-25T07%3A34%3A55.514Z"
+
 @Composable
 fun ProfilePhotoScreen(
     navController: NavHostController,
@@ -89,30 +93,27 @@ fun ProfilePhotoScreen(
         "\uD83E\uDD70", "🧁", "🍰", "🎁", "🎂", "🎈", "🎺",
     )
 
-    val isButtonEnabled by remember {
+    val isButtonEnabled by rememberSaveable {
         mutableStateOf(true)
     }
 
-
-    var blibmojiUrlList by remember {
+    var blibmojiUrlList by rememberSaveable {
         mutableStateOf(listOf<String>())
     }
 
-    var selectedBGColor by remember {
+    var selectedBGColor by rememberSaveable {
         mutableStateOf(BLIBMOJI_BG_COLORS.BLUE.toString())
     }
 
-
-    var selectedBGEmoji by remember {
+    var selectedBGEmoji by rememberSaveable {
         mutableStateOf(avatarBGEmojiList[0])
     }
 
-
-    var selectedBlibmoji by remember {
-        mutableStateOf("https://dxyahfscoumjwjuwlgje.supabase.co/storage/v1/object/public/blibmoji/boy_1.webp?t=2024-07-25T07%3A34%3A55.514Z")
+    var selectedBlibmoji by rememberSaveable {
+        mutableStateOf(DEFAULT_BLIBMOJI_URL)
     }
 
-    var isEditing by remember {
+    var isEditing by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -136,7 +137,7 @@ fun ProfilePhotoScreen(
         }
     }
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = true) {
         scope.launch(IO) {
             viewModel.getUser()
             val userData: UserDataModel? = viewModel.userState.value
@@ -183,7 +184,7 @@ fun ProfilePhotoScreen(
                         items(count = 300) {
                             Text(
                                 text = selectedBGEmoji,
-                                fontFamily = FontProvider.notoEmojiFontFamily,
+//                                fontFamily = FontProvider.notoEmojiFontFamily,
                                 fontSize = 16.sp,
                                 modifier = Modifier.padding(4.dp)
                             )

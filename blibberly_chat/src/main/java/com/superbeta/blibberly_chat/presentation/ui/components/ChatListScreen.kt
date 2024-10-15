@@ -6,14 +6,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -30,17 +27,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
-import com.superbeta.blibberly_chat.presentation.viewModels.ProfileOpsViewModel
+import com.blibberly.blibberly_likes.presentation.ProfileOpsViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
     modifier: Modifier,
     navController: NavHostController,
-    messageViewModel: MessageViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        factory = MessageViewModel.Factory
-    ),
-    profileViewModel: ProfileOpsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = ProfileOpsViewModel.Factory)
+    messageViewModel: MessageViewModel = koinViewModel(),
+    profileViewModel: ProfileOpsViewModel = koinViewModel()
 ) {
     val chats by messageViewModel.usersState.collectAsState()
     val matchedProfiles by profileViewModel.matchedProfilesState.collectAsState()

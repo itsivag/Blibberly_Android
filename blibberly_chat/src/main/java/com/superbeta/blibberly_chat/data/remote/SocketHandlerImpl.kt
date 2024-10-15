@@ -18,23 +18,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class SocketHandlerImpl private constructor(private val userPreferencesDataStore: DataStore<Preferences>) :
+class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferences>) :
     SocketHandler {
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow(listOf<MessageDataModel>())
     private val _usersList = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
 
-    companion object {
-        @Volatile
-        private var instance: SocketHandlerImpl? = null
-
-        fun getInstance(userPreferencesDataStore: DataStore<Preferences>): SocketHandlerImpl {
-            return instance ?: synchronized(this) {
-                instance ?: SocketHandlerImpl(userPreferencesDataStore).also { instance = it }
-            }
-        }
-    }
+//    companion object {
+//        @Volatile
+//        private var instance: SocketHandlerImpl? = null
+//
+//        fun getInstance(userPreferencesDataStore: DataStore<Preferences>): SocketHandlerImpl {
+//            return instance ?: synchronized(this) {
+//                instance ?: SocketHandlerImpl(userPreferencesDataStore).also { instance = it }
+//            }
+//        }
+//    }
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
