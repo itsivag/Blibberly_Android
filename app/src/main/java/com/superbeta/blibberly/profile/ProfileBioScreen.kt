@@ -22,10 +22,11 @@ import com.superbeta.blibberly.ui.components.TextFieldWithTrailingIcon
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileBioScreen(
-    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+    viewModel: UserViewModel = koinViewModel()
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current

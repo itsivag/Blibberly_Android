@@ -1,6 +1,7 @@
 package com.superbeta.blibberly
 
 import android.app.Application
+import com.superbeta.blibberly.di.mainModule
 import com.superbeta.blibberly_chat.di.profileOpsModule
 import com.superbeta.blibberly_auth.di.authModule
 import com.superbeta.blibberly_chat.di.chatModule
@@ -15,7 +16,7 @@ class MyApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@MyApplication)
-            modules(authModule, chatModule, profileOpsModule)
+            modules(mainModule, authModule, chatModule, profileOpsModule)
         }
     }
 }

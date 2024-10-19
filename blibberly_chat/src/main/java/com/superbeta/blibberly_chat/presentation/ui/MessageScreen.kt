@@ -42,7 +42,7 @@ import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
 import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubble
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
-import com.blibberly.blibberly_likes.presentation.ProfileOpsViewModel
+import com.blibberly.blibberly_likes.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_chat.presentation.ui.components.ProfileOpsMessageComponent
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

@@ -42,12 +42,13 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SkillsAndInterestsScreen(
     modifier: Modifier, navController: NavHostController,
-    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+    viewModel: UserViewModel = koinViewModel()
 
 ) {
 

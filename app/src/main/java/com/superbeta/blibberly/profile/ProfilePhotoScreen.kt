@@ -59,10 +59,15 @@ import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly_supabase.utils.supabase
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.storage.Storage
+//import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 const val DEFAULT_BLIBMOJI_URL =
     "https://dxyahfscoumjwjuwlgje.supabase.co/storage/v1/object/public/blibmoji/boy_1.webp?t=2024-07-25T07%3A34%3A55.514Z"
@@ -70,8 +75,17 @@ const val DEFAULT_BLIBMOJI_URL =
 @Composable
 fun ProfilePhotoScreen(
     navController: NavHostController,
-    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+    viewModel: UserViewModel = koinViewModel()
 ) {
+
+    val supabase = createSupabaseClient(
+        supabaseUrl = "https://dxyahfscoumjwjuwlgje.supabase.co",
+        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4eWFoZnNjb3VtandqdXdsZ2plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY5MTUzOTMsImV4cCI6MjAzMjQ5MTM5M30.DqthAS5M1CSeBFQf87TAxv57eMCalxxiPAbRp_XQ8AE"
+    ) {
+        install(Postgrest)
+        install(Auth)
+        install(Storage)
+    }
 
     val avatarBGColorsMap = mapOf<String, Color>(
         BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,

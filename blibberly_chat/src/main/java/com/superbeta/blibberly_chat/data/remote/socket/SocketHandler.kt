@@ -1,4 +1,4 @@
-package com.superbeta.blibberly_chat.data.remote
+package com.superbeta.blibberly_chat.data.remote.socket
 
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem

@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.blibberly.blibberly_likes.data.model.ProfileOpsDataModel
-import com.blibberly.blibberly_likes.presentation.ProfileOpsViewModel
+import com.blibberly.blibberly_likes.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_auth.theme.ColorSecondary
 import java.util.Calendar
 

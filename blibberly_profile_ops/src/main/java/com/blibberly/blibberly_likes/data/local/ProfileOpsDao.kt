@@ -8,8 +8,8 @@ import com.blibberly.blibberly_likes.data.model.ProfileOpsDataModel
 
 @Dao
 interface ProfileOpsDao {
-    @Query("SELECT * FROM profile_ops WHERE userId = :userId")
-    suspend fun getProfileOps(userId: String): ProfileOpsDataModel
+    @Query("SELECT * FROM profile_ops WHERE userEmail = :userEmail")
+    suspend fun getProfileOps(userEmail: String): ProfileOpsDataModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setProfileOps(profileOps: ProfileOpsDataModel)

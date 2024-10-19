@@ -26,5 +26,4 @@ rootProject.name = "Blibberly"
 include(":app")
 include(":blibberly_chat")
 include(":blibberly_auth")
-include(":blibberly_supabase")
-include(":blibberly_likes")
+include(":blibberly_profile_ops")

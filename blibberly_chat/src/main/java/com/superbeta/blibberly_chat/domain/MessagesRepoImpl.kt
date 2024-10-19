@@ -5,19 +5,22 @@ import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.local.MessagesDao
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
-import com.superbeta.blibberly_chat.data.remote.SocketHandler
-import com.superbeta.blibberly_supabase.utils.supabase
-import io.github.jan.supabase.postgrest.from
+import com.superbeta.blibberly_chat.data.remote.socket.SocketHandler
+import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: SocketHandler) :
+class MessagesRepoImpl(
+    private val db: MessagesDao,
+    private val socketHandler: SocketHandler,
+    private val chatRemoteService: ChatRemoteService
+) :
     MessagesRepo {
     private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
     private val _liveUserProfilesState = MutableStateFlow<List<UserDataModel>>(emptyList())
 
-    private val supabaseUsersDb = supabase.from("Users")
+//    private val supabaseUsersDb = supabase.from("Users")
 
     override suspend fun connectSocketToBackend() {
         socketHandler.connectWithSocketBackend()
@@ -48,14 +51,18 @@ class MessagesRepoImpl(private val db: MessagesDao, private val socketHandler: S
     override suspend fun getUsersProfile(liveUsers: List<SocketUserDataModelItem>): StateFlow<List<UserDataModel>> {
         Log.i("live user raw list", liveUsers.toString())
         try {
-            for (email in liveUsers) {
-                val userProfile = supabaseUsersDb.select {
-                    filter {
-                        UserDataModel::email eq email.username
-                    }
-                }.decodeSingle<UserDataModel>()
-                _liveUserProfilesState.value += userProfile
+//            for (email in liveUsers) {
+//                val userProfile = supabaseUsersDb.select {
+//                    filter {
+//                        UserDataModel::email eq email.username
+//                    }
+//                }.decodeSingle<UserDataModel>()
+//                _liveUserProfilesState.value += userProfile
+//            }
+            val appendProfiles: (UserDataModel) -> Unit = { newProfiles ->
+                _liveUserProfilesState.value += newProfiles
             }
+            chatRemoteService.getUsersProfile(liveUsers, appendProfiles)
             Log.i("live user", _liveUserProfilesState.value.toString())
         } catch (e: Exception) {
             Log.e("Error getting live user profile", e.toString())

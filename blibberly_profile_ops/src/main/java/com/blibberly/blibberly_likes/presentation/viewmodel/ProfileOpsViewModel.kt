@@ -1,4 +1,4 @@
-package com.blibberly.blibberly_likes.presentation
+package com.blibberly.blibberly_likes.presentation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

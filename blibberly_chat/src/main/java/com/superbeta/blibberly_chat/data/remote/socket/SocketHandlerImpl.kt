@@ -1,4 +1,4 @@
-package com.superbeta.blibberly_chat.data.remote
+package com.superbeta.blibberly_chat.data.remote.socket
 
 import android.util.Log
 import androidx.datastore.core.DataStore

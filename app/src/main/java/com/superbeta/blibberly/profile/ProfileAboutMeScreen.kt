@@ -36,10 +36,11 @@ import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileAboutMeScreen(
-    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+    viewModel: UserViewModel = koinViewModel()
 ) {
 
     var aboutMe by remember {

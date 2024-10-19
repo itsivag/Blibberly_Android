@@ -44,9 +44,10 @@ import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly_supabase.utils.supabase
+//import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 enum class HeightUnit {
     Cm, Inch,
@@ -62,7 +63,7 @@ enum class WeightUnit {
 fun BioScreen(
     modifier: Modifier,
     navController: NavController,
-    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+    userViewModel: UserViewModel = koinViewModel()
 ) {
 
     var isButtonEnabled by remember {
@@ -106,11 +107,11 @@ fun BioScreen(
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val userData = viewModel.userState.collectAsStateWithLifecycle().value
+    val userData = userViewModel.userState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(key1 = true) {
         scope.launch {
-            viewModel.getUser()
+            userViewModel.getUser()
         }
     }
 
@@ -131,7 +132,7 @@ fun BioScreen(
 
     LaunchedEffect(key1 = true) {
         scope.launch {
-            userFCMToken = viewModel.getUserFCMToken()
+            userFCMToken = userViewModel.getUserFCMToken()
         }
     }
 
@@ -328,21 +329,26 @@ fun BioScreen(
             ) {
                 scope.launch {
                     try {
-                        viewModel.setUser(
-                            UserDataModel(
-                                email = supabase.auth.currentUserOrNull()?.email
-                                    ?: "error finding email",
-                                name = name.text,
-                                age = age.text.toInt(),
-                                height = height.text.toDouble(),
-                                weight = weight.text.toDouble(),
-                                aboutMe = aboutMe,
-                                interests = interests,
-                                gender = gender,
-                                photoMetaData = PhotoMetaData("", "", ""),
-                                fcmToken = userFCMToken
-                            )
-                        )
+                        userViewModel.getUserEmail().collect { email ->
+                            email?.let {
+                                UserDataModel(
+                                    email = it,
+                                    name = name.text,
+                                    age = age.text.toInt(),
+                                    height = height.text.toDouble(),
+                                    weight = weight.text.toDouble(),
+                                    aboutMe = aboutMe,
+                                    interests = interests,
+                                    gender = gender,
+                                    photoMetaData = PhotoMetaData("", "", ""),
+                                    fcmToken = userFCMToken
+                                )
+                            }?.let {
+                                userViewModel.setUser(
+                                    it
+                                )
+                            }
+                        }
 
                     } catch (e: Exception) {
                         Log.e("Error Storing data in room BioScreen", e.toString())

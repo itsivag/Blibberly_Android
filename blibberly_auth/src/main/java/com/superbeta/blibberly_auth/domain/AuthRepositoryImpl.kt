@@ -8,18 +8,14 @@ import androidx.datastore.preferences.core.edit
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.superbeta.blibberly_auth.data.local.AuthDataStoreService
+import com.superbeta.blibberly_auth.data.remote.AuthRemoteService
 import com.superbeta.blibberly_auth.utils.AuthState
 import com.superbeta.blibberly_auth.utils.UserDataPreferenceKeys
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
-import com.superbeta.blibberly_supabase.utils.supabase
+//import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.exceptions.RestException
-import io.github.jan.supabase.gotrue.auth
-import io.github.jan.supabase.gotrue.providers.Google
-import io.github.jan.supabase.gotrue.providers.builtin.Email
-import io.github.jan.supabase.gotrue.providers.builtin.IDToken
 import io.github.jan.supabase.gotrue.user.UserInfo
-import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
@@ -34,7 +30,9 @@ import java.util.UUID
 
 class AuthRepositoryImpl(
     private val context: Context,
-    private val credentialManager: CredentialManager
+    private val credentialManager: CredentialManager,
+    private val authRemoteService: AuthRemoteService,
+    private val authDataStoreService: AuthDataStoreService
 ) : AuthRepository {
 
     private val _authState = MutableStateFlow(AuthState.IDLE)
@@ -56,15 +54,15 @@ class AuthRepositoryImpl(
         }
     }
 
-    override  fun getAuthState(): StateFlow<AuthState> = authState
+    override fun getAuthState(): StateFlow<AuthState> = authState
 
     override suspend fun createUser(mEmail: String, mPassword: String) {
         _authState.value = AuthState.LOADING
         try {
-            supabase.auth.signUpWith(Email) {
-                email = mEmail
-                password = mPassword
-            }
+//            supabase.auth.signUpWith(Email) {
+//                email = mEmail
+//                password = mPassword
+//            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -73,10 +71,10 @@ class AuthRepositoryImpl(
     override suspend fun signInWithEmail(mEmail: String, mPassword: String) {
         _authState.value = AuthState.LOADING
         try {
-            supabase.auth.signInWith(Email) {
-                email = mEmail
-                password = mPassword
-            }
+//            supabase.auth.signInWith(Email) {
+//                email = mEmail
+//                password = mPassword
+//            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -90,7 +88,7 @@ class AuthRepositoryImpl(
         // Providing a nonce is optional but recommended
         val rawNonce = UUID.randomUUID()
             .toString() // Generate a random String. UUID should be sufficient, but can also be any other random string.
-        val bytes = rawNonce.toString().toByteArray()
+        val bytes = rawNonce.toByteArray()
         val md = MessageDigest.getInstance("SHA-256")
         val digest = md.digest(bytes)
         val hashedNonce =
@@ -118,14 +116,17 @@ class AuthRepositoryImpl(
 
                 val googleIdToken = googleIdTokenCredential.idToken
 
-                supabase.auth.signInWith(IDToken) {
-                    idToken = googleIdToken
-                    provider = Google
-                    nonce = rawNonce
-                }
+//                supabase.auth.signInWith(IDToken) {
+//                    idToken = googleIdToken
+//                    provider = Google
+//                    nonce = rawNonce
+//                }
+
+                authRemoteService.signInWithGoogle(googleIdToken, rawNonce)
 
                 // Handle successful sign-in
-                val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
+//                val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
+                val user = authRemoteService.retrieveSession()
                 Log.i("Google Sign In User Data => ", user.toString())
                 _authState.value = AuthState.SIGNED_IN
                 storeUserInDataStore(user)
@@ -148,38 +149,29 @@ class AuthRepositoryImpl(
         }
     }
 
-    private suspend fun storeUserInDataStore(user: UserInfo) {
-        Log.i("Storing User Data In Data Store", user.toString())
-        context.userPreferencesDataStore.edit { preferences ->
-            preferences[UserDataPreferenceKeys.USER_ID] = user.id
-            preferences[UserDataPreferenceKeys.USER_EMAIL] = user.email ?: ""
-        }
-    }
+    private suspend fun storeUserInDataStore(user: UserInfo) =
+        authDataStoreService.setUserData(user)
 
-    override suspend fun getUsersFromDataStore(): Flow<String?> {
-        return context.userPreferencesDataStore.data.map { preferences ->
-            preferences[UserDataPreferenceKeys.USER_EMAIL]
-        }
-    }
+//        Log.i("Storing User Data In Data Store", user.toString())
+//        context.userPreferencesDataStore.edit { preferences ->
+//            preferences[UserDataPreferenceKeys.USER_ID] = user.id
+//            preferences[UserDataPreferenceKeys.USER_EMAIL] = user.email ?: ""
+//        }
+
+
+    override suspend fun getUsersFromDataStore(): Flow<String?> = authDataStoreService.getUserData()
+//        return context.userPreferencesDataStore.data.map { preferences ->
+//            preferences[UserDataPreferenceKeys.USER_EMAIL]
+//        }
+
 
     override suspend fun getUserData(): UserInfo {
-        val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
+        val user = authRemoteService.retrieveSession()
         Log.i("Google Sign In User Data => ", user.toString())
         return user
     }
 
-    override suspend fun findIfUserRegistered(): Boolean {
-        val user = supabase.from("Users").select {
-            filter {
-                getUserData().email?.let { eq("email", it) }
-            }
-        }.decodeSingleOrNull<UserDataModel>()
+    override suspend fun findIfUserRegistered(): Boolean = authRemoteService.findIfUserRegistered()
 
-        Log.i("User Registration", "user registered is => ${user != null}")
-        return user != null
-    }
-
-    override suspend fun forgotPassword() {
-        TODO("Not yet implemented")
-    }
+    override suspend fun forgotPassword() {}
 }

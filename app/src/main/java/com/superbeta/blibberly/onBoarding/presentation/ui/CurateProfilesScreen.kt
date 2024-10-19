@@ -25,12 +25,13 @@ import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CurateProfilesScreen(
     modifier: Modifier,
     navController: NavHostController,
-    viewModel: UserViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = UserViewModel.Factory)
+    viewModel: UserViewModel = koinViewModel()
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_loading))
     val progress by animateLottieCompositionAsState(
