@@ -80,7 +80,9 @@ fun MessageScreen(
 
     LaunchedEffect(true) {
         scope.launch {
-            messageViewModel.collectMessages()
+            if (userName != null) {
+                messageViewModel.collectMessages(userEmail = userName)
+            }
         }
     }
 
@@ -134,7 +136,7 @@ fun MessageScreen(
                 state = messageLazyListState
             ) {
                 item {
-                    ProfileOpsMessageComponent(receiverUserId, profileViewModel,userName)
+                    ProfileOpsMessageComponent(receiverUserId, profileViewModel, userName)
                 }
                 items(count = messages.size) { i ->
                     val currMessage = messages[i]

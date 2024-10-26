@@ -41,9 +41,9 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
             messagesRepo.subscribeToMessages()
         }
 
-        viewModelScope.launch {
-            collectMessages()
-        }
+//        viewModelScope.launch {
+//            collectMessages()
+//        }
     }
 
     private fun getCurrentUserEmail() {
@@ -52,8 +52,8 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
-    suspend fun collectMessages() {
-        messagesRepo.getMessages().collect { messages ->
+    suspend fun collectMessages(userEmail: String) {
+        messagesRepo.getMessages(userEmail = userEmail).collect { messages ->
             Log.i("MessageViewModel", "Collecting messages from Viewmodel: $messages")
             _messageState.value = messages
         }
@@ -108,7 +108,7 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
-    fun disconnectUserFromSocket(){
+    fun disconnectUserFromSocket() {
         messagesRepo.disconnectUserFromSocket()
     }
 

@@ -34,8 +34,8 @@ class MessagesRepoImpl(
         }
     }
 
-    override suspend fun getMessages(): StateFlow<List<MessageDataModel>> {
-        _messageState.value = db.getMessages()
+    override suspend fun getMessages(userEmail: String): StateFlow<List<MessageDataModel>> {
+        _messageState.value = db.getMessages(userEmail)
 
         return _messageState.asStateFlow()
     }
