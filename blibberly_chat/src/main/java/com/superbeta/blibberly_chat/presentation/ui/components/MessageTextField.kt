@@ -44,9 +44,9 @@ fun MessageTextField(
     }
 
     val currentTimeStamp = Clock.System.now()
-
+    val messageId = currentTimeStamp.toString() + currUserId
     val data = MessageDataModel(
-        messageId = "1",
+        messageId = messageId,
         content = message.text,
         senderID = currUserId,
         receiverID = receiverUserId,

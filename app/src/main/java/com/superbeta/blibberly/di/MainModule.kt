@@ -7,6 +7,7 @@ import com.superbeta.blibberly.user.repo.MUserRepository
 import com.superbeta.blibberly.user.repo.MUserRepositoryImpl
 import com.superbeta.blibberly.utils.RoomInstanceProvider
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
+import com.superbeta.blibberly_chat.notification.NotificationRepo
 import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
@@ -22,7 +23,7 @@ val mainModule = module {
         RoomInstanceProvider.getDb(androidContext()).userLocalDao()
     }
 
-    single {
+    single<NotificationRepo> {
         NotificationRepoImpl()
     }
 

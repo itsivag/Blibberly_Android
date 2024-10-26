@@ -15,8 +15,7 @@ class MessagesRepoImpl(
     private val db: MessagesDao,
     private val socketHandler: SocketHandler,
     private val chatRemoteService: ChatRemoteService
-) :
-    MessagesRepo {
+) : MessagesRepo {
     private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
     private val _liveUserProfilesState = MutableStateFlow<List<UserDataModel>>(emptyList())
 
@@ -30,18 +29,21 @@ class MessagesRepoImpl(
     override suspend fun subscribeToMessages() {
         socketHandler.getMessageList().collect { messages ->
             _messageState.value = messages
-            saveMessagesToLocalDb(messages)
+            saveMessagesToLocalDb(_messageState.value)
 //            Log.i("Collect Message from server", _messageState.value.toString())
         }
     }
 
     override suspend fun getMessages(): StateFlow<List<MessageDataModel>> {
+        _messageState.value = db.getMessages()
+
         return _messageState.asStateFlow()
     }
 
     override suspend fun sendMessage(userId: String, message: MessageDataModel) {
         socketHandler.emitMessage(userId, message)
-        _messageState.value += message
+//        _messageState.value += message
+        saveMessagesToLocalDb(_messageState.value)
     }
 
     override fun getUsers(): StateFlow<List<SocketUserDataModelItem>> {
@@ -77,7 +79,6 @@ class MessagesRepoImpl(
 
     override suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>) {
         db.saveMessages(messages)
-        _messageState.value = db.getMessages()
     }
 
     override fun disconnectUserFromSocket() {

@@ -14,7 +14,7 @@ class NotificationViewModel : ViewModel() {
     private val api: FCMApi = Retrofit.Builder().baseUrl("http://192.168.29.216:8080/")
         .addConverterFactory(GsonConverterFactory.create()).build().create()
 
-    val broadcast = true
+    private val broadcast = true
 
     init {
         viewModelScope.launch {
