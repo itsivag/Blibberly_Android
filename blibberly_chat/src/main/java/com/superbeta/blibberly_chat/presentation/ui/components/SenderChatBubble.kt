@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,28 +45,38 @@ fun SenderChatBubble(currMessageDataModel: MessageDataModel) {
         contentAlignment = Alignment.CenterEnd
     ) {
 
-        Column(
+        Row(
             modifier = Modifier
                 .padding(start = 16.dp)
                 .background(
                     color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(
-                        topStart = 16.dp, topEnd = 16.dp, bottomEnd = 0.dp, bottomStart = 16.dp
+                        topStart = 12.dp, topEnd = 12.dp, bottomEnd = 0.dp, bottomStart = 12.dp
                     )
                 )
-                .padding(8.dp), horizontalAlignment = Alignment.End
+                .padding(2.dp),
+//            horizontalAlignment = Alignment.End
         ) {
-            Text(text = currMessageDataModel.content, color = Color.White, fontSize = 14.sp)
+            Text(
+                text = currMessageDataModel.content,
+                color = Color.White,
+                fontSize = 14.sp,
+//                fontStyle = ,
+                modifier = Modifier.padding(end = 4.dp, top = 2.dp, bottom = 2.dp, start = 8.dp)
+            )
             Row(
+                modifier = Modifier.padding(top = 6.dp, start = 4.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
             ) {
                 Text(
                     text = currMessageDataModel.timeStamp,
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     color = Color.White,
                 )
                 Icon(
-                    modifier = Modifier.padding(start = 4.dp),
+                    modifier = Modifier
+                        .size(20.dp)
+                        .padding(start = 2.dp),
                     imageVector = ImageVector.vectorResource(id = R.drawable.double_tick),
                     contentDescription = "Read/Delivered",
                     tint = if (isMessageRead && isMessageDelivered) Color.Blue else Color.LightGray
