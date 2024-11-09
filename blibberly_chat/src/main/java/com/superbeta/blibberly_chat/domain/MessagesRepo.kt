@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface MessagesRepo {
     suspend fun connectSocketToBackend()
     suspend fun subscribeToMessages()
-    suspend fun getMessages(userEmail: String): StateFlow<List<MessageDataModel>>
+    suspend fun getMessages(userEmail: String, userId: String?): StateFlow<List<MessageDataModel>>
     suspend fun sendMessage(userId: String, message: MessageDataModel)
 
     fun getUsers(): StateFlow<List<SocketUserDataModelItem>>

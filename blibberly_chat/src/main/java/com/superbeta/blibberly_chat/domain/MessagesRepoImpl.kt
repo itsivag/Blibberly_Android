@@ -10,6 +10,10 @@ import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class MessagesRepoImpl(
     private val db: MessagesDao,
@@ -34,9 +38,32 @@ class MessagesRepoImpl(
         }
     }
 
-    override suspend fun getMessages(userEmail: String): StateFlow<List<MessageDataModel>> {
-        _messageState.value = db.getMessages(userEmail)
+    override suspend fun getMessages(
+        userEmail: String,
+        userId: String?
+    ): StateFlow<List<MessageDataModel>> {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
 
+        val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        outputFormat.timeZone = TimeZone.getDefault()
+
+        val formattedTimeStamp = db.getMessages().map { message ->
+            try {
+                val date = inputFormat.parse(message.timeStamp)
+                val formattedDate = date?.let { outputFormat.format(it) }
+                Log.i("DATE FORMATED", formattedDate ?: "NULL")
+                if (formattedDate != null) {
+                    message.copy(timeStamp = formattedDate)
+                } else {
+                    message
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                message
+            }
+        }
+        _messageState.value = formattedTimeStamp
         return _messageState.asStateFlow()
     }
 

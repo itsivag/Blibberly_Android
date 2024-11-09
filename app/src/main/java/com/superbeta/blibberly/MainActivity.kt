@@ -34,6 +34,7 @@ import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.utils.AuthState
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.compose.KoinContext
 
 
 class MainActivity : ComponentActivity() {
@@ -75,73 +76,76 @@ class MainActivity : ComponentActivity() {
         var isBottomNavBarVisible by mutableStateOf(false)
 
         setContent {
-            BlibberlyTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-                ) {
+            KoinContext {
+                BlibberlyTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
 
-                    val authViewModel = getViewModel<AuthViewModel>()
+                        val authViewModel = getViewModel<AuthViewModel>()
 
-                    val scope = rememberCoroutineScope()
-                    val navController = rememberNavController()
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    when (navBackStackEntry?.destination?.route) {
-                        Screen.Home.route -> {
-                            isTopBarVisible = true
-                            isBottomNavBarVisible = true
+                        val scope = rememberCoroutineScope()
+                        val navController = rememberNavController()
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        when (navBackStackEntry?.destination?.route) {
+                            Screen.Home.route -> {
+                                isTopBarVisible = true
+                                isBottomNavBarVisible = true
+                            }
+
+                            Screen.Profile.route -> {
+                                isTopBarVisible = false
+                                isBottomNavBarVisible = true
+                            }
+
+                            Screen.ChatList.route -> {
+                                isTopBarVisible = false
+                                isBottomNavBarVisible = true
+                            }
+
+                            else -> {
+                                isTopBarVisible = false
+                                isBottomNavBarVisible = false
+                            }
+
                         }
 
-                        Screen.Profile.route -> {
-                            isTopBarVisible = false
-                            isBottomNavBarVisible = true
+                        val selectedScreen by remember {
+                            mutableStateOf(Screen.Home.route)
                         }
 
-                        Screen.ChatList.route -> {
-                            isTopBarVisible = false
-                            isBottomNavBarVisible = true
-                        }
+                        Scaffold(topBar = {
+                            if (isTopBarVisible) {
+                                BlibberlyTopAppBar(navController)
+                            }
+                        }, bottomBar = {
+                            if (isBottomNavBarVisible) {
+                                BlibberlyBottomBar(navController, bottomNavScreens, selectedScreen)
+                            }
 
-                        else -> {
-                            isTopBarVisible = false
-                            isBottomNavBarVisible = false
-                        }
-
-                    }
-
-                    val selectedScreen by remember {
-                        mutableStateOf(Screen.Home.route)
-                    }
-
-                    Scaffold(topBar = {
-                        if (isTopBarVisible) {
-                            BlibberlyTopAppBar(navController)
-                        }
-                    }, bottomBar = {
-                        if (isBottomNavBarVisible) {
-                            BlibberlyBottomBar(navController, bottomNavScreens, selectedScreen)
-                        }
-
-                    }) {
-                        val authState = authViewModel.authState.collectAsState()
-                        val startNavRoute: String =
-                            when (authState.value) {
-                                AuthState.SIGNED_IN -> Screen.Home.route
+                        }) {
+                            val authState = authViewModel.authState.collectAsState()
+                            val startNavRoute: String =
+                                when (authState.value) {
+                                    AuthState.SIGNED_IN -> Screen.Home.route
 //                            AuthState.SIGNED_OUT -> Screen.SignIn.route
 //                            AuthState.USER_EMAIL_STORED -> {}
 //                            AuthState.USER_EMAIL_STORAGE_ERROR ->
-                                AuthState.USER_NOT_REGISTERED -> Screen.OnBoarding.route
+                                    AuthState.USER_NOT_REGISTERED -> Screen.OnBoarding.route
 //                            AuthState.ERROR ->
 //                            AuthState.LOADING ->
 //                            AuthState.IDLE ->
-                                AuthState.USER_REGISTERED -> Screen.Home.route
-                                else -> Screen.SignIn.route
-                            }
+                                    AuthState.USER_REGISTERED -> Screen.Home.route
+                                    else -> Screen.SignIn.route
+                                }
 
-                        BlibberlyNavHost(
-                            navController = navController,
-                            modifier = Modifier.padding(it),
-                            startDestination = startNavRoute
-                        )
+                            BlibberlyNavHost(
+                                navController = navController,
+                                modifier = Modifier.padding(it),
+                                startDestination = startNavRoute
+                            )
+                        }
                     }
                 }
             }

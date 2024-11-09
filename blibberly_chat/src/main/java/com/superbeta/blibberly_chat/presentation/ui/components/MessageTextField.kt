@@ -24,20 +24,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MessageTextField(
     receiverUserId: String,
+    currUserId: String,
     viewModel: MessageViewModel = koinViewModel(),
-    currUserId: String
+    receiverUserEmail: String,
 ) {
     var message by remember {
         mutableStateOf(TextFieldValue())
@@ -84,7 +83,11 @@ fun MessageTextField(
         IconButton(
             onClick = {
                 scope.launch {
-                    viewModel.sendMessage(userId = receiverUserId, data = data)
+                    viewModel.sendMessage(
+                        userEmail = receiverUserEmail,
+                        userId = receiverUserId,
+                        data = data
+                    )
                     message = TextFieldValue("")
                 }
             },

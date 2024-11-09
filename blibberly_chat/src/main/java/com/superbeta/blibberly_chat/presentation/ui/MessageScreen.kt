@@ -53,10 +53,9 @@ fun MessageScreen(
     modifier: Modifier,
     navController: NavHostController,
     receiverUserId: String?,
-    userName: String?,
+    receiverUserEmail: String?,
     messageViewModel: MessageViewModel = koinViewModel(),
     profileViewModel: ProfileOpsViewModel = koinViewModel()
-
 ) {
 
     val scope = rememberCoroutineScope()
@@ -80,8 +79,13 @@ fun MessageScreen(
 
     LaunchedEffect(true) {
         scope.launch {
-            if (userName != null) {
-                messageViewModel.collectMessages(userEmail = userName)
+            if (receiverUserEmail != null) {
+                receiverUserId?.let { userId ->
+                    messageViewModel.collectMessages(
+                        userEmail = receiverUserEmail,
+                        userId = userId
+                    )
+                }
             }
         }
     }
@@ -108,7 +112,7 @@ fun MessageScreen(
                         modifier = Modifier.size(48.dp)
                     )
                     Text(
-                        text = userName ?: "Default User",
+                        text = receiverUserEmail ?: "Default User",
                         fontSize = 18.sp,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
@@ -136,7 +140,7 @@ fun MessageScreen(
                 state = messageLazyListState
             ) {
                 item {
-                    ProfileOpsMessageComponent(receiverUserId, profileViewModel, userName)
+                    ProfileOpsMessageComponent(receiverUserId, profileViewModel, receiverUserEmail)
                 }
                 items(count = messages.size) { i ->
                     val currMessage = messages[i]
@@ -147,12 +151,15 @@ fun MessageScreen(
                     }
                 }
             }
-            receiverUserId?.let { it1 ->
-                currUser?.let { it2 ->
-                    MessageTextField(
-                        it1,
-                        currUserId = it2
-                    )
+            receiverUserId?.let { userID ->
+                currUser?.let { currUserEmail ->
+                    receiverUserEmail?.let { receiverUserEmail ->
+                        MessageTextField(
+                            receiverUserId = userID,
+                            currUserId = currUserEmail,
+                            receiverUserEmail = receiverUserEmail
+                        )
+                    }
                 }
             }
         }

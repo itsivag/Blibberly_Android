@@ -52,17 +52,20 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
-    suspend fun collectMessages(userEmail: String) {
-        messagesRepo.getMessages(userEmail = userEmail).collect { messages ->
+    suspend fun collectMessages(userEmail: String, userId: String) {
+        messagesRepo.getMessages(userEmail = userEmail, userId = userId).collect { messages ->
             Log.i("MessageViewModel", "Collecting messages from Viewmodel: $messages")
             _messageState.value = messages
         }
     }
 
-    fun sendMessage(userId: String, data: MessageDataModel) {
+    suspend fun sendMessage(userEmail: String, userId: String, data: MessageDataModel) {
         viewModelScope.launch {
             messagesRepo.sendMessage(userId, data)
             _messageState.value += data
+        }
+        viewModelScope.launch {
+            collectMessages(userEmail = userEmail, userId = userId)
         }
     }
 
