@@ -12,7 +12,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -40,7 +39,7 @@ import org.koin.compose.KoinContext
 class MainActivity : ComponentActivity() {
 
     private val bottomNavScreens = listOf(
-        Screen.Profile,
+        Screen.CurrUserProfile,
         Screen.Home,
         Screen.ChatList,
     )
@@ -94,7 +93,7 @@ class MainActivity : ComponentActivity() {
                                 isBottomNavBarVisible = true
                             }
 
-                            Screen.Profile.route -> {
+                            Screen.CurrUserProfile.route -> {
                                 isTopBarVisible = false
                                 isBottomNavBarVisible = true
                             }

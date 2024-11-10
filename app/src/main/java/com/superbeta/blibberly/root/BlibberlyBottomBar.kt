@@ -43,7 +43,7 @@ fun BlibberlyBottomBar(
                 unselectedContentColor = ColorDisabled,
                 icon = {
                     val iconDrawable = when (screen.route) {
-                        Screen.Profile.route -> R.drawable.profile
+                        Screen.CurrUserProfile.route -> R.drawable.profile
                         Screen.ChatList.route -> R.drawable.chat_history
                         Screen.Home.route -> R.drawable.home
 

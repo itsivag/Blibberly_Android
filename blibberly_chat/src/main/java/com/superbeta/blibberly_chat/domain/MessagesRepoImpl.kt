@@ -10,6 +10,7 @@ import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -114,5 +115,9 @@ class MessagesRepoImpl(
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
+        return _liveUserProfilesState.value.firstOrNull { profile -> profile.email == email }
     }
 }

@@ -111,6 +111,10 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
+    suspend fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
+        return messagesRepo.getSpecificUserProfileWithEmail(email)
+    }
+
     fun disconnectUserFromSocket() {
         messagesRepo.disconnectUserFromSocket()
     }

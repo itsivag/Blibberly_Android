@@ -15,7 +15,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(
+fun CurrUserProfileScreen(
     modifier: Modifier, navController: NavHostController,
     viewModel: UserViewModel = koinViewModel()
 ) {

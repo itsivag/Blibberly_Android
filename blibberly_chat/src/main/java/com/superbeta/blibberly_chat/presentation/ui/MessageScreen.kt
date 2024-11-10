@@ -1,5 +1,6 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,7 +52,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MessageScreen(
     modifier: Modifier,
-    navController: NavHostController,
+    navigateToProfile: () -> Unit,
+    navigateBack: () -> Unit,
     receiverUserId: String?,
     receiverUserEmail: String?,
     messageViewModel: MessageViewModel = koinViewModel(),
@@ -97,7 +99,7 @@ fun MessageScreen(
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = { navigateBack() }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.arrow_back),
                         contentDescription = "Back",
@@ -105,7 +107,9 @@ fun MessageScreen(
                 }
             },
             title = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.clickable { navigateToProfile() }) {
                     Icon(
                         imageVector = Icons.Default.AccountCircle,
                         contentDescription = "Profile picture",

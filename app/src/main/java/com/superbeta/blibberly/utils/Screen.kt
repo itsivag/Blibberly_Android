@@ -6,7 +6,7 @@ sealed class Screen(val route: String) {
     data object OTPEnter : Screen("otp_enter")
     data object SkillsAndInterests : Screen("skill_and_interests")
     data object Bio : Screen("bio")
-    data object Profile : Screen("profile")
+    data object CurrUserProfile : Screen("profile")
     data object ChatList : Screen("chat_list")
     data object Message : Screen("messages")
     data object Home : Screen("home")
@@ -17,4 +17,5 @@ sealed class Screen(val route: String) {
     data object Photo : Screen("photo")
     data object AboutMe : Screen("about_me")
     data object CurateProfile : Screen("curate_Profiles")
+    data object UserProfile : Screen("user_profile")
 }
