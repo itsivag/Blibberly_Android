@@ -93,9 +93,11 @@ fun BlibberlyNavHost(
                 userName = it.arguments?.getString("userName")!!,
                 navigateToMessageScreen = {
                     navController.navigate(
-                        Screen.Message.route + it.arguments?.getString("userEmail") + it.arguments?.getString(
-                            "userName"
-                        )
+                        Screen.Message.route + "/${it.arguments?.getString("userEmail")}/${
+                            it.arguments?.getString(
+                                "userName"
+                            )
+                        }"
                     )
                 }, navigateBack = { navController.popBackStack() })
         }
