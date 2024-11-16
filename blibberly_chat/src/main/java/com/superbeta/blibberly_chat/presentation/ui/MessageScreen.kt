@@ -51,11 +51,9 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageScreen(
-    modifier: Modifier,
-    navigateToProfile: () -> Unit,
     navigateBack: () -> Unit,
-    receiverUserName: String?,
-    receiverUserEmail: String?,
+    receiverUserName: String = "",
+    receiverUserEmail: String = "",
     messageViewModel: MessageViewModel = koinViewModel(),
     profileViewModel: ProfileOpsViewModel = koinViewModel(),
     navigateToProfile2: (String, String) -> Unit
@@ -123,13 +121,11 @@ fun MessageScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (receiverUserEmail != null && receiverUserName != null) {
-                                navigateToProfile2(receiverUserEmail, receiverUserName)
-                            }
+                            navigateToProfile2(receiverUserEmail, receiverUserName)
                         }) {
                     currUserProfile?.let { BlibMojiCircleAvatar(photoMetaData = it.photoMetaData) }
                     Text(
-                        text = receiverUserEmail ?: "Default User",
+                        text = receiverUserName,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
@@ -172,16 +168,12 @@ fun MessageScreen(
                     }
                 }
             }
-            receiverUserName?.let { userID ->
-                currUser?.let { currUserEmail ->
-                    receiverUserEmail?.let { receiverUserEmail ->
-                        MessageTextField(
-                            receiverUserId = userID,
-                            currUserId = currUserEmail,
-                            receiverUserEmail = receiverUserEmail
-                        )
-                    }
-                }
+            currUser?.let { currUserEmail ->
+                MessageTextField(
+                    receiverUserId = receiverUserEmail,
+                    currUserId = currUserEmail,
+                    receiverUserEmail = receiverUserEmail
+                )
             }
         }
     }

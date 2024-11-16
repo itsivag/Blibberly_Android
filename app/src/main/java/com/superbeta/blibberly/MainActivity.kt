@@ -87,31 +87,36 @@ class MainActivity : ComponentActivity() {
                         val scope = rememberCoroutineScope()
                         val navController = rememberNavController()
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        var selectedScreen by remember {
+                            mutableStateOf(Screen.Home.route)
+                        }
+
                         when (navBackStackEntry?.destination?.route) {
                             Screen.Home.route -> {
                                 isTopBarVisible = true
                                 isBottomNavBarVisible = true
+                                selectedScreen = Screen.Home.route
                             }
 
                             Screen.CurrUserProfile.route -> {
                                 isTopBarVisible = false
                                 isBottomNavBarVisible = true
+                                selectedScreen = Screen.CurrUserProfile.route
+
                             }
 
                             Screen.ChatList.route -> {
                                 isTopBarVisible = false
                                 isBottomNavBarVisible = true
+                                selectedScreen = Screen.ChatList.route
                             }
+
 
                             else -> {
                                 isTopBarVisible = false
                                 isBottomNavBarVisible = false
                             }
 
-                        }
-
-                        val selectedScreen by remember {
-                            mutableStateOf(Screen.Home.route)
                         }
 
                         Scaffold(topBar = {

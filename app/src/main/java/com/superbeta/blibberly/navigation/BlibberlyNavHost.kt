@@ -125,26 +125,20 @@ fun BlibberlyNavHost(
                 navArgument("userName", builder = { type = NavType.StringType })
             )
         ) { backStackEntry ->
-            MessageScreen(
-                modifier,
-                navigateToProfile = {
-                    navController.navigate(
-                        Screen.UserProfile.route + "/${backStackEntry.arguments?.getString("userEmail")}/${
-                            backStackEntry.arguments?.getString(
-                                "userName"
+            backStackEntry.arguments?.getString("userEmail")?.let { argUserEmail ->
+                backStackEntry.arguments?.getString("userName")?.let { argUserName ->
+                    MessageScreen(
+                        navigateToProfile2 = { userEmail, userName ->
+                            navController.navigate(
+                                Screen.UserProfile.route + "/$userEmail/$userName"
                             )
-                        }"
+                        },
+                        navigateBack = { navController.popBackStack() },
+                        receiverUserEmail = argUserEmail,
+                        receiverUserName = argUserName,
                     )
-                },
-                navigateToProfile2 = { userEmail, userName ->
-                    navController.navigate(
-                        Screen.UserProfile.route + "/$userEmail/$userName"
-                    )
-                },
-                navigateBack = { navController.popBackStack() },
-                receiverUserEmail = backStackEntry.arguments?.getString("userEmail"),
-                receiverUserName = backStackEntry.arguments?.getString("userName"),
-            )
+                }
+            }
         }
         composable(Screen.Filter.route) {
             FilterScreen(modifier, navController)
