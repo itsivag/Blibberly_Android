@@ -109,9 +109,13 @@ fun BlibberlyNavHost(
         }
 
         composable(Screen.ChatList.route) {
-            ChatListScreen(modifier, navigateToMessage =   {userEmail,userName -> navController.navigate(
-                Screen.Message.route + "/$userEmail/$userName"
-            )})
+            ChatListScreen(
+                modifier,
+                navigateToMessage = { userEmail, userName ->
+                    navController.navigate(
+                        Screen.Message.route + "/$userEmail/$userName"
+                    )
+                })
         }
 
         composable(
@@ -132,9 +136,14 @@ fun BlibberlyNavHost(
                         }"
                     )
                 },
+                navigateToProfile2 = { userEmail, userName ->
+                    navController.navigate(
+                        Screen.UserProfile.route + "/$userEmail/$userName"
+                    )
+                },
                 navigateBack = { navController.popBackStack() },
-                backStackEntry.arguments?.getString("userEmail"),
-                backStackEntry.arguments?.getString("userName"),
+                receiverUserEmail = backStackEntry.arguments?.getString("userEmail"),
+                receiverUserName = backStackEntry.arguments?.getString("userName"),
             )
         }
         composable(Screen.Filter.route) {

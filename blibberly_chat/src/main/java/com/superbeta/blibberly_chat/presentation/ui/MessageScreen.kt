@@ -1,6 +1,5 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,11 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,7 +35,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.navigation.NavHostController
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
@@ -58,10 +54,11 @@ fun MessageScreen(
     modifier: Modifier,
     navigateToProfile: () -> Unit,
     navigateBack: () -> Unit,
-    receiverUserId: String?,
+    receiverUserName: String?,
     receiverUserEmail: String?,
     messageViewModel: MessageViewModel = koinViewModel(),
-    profileViewModel: ProfileOpsViewModel = koinViewModel()
+    profileViewModel: ProfileOpsViewModel = koinViewModel(),
+    navigateToProfile2: (String, String) -> Unit
 ) {
 
 
@@ -96,7 +93,7 @@ fun MessageScreen(
     LaunchedEffect(true) {
         scope.launch {
             if (receiverUserEmail != null) {
-                receiverUserId?.let { userId ->
+                receiverUserName?.let { userId ->
                     messageViewModel.collectMessages(
                         userEmail = receiverUserEmail,
                         userId = userId
@@ -125,7 +122,11 @@ fun MessageScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { navigateToProfile() }) {
+                        .clickable {
+                            if (receiverUserEmail != null && receiverUserName != null) {
+                                navigateToProfile2(receiverUserEmail, receiverUserName)
+                            }
+                        }) {
                     currUserProfile?.let { BlibMojiCircleAvatar(photoMetaData = it.photoMetaData) }
                     Text(
                         text = receiverUserEmail ?: "Default User",
@@ -156,7 +157,11 @@ fun MessageScreen(
                 state = messageLazyListState
             ) {
                 item {
-                    ProfileOpsMessageComponent(receiverUserId, profileViewModel, receiverUserEmail)
+                    ProfileOpsMessageComponent(
+                        receiverUserName,
+                        profileViewModel,
+                        receiverUserEmail
+                    )
                 }
                 items(count = messages.size) { i ->
                     val currMessage = messages[i]
@@ -167,7 +172,7 @@ fun MessageScreen(
                     }
                 }
             }
-            receiverUserId?.let { userID ->
+            receiverUserName?.let { userID ->
                 currUser?.let { currUserEmail ->
                     receiverUserEmail?.let { receiverUserEmail ->
                         MessageTextField(

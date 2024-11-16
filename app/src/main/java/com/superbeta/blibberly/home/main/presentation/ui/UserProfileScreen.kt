@@ -45,7 +45,8 @@ fun UserProfileScreen(
     }
     LaunchedEffect(key1 = true) {
         currUser =
-            messageViewModel.getSpecificUserProfileWithEmail(email = userName)
+            messageViewModel.getSpecificUserProfileWithEmail(email = userEmail)
+
     }
 
     Scaffold(topBar = {

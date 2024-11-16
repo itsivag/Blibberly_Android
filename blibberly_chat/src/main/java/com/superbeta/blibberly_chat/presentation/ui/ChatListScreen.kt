@@ -2,7 +2,6 @@ package com.superbeta.blibberly_chat.presentation.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.blibberly.blibberly_likes.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_chat.presentation.ui.components.ChatListItem
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -35,6 +33,7 @@ fun ChatListScreen(
     val userProfiles by messageViewModel.userProfileState.collectAsState()
 
     val scope = rememberCoroutineScope()
+
     LaunchedEffect(key1 = true) {
         scope.launch {
             messageViewModel.getUsers()
@@ -66,10 +65,13 @@ fun ChatListScreen(
             TopAppBar(title = { Text(text = "Live Chats") })
         }
         items(userProfiles.size) { i ->
+            val email = userProfiles[i].email
+            val userName = userProfiles[i].name
+
             ChatListItem(
                 userProfile = userProfiles[i],
                 navigateToMessage = {
-                    navigateToMessage(userProfiles[i].email, userProfiles[i].name)
+                    navigateToMessage(email, userName)
                 })
         }
 //        item {

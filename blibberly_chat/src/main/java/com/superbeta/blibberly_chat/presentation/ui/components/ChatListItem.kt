@@ -20,7 +20,7 @@ import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 fun ChatListItem(
 //    socketUserDataModelItem: SocketUserDataModelItem,
     navigateToMessage: () -> Unit,
-    userProfile: UserDataModel
+    userProfile: UserDataModel,
 ) {
     Row(
         modifier = Modifier
