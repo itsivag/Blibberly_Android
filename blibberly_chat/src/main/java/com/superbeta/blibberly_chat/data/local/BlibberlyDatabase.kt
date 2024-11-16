@@ -8,7 +8,7 @@ import com.blibberly.blibberly_likes.data.model.ProfileOpsDataModel
 import com.superbeta.blibberly_chat.data.model.Converters
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 
-@Database(entities = [MessageDataModel::class, ProfileOpsDataModel::class], version = 4)
+@Database(entities = [MessageDataModel::class, ProfileOpsDataModel::class], version = 5)
 @TypeConverters(Converters::class)
 abstract class BlibberlyDatabase : RoomDatabase() {
     abstract fun MessagesDao(): MessagesDao

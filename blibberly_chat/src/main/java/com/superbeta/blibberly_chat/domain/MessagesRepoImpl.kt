@@ -10,9 +10,7 @@ import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -49,7 +47,7 @@ class MessagesRepoImpl(
         val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         outputFormat.timeZone = TimeZone.getDefault()
 
-        val formattedTimeStamp = db.getMessages().map { message ->
+        val formattedTimeStamp = db.getMessages(userEmail).map { message ->
             try {
                 val date = inputFormat.parse(message.timeStamp)
                 val formattedDate = date?.let { outputFormat.format(it) }
@@ -71,8 +69,12 @@ class MessagesRepoImpl(
     override suspend fun sendMessage(userId: String, message: MessageDataModel) {
         socketHandler.emitMessage(userId, message)
 //        _messageState.value += message
-        saveMessagesToLocalDb(_messageState.value)
+//        saveMessagesToLocalDb(_messageState.value)
+        saveSingleMessageToDb(userId, message)
+        Log.i("Message to be sent", _messageState.value.toString())
+
     }
+
 
     override fun getUsers(): StateFlow<List<SocketUserDataModelItem>> {
         return socketHandler.getUsers()
@@ -107,6 +109,10 @@ class MessagesRepoImpl(
 
     override suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>) {
         db.saveMessages(messages)
+    }
+
+    private suspend fun saveSingleMessageToDb(userId: String, message: MessageDataModel) {
+        db.saveSingleMessage(message)
     }
 
     override fun disconnectUserFromSocket() {

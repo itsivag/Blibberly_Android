@@ -38,7 +38,13 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
             val email = preferences[stringPreferencesKey("user_email")]
 
             if (email != null) {
-                options.auth = mapOf("username" to email)
+//                options.auth = mapOf("username" to email)
+                Log.i("SocketHandlerImpl", "Connecting to socket")
+                options.extraHeaders = mapOf(
+                    "email" to listOf(email),
+                    "username" to listOf("sample_sambavam")
+                )
+
                 socket = IO.socket("http://192.168.29.216:3000/", options)
                 socket.connect()
 
@@ -148,10 +154,10 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
     override fun getSocket(): Socket = socket
 
 
-    override fun emitMessage(userId: String, data: MessageDataModel) {
+    override fun emitMessage(userEmail: String, data: MessageDataModel) {
         val message = mapOf(
             "content" to data,
-            "to" to userId
+            "to" to data.receiverEmail
         )
         val jsonMessage = Gson().toJson(message)
 

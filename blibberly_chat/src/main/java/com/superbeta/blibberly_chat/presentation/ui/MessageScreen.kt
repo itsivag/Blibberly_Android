@@ -54,9 +54,9 @@ fun MessageScreen(
     navigateBack: () -> Unit,
     receiverUserName: String = "",
     receiverUserEmail: String = "",
+    navigateToProfile: (String, String) -> Unit,
     messageViewModel: MessageViewModel = koinViewModel(),
     profileViewModel: ProfileOpsViewModel = koinViewModel(),
-    navigateToProfile2: (String, String) -> Unit
 ) {
 
 
@@ -121,7 +121,7 @@ fun MessageScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navigateToProfile2(receiverUserEmail, receiverUserName)
+                            navigateToProfile(receiverUserEmail, receiverUserName)
                         }) {
                     currUserProfile?.let { BlibMojiCircleAvatar(photoMetaData = it.photoMetaData) }
                     Text(
@@ -161,7 +161,7 @@ fun MessageScreen(
                 }
                 items(count = messages.size) { i ->
                     val currMessage = messages[i]
-                    if (currMessage.senderID == currUser) {
+                    if (currMessage.senderEmail == currUser) {
                         SenderChatBubble(currMessage)
                     } else {
                         ReceiverChatBubble(currMessage)

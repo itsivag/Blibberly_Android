@@ -16,8 +16,8 @@ import com.google.gson.Gson
 data class MessageDataModel(
     @PrimaryKey @ColumnInfo("messageId") val messageId: String,
     @ColumnInfo("content") val content: String,
-    @ColumnInfo("senderId") val senderID: String,
-    @ColumnInfo("receiverId") val receiverID: String,
+    @ColumnInfo("senderEmail") val senderEmail: String,
+    @ColumnInfo("receiverEmail") val receiverEmail: String,
     @ColumnInfo("timeStamp") val timeStamp: String,
     @ColumnInfo("isDelivered") val isDelivered: Boolean,
     @ColumnInfo("isRead") val isRead: Boolean

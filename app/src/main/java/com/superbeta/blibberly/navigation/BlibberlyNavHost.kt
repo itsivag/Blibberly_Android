@@ -128,7 +128,7 @@ fun BlibberlyNavHost(
             backStackEntry.arguments?.getString("userEmail")?.let { argUserEmail ->
                 backStackEntry.arguments?.getString("userName")?.let { argUserName ->
                     MessageScreen(
-                        navigateToProfile2 = { userEmail, userName ->
+                        navigateToProfile = { userEmail, userName ->
                             navController.navigate(
                                 Screen.UserProfile.route + "/$userEmail/$userName"
                             )

@@ -47,8 +47,8 @@ fun MessageTextField(
     val data = MessageDataModel(
         messageId = messageId,
         content = message.text,
-        senderID = currUserId,
-        receiverID = receiverUserId,
+        senderEmail = currUserId,
+        receiverEmail = receiverUserId,
         timeStamp = currentTimeStamp.toString(),
         isDelivered = false,
         isRead = false
@@ -85,7 +85,7 @@ fun MessageTextField(
                 scope.launch {
                     viewModel.sendMessage(
                         userEmail = receiverUserEmail,
-                        userId = receiverUserId,
+                        userId = currUserId,
                         data = data
                     )
                     message = TextFieldValue("")

@@ -90,6 +90,7 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
                 }
             }
         } catch (e: Exception) {
+            Log.e("MessageViewModel", e.toString())
             _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_ERROR
         }
     }
