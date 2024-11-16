@@ -8,8 +8,11 @@ import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.domain.MessagesRepo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 enum class HomeScreenState {
@@ -30,7 +33,11 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     val usersState: StateFlow<List<SocketUserDataModelItem>> = _usersState.asStateFlow()
 
     private val _userProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
-    val userProfileState: StateFlow<List<UserDataModel>> = _userProfileState.asStateFlow()
+    val userProfileState: StateFlow<List<UserDataModel>> =
+        _userProfileState.map { it.distinctBy { user -> user.email } }.stateIn(
+            viewModelScope,
+            SharingStarted.Lazily, emptyList()
+        )
 
     private val _homeScreenState =
         MutableStateFlow<HomeScreenState>(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)

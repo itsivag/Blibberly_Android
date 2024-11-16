@@ -10,28 +10,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.blibberly.blibberly_likes.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_chat.presentation.ui.components.ChatListItem
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
     modifier: Modifier,
-    navController: NavHostController,
+    navigateToMessage: (String, String) -> Unit,
     messageViewModel: MessageViewModel = koinViewModel(),
-    profileViewModel: ProfileOpsViewModel = koinViewModel()
+    profileViewModel: ProfileOpsViewModel = koinViewModel(),
 ) {
-    val chats by messageViewModel.usersState.collectAsState()
+//    val chats by messageViewModel.usersState.collectAsState()
     val matchedProfiles by profileViewModel.matchedProfilesState.collectAsState()
     val likedProfiles by profileViewModel.likedProfilesState.collectAsState()
 
+    val userProfiles by messageViewModel.userProfileState.collectAsState()
+
+    val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = true) {
-        messageViewModel.getUsers()
+        scope.launch {
+            messageViewModel.getUsers()
+        }
+    }
+
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            messageViewModel.getUserProfile()
+        }
     }
 
     LaunchedEffect(key1 = true) {
@@ -44,17 +57,31 @@ fun ChatListScreen(
 
     LazyColumn(modifier = modifier) {
 
+//        item {
+//            Button(onClick = {
+//                messageViewModel.disconnectUserFromSocket()
+//            }, content = { Text(text = "Disconnect") })
+//        }
         item {
-            Button(onClick = {
-                messageViewModel.disconnectUserFromSocket()
-            }, content = { Text(text = "Disconnect") })
+            TopAppBar(title = { Text(text = "Live Chats") })
         }
-        item {
-            TopAppBar(title = { Text(text = "Matched Chats") })
+        items(userProfiles.size) { i ->
+            ChatListItem(
+                userProfile = userProfiles[i],
+                navigateToMessage = {
+                    navigateToMessage(userProfiles[i].email, userProfiles[i].name)
+                })
         }
-        items(chats.size) { i ->
-            ChatListItem(chats[i], navController)
-        }
+//        item {
+//            TopAppBar(title = { Text(text = "Matched Chats") })
+//        }
+//        items(matchedProfiles.size) { i ->
+//            ChatListItem(
+//                userProfile = userProfiles[i],
+//                navigateToMessage = {
+//                    navigateToMessage(userProfiles[i].email, userProfiles[i].name)
+//                })
+//        }
         item {
             TopAppBar(title = { Text(text = "Liked Chats") })
         }

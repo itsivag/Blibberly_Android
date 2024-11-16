@@ -107,8 +107,11 @@ fun BlibberlyNavHost(
         composable(Screen.Home.route) {
             HomeScreen(modifier, navController)
         }
+
         composable(Screen.ChatList.route) {
-            ChatListScreen(modifier, navController)
+            ChatListScreen(modifier, navigateToMessage =   {userEmail,userName -> navController.navigate(
+                Screen.Message.route + "/$userEmail/$userName"
+            )})
         }
 
         composable(

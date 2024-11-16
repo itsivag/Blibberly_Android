@@ -1,10 +1,12 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,6 +46,8 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubbl
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.blibberly.blibberly_likes.presentation.viewmodel.ProfileOpsViewModel
+import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_chat.presentation.ui.components.BlibMojiCircleAvatar
 import com.superbeta.blibberly_chat.presentation.ui.components.ProfileOpsMessageComponent
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -60,6 +64,7 @@ fun MessageScreen(
     profileViewModel: ProfileOpsViewModel = koinViewModel()
 ) {
 
+
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -67,8 +72,17 @@ fun MessageScreen(
     val userPreferencesDataStore = context.userPreferencesDataStore
     val messageLazyListState = rememberLazyListState()
 
+
     var currUser by remember {
         mutableStateOf<String?>(null)
+    }
+    var currUserProfile by remember {
+        mutableStateOf<UserDataModel?>(null)
+    }
+
+    LaunchedEffect(key1 = true) {
+        currUserProfile =
+            receiverUserEmail?.let { messageViewModel.getSpecificUserProfileWithEmail(email = it) }
     }
 
     LaunchedEffect(key1 = true) {
@@ -109,12 +123,10 @@ fun MessageScreen(
             title = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { navigateToProfile() }) {
-                    Icon(
-                        imageVector = Icons.Default.AccountCircle,
-                        contentDescription = "Profile picture",
-                        modifier = Modifier.size(48.dp)
-                    )
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { navigateToProfile() }) {
+                    currUserProfile?.let { BlibMojiCircleAvatar(photoMetaData = it.photoMetaData) }
                     Text(
                         text = receiverUserEmail ?: "Default User",
                         fontSize = 18.sp,
