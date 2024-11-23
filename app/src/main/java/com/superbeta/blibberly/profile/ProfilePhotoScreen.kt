@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -46,6 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
@@ -133,6 +135,8 @@ fun ProfilePhotoScreen(
     val screenHeight = config.screenHeightDp.dp
     val scope = rememberCoroutineScope()
 
+    val userData by viewModel.userState.collectAsStateWithLifecycle()
+
     LaunchedEffect(key1 = true) {
         scope.launch(IO) {
             try {
@@ -152,11 +156,20 @@ fun ProfilePhotoScreen(
     LaunchedEffect(key1 = true) {
         scope.launch(IO) {
             viewModel.getUser()
-            val userData: UserDataModel? = viewModel.userState.value
-            if (userData != null && userData.photoMetaData.blibmojiUrl.isNotEmpty() && userData.photoMetaData.bgEmoji.isNotEmpty() && userData.photoMetaData.bgColor.isNotEmpty()) {
-                selectedBlibmoji = userData.photoMetaData.blibmojiUrl
-                selectedBGEmoji = userData.photoMetaData.bgEmoji
-                selectedBGColor = userData.photoMetaData.bgColor
+            Log.i("CURR USER BLIB", userData.toString())
+        }
+    }
+
+    LaunchedEffect(key1 = userData) {
+        scope.launch(IO) {
+            try {
+                if (userData != null && userData!!.photoMetaData.blibmojiUrl.isNotEmpty() && userData!!.photoMetaData.bgEmoji.isNotEmpty() && userData!!.photoMetaData.bgColor.isNotEmpty()) {
+                    selectedBlibmoji = userData!!.photoMetaData.blibmojiUrl
+                    selectedBGEmoji = userData!!.photoMetaData.bgEmoji
+                    selectedBGColor = userData!!.photoMetaData.bgColor
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

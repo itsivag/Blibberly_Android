@@ -61,9 +61,7 @@ enum class WeightUnit {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BioScreen(
-    modifier: Modifier,
-    navController: NavController,
-    userViewModel: UserViewModel = koinViewModel()
+    modifier: Modifier, navController: NavController, userViewModel: UserViewModel = koinViewModel()
 ) {
 
     var isButtonEnabled by remember {
@@ -329,27 +327,24 @@ fun BioScreen(
             ) {
                 scope.launch {
                     try {
-                        userViewModel.getUserEmail().collect { email ->
-                            email?.let {
-                                UserDataModel(
-                                    email = it,
-                                    name = name.text,
-                                    age = age.text.toInt(),
-                                    height = height.text.toDouble(),
-                                    weight = weight.text.toDouble(),
-                                    aboutMe = aboutMe,
-                                    interests = interests,
-                                    gender = gender,
-                                    photoMetaData = PhotoMetaData("", "", ""),
-                                    fcmToken = userFCMToken
-                                )
-                            }?.let {
-                                userViewModel.setUser(
-                                    it
-                                )
-                            }
+                        userViewModel.getUserEmail()?.let { email ->
+                            UserDataModel(
+                                email = email,
+                                name = name.text,
+                                age = age.text.toInt(),
+                                height = height.text.toDouble(),
+                                weight = weight.text.toDouble(),
+                                aboutMe = aboutMe,
+                                interests = interests,
+                                gender = gender,
+                                photoMetaData = PhotoMetaData("", "", ""),
+                                fcmToken = userFCMToken
+                            ).let {
+                                    userViewModel.setUser(
+                                        it
+                                    )
+                                }
                         }
-
                     } catch (e: Exception) {
                         Log.e("Error Storing data in room BioScreen", e.toString())
                     }

@@ -45,7 +45,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
                     "username" to listOf("sample_sambavam")
                 )
 
-                socket = IO.socket("http://192.168.29.216:3000/", options)
+                socket = IO.socket("https://walrus-app-dyirf.ondigitalocean.app/", options)
                 socket.connect()
 
                 registerMessageListener()

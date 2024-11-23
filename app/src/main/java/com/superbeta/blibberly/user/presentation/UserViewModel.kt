@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.repo.MUserRepository
-import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -20,9 +19,10 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
 
     suspend fun getUser() {
         _userState.value = mUserRepository.getUser()
+        Log.i("USER STATE VIEWMODEL", userState.value.toString())
     }
 
-    suspend fun getUserEmail(): Flow<String?> {
+    suspend fun getUserEmail(): String? {
         return mUserRepository.getUserEmail()
     }
 

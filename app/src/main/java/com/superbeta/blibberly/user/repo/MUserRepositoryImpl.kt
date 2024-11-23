@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.user.repo
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.superbeta.blibberly.user.data.local.UserLocalDao
@@ -10,6 +11,9 @@ import com.superbeta.blibberly_auth.utils.UserDataPreferenceKeys
 import com.superbeta.blibberly_chat.notification.NotificationRepo
 import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
 
@@ -20,13 +24,25 @@ class MUserRepositoryImpl(
     private val userRemoteService: UserRemoteService
 ) : MUserRepository {
     override suspend fun getUser(): UserDataModel {
+
+        val remoteUserData = getUserEmail()?.let { userRemoteService.getUser(it) }
+        val localUserData = db.getUser()
+
+        if (remoteUserData != null) {
+            if (remoteUserData != localUserData) {
+                setUserToLocalDb(remoteUserData)
+            }
+        }
+//        Log.i("Database Upload Remote", remoteUserData.toString())
+//        Log.i("Database Upload Local", db.getUser().toString())
+
         return db.getUser()
     }
 
-    override suspend fun getUserEmail(): Flow<String?> {
+    override suspend fun getUserEmail(): String? {
         return userPreferencesDataStore.data.map { preferences ->
             preferences[UserDataPreferenceKeys.USER_EMAIL]
-        }
+        }.firstOrNull()
     }
 
     override suspend fun getUserFCMToken(): String {
@@ -34,8 +50,8 @@ class MUserRepositoryImpl(
     }
 
 
-    override suspend fun setUserToLocalDb(userDataModel: UserDataModel) {
-        return db.setUser(userDataModel)
+    override suspend fun setUserToLocalDb(userDataModel: UserDataModel?) {
+        userDataModel?.let { db.setUser(it) }
     }
 
     override suspend fun setUserToRemote(userDataModel: UserDataModel) {
