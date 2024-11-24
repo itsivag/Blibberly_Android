@@ -145,7 +145,7 @@ fun BlibberlyNavHost(
         }
 
         composable(Screen.CurrUserProfile.route) {
-            CurrUserProfileScreen(modifier, navController)
+            CurrUserProfileScreen(modifier)
         }
     }
 }

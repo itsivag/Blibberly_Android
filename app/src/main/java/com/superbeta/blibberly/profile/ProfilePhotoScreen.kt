@@ -76,7 +76,7 @@ const val DEFAULT_BLIBMOJI_URL =
 
 @Composable
 fun ProfilePhotoScreen(
-    navController: NavHostController,
+//    navController: NavHostController,
     viewModel: UserViewModel = koinViewModel()
 ) {
 

@@ -16,7 +16,8 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrUserProfileScreen(
-    modifier: Modifier, navController: NavHostController,
+    modifier: Modifier,
+//    navController: NavHostController,
     viewModel: UserViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -31,7 +32,7 @@ fun CurrUserProfileScreen(
             TopAppBar(title = { Text(text = "Profile") })
         }
         item {
-            ProfilePhotoScreen(navController)
+            ProfilePhotoScreen()
         }
         item {
             ProfileBioScreen()

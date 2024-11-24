@@ -83,11 +83,7 @@ fun ProfileBioScreen(
             "Sankar",
             updateValueInRoom = {
                 scope.launch {
-                    try {
-//                        userLocalDbService.updateName(name.text)
-                    } catch (e: Exception) {
-                        Log.e("Profile Data Store Error", e.toString())
-                    }
+                    viewModel.updateName("nottu")
                 }
             }
         )

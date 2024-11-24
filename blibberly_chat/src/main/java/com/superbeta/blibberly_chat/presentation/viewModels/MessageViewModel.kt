@@ -40,7 +40,7 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         )
 
     private val _homeScreenState =
-        MutableStateFlow<HomeScreenState>(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
+        MutableStateFlow(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
     val homeScreenState: StateFlow<HomeScreenState> = _homeScreenState.asStateFlow()
 
     init {

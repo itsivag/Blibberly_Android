@@ -9,12 +9,13 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.data.remote.UserRemoteService
 import com.superbeta.blibberly_auth.utils.UserDataPreferenceKeys
 import com.superbeta.blibberly_chat.notification.NotificationRepo
-import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 
 class MUserRepositoryImpl(
@@ -23,20 +24,35 @@ class MUserRepositoryImpl(
     private val userPreferencesDataStore: DataStore<Preferences>,
     private val userRemoteService: UserRemoteService
 ) : MUserRepository {
-    override suspend fun getUser(): UserDataModel {
 
+    private val _userState = MutableStateFlow<UserDataModel?>(null)
+
+    //
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            _userState.value = getUser()
+//            try {
+//                setUserToRemote(_userState.value!!)
+//            } catch (e: Exception) {
+//                Log.e("USER PROFILE SYNC ERROR", e.toString())
+//            }
+        }
+    }
+
+    override suspend fun getUser(): UserDataModel {
         val remoteUserData = getUserEmail()?.let { userRemoteService.getUser(it) }
         val localUserData = db.getUser()
 
         if (remoteUserData != null) {
             if (remoteUserData != localUserData) {
-                setUserToLocalDb(remoteUserData)
+//                setUserToLocalDb(remoteUserData)
+                setUserToRemote(localUserData)
             }
         }
 //        Log.i("Database Upload Remote", remoteUserData.toString())
 //        Log.i("Database Upload Local", db.getUser().toString())
 
-        return db.getUser()
+        return localUserData
     }
 
     override suspend fun getUserEmail(): String? {
@@ -51,39 +67,69 @@ class MUserRepositoryImpl(
 
 
     override suspend fun setUserToLocalDb(userDataModel: UserDataModel?) {
-        userDataModel?.let { db.setUser(it) }
+        CoroutineScope(Dispatchers.IO).launch {
+            userDataModel?.let { db.setUser(it) }
+        }
     }
 
     override suspend fun setUserToRemote(userDataModel: UserDataModel) {
-
+        CoroutineScope(Dispatchers.IO).launch {
+            userRemoteService.setUser(userDataModel)
+        }
     }
 
     override suspend fun updateName(newName: String) {
-        return db.updateName(newName)
+        CoroutineScope(Dispatchers.IO).launch {
+            db.updateName(newName)
+            _userState.value?.let { userRemoteService.updateUserName(newName, it.email) }
+        }
     }
 
     override suspend fun updateAge(newAge: Int) {
-        return db.updateAge(newAge)
+        CoroutineScope(Dispatchers.IO).launch {
+            _userState.value?.let { userRemoteService.updateAge(newAge, it.email) }
+            db.updateAge(newAge)
+        }
     }
 
     override suspend fun updateHeight(newHeight: Double) {
-        return db.updateHeight(newHeight)
+        CoroutineScope(Dispatchers.IO).launch {
+            _userState.value?.let { userRemoteService.updateHeight(newHeight, it.email) }
+            db.updateHeight(newHeight)
+        }
     }
 
     override suspend fun updateWeight(newWeight: Double) {
-        return db.updateWeight(newWeight)
+        CoroutineScope(Dispatchers.IO).launch {
+            _userState.value?.let { userRemoteService.updateWeight(newWeight, it.email) }
+            db.updateWeight(newWeight)
+        }
     }
 
     override suspend fun updateAboutMe(newAboutMe: String) {
-        return db.updateAboutMe(newAboutMe)
+        CoroutineScope(Dispatchers.IO).launch {
+            _userState.value?.let { userRemoteService.updateAboutMe(newAboutMe, it.email) }
+            db.updateAboutMe(newAboutMe)
+        }
     }
 
     override suspend fun updateInterests(newInterests: List<String>) {
-        return db.updateInterests(newInterests)
+        CoroutineScope(Dispatchers.IO).launch {
+            _userState.value?.let { userRemoteService.updateInterests(newInterests, it.email) }
+            db.updateInterests(newInterests)
+        }
     }
 
     override suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData) {
-        return db.updatePhotoMetaData(photoMetaData)
+        CoroutineScope(Dispatchers.IO).launch {
+            db.updatePhotoMetaData(photoMetaData)
+            _userState.value?.let {
+                userRemoteService.updatePhotoMetaData(
+                    photoMetaData,
+                    it.email
+                )
+            }
+        }
     }
 
 

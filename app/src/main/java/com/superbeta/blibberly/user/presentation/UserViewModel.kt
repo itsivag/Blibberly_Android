@@ -8,12 +8,13 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.repo.MUserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() {
 
     private val _userState = MutableStateFlow<UserDataModel?>(null)
-    val userState: MutableStateFlow<UserDataModel?> = _userState
+    val userState: StateFlow<UserDataModel?> = _userState
 
     private val _blibmojiUrls = MutableStateFlow<List<String>>(emptyList())
 
@@ -43,6 +44,12 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
         }
     }
 
+    suspend fun updateName(name: String) {
+        viewModelScope.launch {
+            mUserRepository.updateName(name)
+        }
+    }
+
     suspend fun updateInterests(newInterests: List<String>) {
         viewModelScope.launch {
             mUserRepository.updateInterests(newInterests)
@@ -61,6 +68,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
             getUser()
             val u: UserDataModel? = userState.value
             if (u != null) {
+                //TODO make changes to supa upload
                 mUserRepository.setUserToRemote(u)
             } else {
                 Log.e("Database Upload Error", "User Data is null")

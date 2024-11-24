@@ -30,11 +30,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -55,15 +57,22 @@ fun ProfileAboutMeScreen(
         FocusRequester()
     }
 
+    val userData by viewModel.userState.collectAsStateWithLifecycle()
+
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(key1 = Unit) {
-        scope.launch {
+    LaunchedEffect(key1 = true) {
+        scope.launch(IO) {
             viewModel.getUser()
-            val userData: UserDataModel? =
-                viewModel.userState.value
-            if (userData != null) {
-                aboutMe = TextFieldValue(userData.aboutMe)
+        }
+    }
+
+    LaunchedEffect(key1 = userData) {
+        scope.launch(IO) {
+            try {
+                aboutMe = TextFieldValue(userData!!.aboutMe)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
@@ -82,7 +91,6 @@ fun ProfileAboutMeScreen(
 
         OutlinedTextField(minLines = 3,
             value = aboutMe,
-
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
@@ -90,13 +98,13 @@ fun ProfileAboutMeScreen(
                 .onFocusChanged { isFocused = it.hasFocus },
             onValueChange = { value -> aboutMe = value },
             shape = RoundedCornerShape(14.dp),
-            placeholder = {
-                Text(
-                    text = "Yo Blibbers! \uD83C\uDF1F I'm Mia, a coffee aficionado ☕ and aspiring travel blogger \uD83C\uDF0D. Catch me vibing to indie tunes or geeking out over the latest tech trends. Let's swap memes, share playlists, and see if our stars align on Blibberly! Let's make some memories, fam! \uD83D\uDE80✨\"",
-                    color = ColorDisabled,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-            },
+//            placeholder = {
+//                Text(
+//                    text = "Yo Blibbers! \uD83C\uDF1F I'm Mia, a coffee aficionado ☕ and aspiring travel blogger \uD83C\uDF0D. Catch me vibing to indie tunes or geeking out over the latest tech trends. Let's swap memes, share playlists, and see if our stars align on Blibberly! Let's make some memories, fam! \uD83D\uDE80✨\"",
+//                    color = ColorDisabled,
+//                    modifier = Modifier.padding(vertical = 8.dp)
+//                )
+//            },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = ColorPrimary,
                 unfocusedBorderColor = ColorDisabled,
@@ -118,7 +126,7 @@ fun ProfileAboutMeScreen(
                         }
                         IconButton(onClick = {
                             scope.launch {
-//                                    updateValueInRoom()
+                                viewModel.updateAboutMe(aboutMe.text)
                             }.invokeOnCompletion {
                                 focusManager.clearFocus()
                             }
