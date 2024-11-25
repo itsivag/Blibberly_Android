@@ -49,7 +49,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(project(":blibberly_auth"))
+    implementation(project(":auth"))
     implementation(project(":profile_ops"))
 //    implementation(project(":blibberly_supabase"))
     //profile likes, dislikes, reports and matches

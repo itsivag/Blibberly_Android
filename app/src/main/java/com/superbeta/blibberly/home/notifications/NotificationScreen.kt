@@ -15,10 +15,14 @@ import com.superbeta.blibberly.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotificationScreen(modifier: Modifier, navController: NavHostController) {
+fun NotificationScreen(
+    modifier: Modifier,
+    navigateBack: () -> Unit
+//                       navController: NavHostController
+) {
     Column(modifier = modifier) {
         TopAppBar(title = { }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = { navigateBack() }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
                     contentDescription = "back"

@@ -18,7 +18,9 @@ import androidx.navigation.NavHostController
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NotificationConsentScreen(modifier: Modifier, navController: NavHostController) {
+fun NotificationConsentScreen(modifier: Modifier,
+//                              navController: NavHostController
+) {
     val context = LocalContext.current
 //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     val settingsIntent: Intent =

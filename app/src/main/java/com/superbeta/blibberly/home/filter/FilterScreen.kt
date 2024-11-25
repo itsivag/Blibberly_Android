@@ -6,6 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 
 @Composable
-fun FilterScreen(modifier: Modifier, navController: NavHostController) {
+fun FilterScreen(modifier: Modifier,
+//                 navController: NavHostController
+) {
     Text(text = "Filter")
 }

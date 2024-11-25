@@ -61,7 +61,11 @@ enum class WeightUnit {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BioScreen(
-    modifier: Modifier, navController: NavController, userViewModel: UserViewModel = koinViewModel()
+    modifier: Modifier,
+//    navController: NavController,
+    navigateBack: () -> Unit,
+    navigateToAboutMe: () -> Unit,
+    userViewModel: UserViewModel = koinViewModel()
 ) {
 
     var isButtonEnabled by remember {
@@ -141,7 +145,7 @@ fun BioScreen(
         item {
 
             TopAppBar(title = { }, navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = { navigateBack() }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
                         contentDescription = "back"
@@ -340,16 +344,16 @@ fun BioScreen(
                                 photoMetaData = PhotoMetaData("", "", ""),
                                 fcmToken = userFCMToken
                             ).let {
-                                    userViewModel.setUser(
-                                        it
-                                    )
-                                }
+                                userViewModel.setUser(
+                                    it
+                                )
+                            }
                         }
                     } catch (e: Exception) {
                         Log.e("Error Storing data in room BioScreen", e.toString())
                     }
                 }.invokeOnCompletion {
-                    navController.navigate(Screen.AboutMe.route)
+                    navigateToAboutMe()
                 }
             }
         }

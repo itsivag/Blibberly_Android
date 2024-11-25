@@ -30,7 +30,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CurateProfilesScreen(
     modifier: Modifier,
-    navController: NavHostController,
+//    navController: NavHostController,
+    navigateToHome: () -> Unit,
     viewModel: UserViewModel = koinViewModel()
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_loading))
@@ -51,7 +52,7 @@ fun CurateProfilesScreen(
             viewModel.uploadUserToDB()
         }.invokeOnCompletion {
             Log.i("User", "Email -> ${userState.value?.email}")
-            navController.navigate(Screen.Home.route)
+            navigateToHome()
         }
     }
 

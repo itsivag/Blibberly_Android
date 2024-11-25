@@ -47,7 +47,10 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SkillsAndInterestsScreen(
-    modifier: Modifier, navController: NavHostController,
+    modifier: Modifier,
+//    navController: NavHostController,
+    navigateBack: () -> Unit,
+    navigateToPhoto: () -> Unit,
     viewModel: UserViewModel = koinViewModel()
 
 ) {
@@ -123,7 +126,7 @@ fun SkillsAndInterestsScreen(
             TopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navigateBack() }) {
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
                             contentDescription = "back"
@@ -221,7 +224,7 @@ fun SkillsAndInterestsScreen(
                 scope.launch {
                     viewModel.updateInterests(selectedInterests)
                 }.invokeOnCompletion {
-                    navController.navigate(Screen.Photo.route)
+                    navigateToPhoto()
                 }
             }
 

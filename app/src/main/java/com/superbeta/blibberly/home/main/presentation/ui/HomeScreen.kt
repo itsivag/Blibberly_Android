@@ -45,7 +45,9 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    modifier: Modifier, navController: NavHostController,
+    modifier: Modifier,
+//    navController: NavHostController,
+    navigateToChat: (String, String) -> Unit,
     messageViewModel: MessageViewModel = koinViewModel(),
 //    homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
 //        factory = HomeViewModel.Factory
@@ -91,7 +93,7 @@ fun HomeScreen(
     }
     when (homeScreenState) {
         HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS -> {
-            BlibberlyHorizontalPager(pagerState, modifier, navController, liveUserProfile)
+            BlibberlyHorizontalPager(pagerState, modifier, navigateToChat, liveUserProfile)
         }
 
         HomeScreenState.LIVE_USERS_EMPTY -> {
@@ -115,7 +117,8 @@ fun HomeScreen(
 fun BlibberlyHorizontalPager(
     pagerState: PagerState,
     modifier: Modifier,
-    navController: NavHostController,
+    navigateToChat: (String, String) -> Unit,
+//    navController: NavHostController,
     liveUsers: List<UserDataModel>
 ) {
     HorizontalPager(
@@ -142,7 +145,8 @@ fun BlibberlyHorizontalPager(
             ) {
                 item {
                     BlibMojiCard(userDataModel = currUser,
-                        navigateToChat = { navController.navigate(Screen.Message.route + "/${currUser.email}/${currUser.name}") })
+                        navigateToChat = { navigateToChat(currUser.email, currUser.name) })
+//                        navigateToChat = { navController.navigate(Screen.Message.route + "/${currUser.email}/${currUser.name}") })
                 }
                 item { AboutCard(user = currUser) }
                 item { LanguageCard(user = currUser) }

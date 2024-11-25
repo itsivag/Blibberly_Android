@@ -7,8 +7,17 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OnBoardingScreen(modifier: Modifier, navController: NavHostController) {
-    BioScreen(modifier = modifier, navController = navController)
+fun OnBoardingScreen(
+    modifier: Modifier,
+    navigateBack: () -> Unit,
+    navigateToAboutMe: () -> Unit,
+//                     navController: NavHostController
+) {
+    BioScreen(
+        modifier = modifier,
+        navigateBack = navigateBack,
+        navigateToAboutMe = navigateToAboutMe
+    )
 }
 
 

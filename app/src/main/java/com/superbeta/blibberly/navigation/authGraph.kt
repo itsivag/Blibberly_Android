@@ -1,0 +1,29 @@
+package com.superbeta.blibberly.navigation
+
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
+import com.superbeta.blibberly.auth.presentation.ui.SignUpScreen
+import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_auth.presentation.ui.OTPScreen
+import com.superbeta.blibberly_auth.presentation.ui.SignInScreen
+
+fun NavGraphBuilder.authNavGraph(navController: NavHostController, modifier: Modifier) {
+    navigation(startDestination = Screen.SignIn.route, route = "AUTH") {
+
+        composable(Screen.SignIn.route) {
+            SignInScreen(modifier, navController)
+        }
+
+        composable(Screen.SignUp.route) {
+            SignUpScreen(modifier = modifier, navController = navController)
+        }
+
+        composable(Screen.OTPEnter.route) {
+            OTPScreen(modifier, navController)
+        }
+
+    }
+}

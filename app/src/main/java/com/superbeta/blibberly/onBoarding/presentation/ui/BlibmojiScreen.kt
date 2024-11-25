@@ -110,8 +110,10 @@ val avatarBGColorsMap = mapOf<String, Color>(
 @Composable
 fun BlibmojiScreen(
     modifier: Modifier,
-    navController: NavHostController,
-    viewModel: UserViewModel = koinViewModel()
+//    navController: NavHostController,
+    viewModel: UserViewModel = koinViewModel(),
+    navigateBack: () -> Unit,
+    navigateToCurateProfile: () -> Unit
 ) {
     val supabase = createSupabaseClient(
         supabaseUrl = "https://dxyahfscoumjwjuwlgje.supabase.co",
@@ -198,7 +200,7 @@ fun BlibmojiScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TopAppBar(title = { }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = { navigateBack() }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
                     contentDescription = "back"
@@ -287,7 +289,7 @@ fun BlibmojiScreen(
 //                    delay(2000)
                     setIsComplete(true)
                 }.invokeOnCompletion {
-                    navController.navigate(Screen.CurateProfile.route)
+                    navigateToCurateProfile()
                 }
             },
         )
@@ -435,7 +437,7 @@ fun BlibmojiScreen(
                                         )
                                     )
                                 }.invokeOnCompletion {
-                                    navController.navigate(Screen.CurateProfile.route)
+                                    navigateToCurateProfile()
                                 }
                             }
                         }
