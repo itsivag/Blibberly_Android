@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,6 +62,7 @@ import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly.utils.FontProvider
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
@@ -89,7 +91,7 @@ fun ProfilePhotoScreen(
         install(Storage)
     }
 
-    val avatarBGColorsMap = mapOf<String, Color>(
+    val avatarBGColorsMap = mapOf(
         BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
         BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
         BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
@@ -175,7 +177,9 @@ fun ProfilePhotoScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         avatarBGColorsMap[selectedBGColor]?.let {
@@ -188,7 +192,7 @@ fun ProfilePhotoScreen(
                     )
                 )
                 .height(screenHeight / 2)
-                .background(color = it)
+                .background(color = it, shape = RoundedCornerShape(16.dp))
         }?.let {
             Box(
                 modifier = it,
@@ -209,7 +213,7 @@ fun ProfilePhotoScreen(
                         items(count = 300) {
                             Text(
                                 text = selectedBGEmoji,
-//                                fontFamily = FontProvider.notoEmojiFontFamily,
+                                fontFamily = FontProvider.notoEmojiFontFamily,
                                 fontSize = 16.sp,
                                 modifier = Modifier.padding(4.dp)
                             )

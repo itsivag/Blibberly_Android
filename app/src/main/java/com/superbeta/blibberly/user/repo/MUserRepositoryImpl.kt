@@ -43,14 +43,18 @@ class MUserRepositoryImpl(
         val remoteUserData = getUserEmail()?.let { userRemoteService.getUser(it) }
         val localUserData = db.getUser()
 
+        if (localUserData.email.isEmpty()) {
+            setUserToLocalDb(remoteUserData)
+        }
+
         if (remoteUserData != null) {
             if (remoteUserData != localUserData) {
 //                setUserToLocalDb(remoteUserData)
                 setUserToRemote(localUserData)
             }
         }
-//        Log.i("Database Upload Remote", remoteUserData.toString())
-//        Log.i("Database Upload Local", db.getUser().toString())
+        Log.i("Curr User Remote", remoteUserData.toString())
+        Log.i("Curr User Local", db.getUser().toString())
 
         return localUserData
     }
