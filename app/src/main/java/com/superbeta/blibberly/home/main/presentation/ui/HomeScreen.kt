@@ -57,7 +57,7 @@ fun HomeScreen(
     val screenHeight = config.screenHeightDp.dp
 
     val homeScreenState by messageViewModel.homeScreenState.collectAsStateWithLifecycle()
-    val liveUsers by messageViewModel.usersState.collectAsStateWithLifecycle()
+//    val liveUsers by messageViewModel.usersState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope { Dispatchers.IO }
     val liveUserProfile by messageViewModel.userProfileState.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(pageCount = {
@@ -79,7 +79,7 @@ fun HomeScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = liveUserProfile) {
         scope.launch {
             try {
                 messageViewModel.getUserProfile()
