@@ -44,14 +44,16 @@ import com.superbeta.blibberly_auth.utils.AuthState
 import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.theme.components.PrimaryButton
-import com.superbeta.blibberly_auth.utils.Screen
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignInScreen(
-    modifier: Modifier, navController: NavHostController,
-    authViewModel: AuthViewModel = koinViewModel()
+    modifier: Modifier,
+//    navController: NavHostController,
+    authViewModel: AuthViewModel = koinViewModel(),
+    navigateToSignUp: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
 
     val authState by authViewModel.authState.collectAsStateWithLifecycle()
@@ -168,7 +170,7 @@ fun SignInScreen(
 //                    AuthRepositoryImpl().signInWithEmail(email.text, password.text)
 
                 }.invokeOnCompletion {
-                    navController.navigate(Screen.Home.route)
+                    navigateToHome()
                 }
 //                navController.navigate("otp_enter")
             })
@@ -194,7 +196,7 @@ fun SignInScreen(
             )
         }
 
-        GoogleSignInButton(navController)
+        GoogleSignInButton()
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -204,7 +206,7 @@ fun SignInScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Don't have an account?")
-            TextButton(onClick = { navController.navigate(Screen.SignUp.route) }) {
+            TextButton(onClick = { navigateToSignUp() }) {
                 Text(text = "Sign Up", color = Color.Blue)
             }
         }

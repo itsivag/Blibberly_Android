@@ -34,7 +34,7 @@ import com.superbeta.blibberly_chat.presentation.ui.ChatListScreen
 fun BlibberlyNavHost(
     navController: NavHostController, modifier: Modifier, startDestination: String, route: String
 ) {
-    NavHost(navController = navController, startDestination = startDestination, route = route) {
+    NavHost(navController = navController, startDestination = startDestination) {
 
         authNavGraph(navController, modifier)
         onBoardingGraph(navController, modifier)

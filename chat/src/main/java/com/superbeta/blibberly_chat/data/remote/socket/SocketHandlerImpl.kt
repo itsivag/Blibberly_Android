@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.PrivateMessage
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
+import com.superbeta.blibberly_chat.utils.SOCKET_URL
 import io.socket.client.IO
 import io.socket.client.Socket
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,14 @@ import kotlinx.coroutines.launch
 
 class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferences>) :
     SocketHandler {
+
+    sealed class SocketEvent(val eventName: String) {
+        data object MESSAGE : SocketEvent("private message")
+        data object USERS : SocketEvent("users")
+        data object USER_CONNECTED : SocketEvent("user connected")
+        data object USER_DISCONNECTED : SocketEvent("user disconnected")
+    }
+
     private lateinit var socket: Socket
 
     private val _messageList = MutableStateFlow<MessageDataModel?>(null)
@@ -45,7 +54,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
                     "username" to listOf("sample_sambavam")
                 )
 
-                socket = IO.socket("http://192.168.29.216:3000/", options)
+                socket = IO.socket(SOCKET_URL, options)
                 socket.connect()
 
                 registerMessageListener()
@@ -63,7 +72,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
     override fun registerMessageListener() {
         try {
             Log.i("Message from server", "Started Listening")
-            socket.on("private message") { msg ->
+            socket.on(SocketEvent.MESSAGE.eventName) { msg ->
                 if (!msg.isNullOrEmpty()) {
                     try {
                         val data = Gson().fromJson(msg[0].toString(), PrivateMessage::class.java)
@@ -81,7 +90,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
     override fun registerUsersListener() {
         try {
-            socket.on("users") { users ->
+            socket.on(SocketEvent.USERS.eventName) { users ->
                 if (!users.isNullOrEmpty()) {
                     try {
                         val userList = Gson().fromJson(
@@ -102,7 +111,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
     override fun registerNewUserConnectedListener() {
         try {
-            socket.on("user connected") { newUser ->
+            socket.on(SocketEvent.USER_CONNECTED.eventName) { newUser ->
                 if (!newUser.isNullOrEmpty()) {
                     try {
                         val data = Gson().fromJson(
@@ -125,7 +134,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
     override fun registerUserDisconnectedListener() {
         try {
-            socket.on("user disconnected") { disconnectedUser ->
+            socket.on(SocketEvent.USER_DISCONNECTED.eventName) { disconnectedUser ->
                 if (!disconnectedUser.isNullOrEmpty()) {
                     try {
                         val data = Gson().fromJson(
@@ -163,7 +172,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
         Log.i("private message", jsonMessage)
 
-        socket.emit("private message", jsonMessage)
+        socket.emit(SocketEvent.MESSAGE.eventName, jsonMessage)
     }
 
     override fun emitUserDisconnected() {

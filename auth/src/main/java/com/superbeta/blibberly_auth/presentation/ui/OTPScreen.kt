@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,7 +38,12 @@ import com.superbeta.blibberly_auth.theme.components.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OTPScreen(modifier: Modifier, navController: NavHostController) {
+fun OTPScreen(
+    modifier: Modifier,
+//              navController: NavHostController
+    navigateBack: () -> Unit,
+    navigateToOnBoarding: () -> Unit
+) {
 
     var otpValue by remember {
         mutableStateOf("")
@@ -53,9 +59,11 @@ fun OTPScreen(modifier: Modifier, navController: NavHostController) {
         TopAppBar(
             title = { },
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = {
+                    navigateBack()
+                }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "back"
                     )
                 }
@@ -75,7 +83,7 @@ fun OTPScreen(modifier: Modifier, navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(16.dp), buttonText = "Continue", isButtonEnabled = isButtonEnabled
         ) {
-            navController.navigate("onboarding")
+            navigateToOnBoarding()
         }
     }
 

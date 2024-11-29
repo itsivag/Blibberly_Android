@@ -141,13 +141,15 @@ class MainActivity : ComponentActivity() {
 //                            AuthState.LOADING ->
 //                            AuthState.IDLE ->
                                     AuthState.USER_REGISTERED -> Screen.Home.route
-                                    else -> Screen.SignIn.route
+//                                    else ->
+                                    else -> "AUTH"
                                 }
 
                             BlibberlyNavHost(
                                 navController = navController,
                                 modifier = Modifier.padding(it),
-                                startDestination = startNavRoute
+                                startDestination = startNavRoute,
+                                route = "AUTH"
                             )
                         }
                     }

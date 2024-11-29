@@ -14,7 +14,12 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, modifier: Mod
     navigation(startDestination = Screen.SignIn.route, route = "AUTH") {
 
         composable(Screen.SignIn.route) {
-            SignInScreen(modifier, navController)
+            SignInScreen(modifier, navigateToHome = {
+                navController.navigate(Screen.Home.route)
+
+            }, navigateToSignUp = {
+                navController.navigate(Screen.SignUp.route)
+            })
         }
 
         composable(Screen.SignUp.route) {
@@ -22,7 +27,10 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, modifier: Mod
         }
 
         composable(Screen.OTPEnter.route) {
-            OTPScreen(modifier, navController)
+            OTPScreen(
+                modifier,
+                navigateBack = { navController.popBackStack() },
+                navigateToOnBoarding = { navController.navigate(Screen.OnBoarding.route) })
         }
 
     }

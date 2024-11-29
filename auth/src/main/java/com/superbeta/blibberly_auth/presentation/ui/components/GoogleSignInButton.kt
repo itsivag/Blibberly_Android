@@ -17,7 +17,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun GoogleSignInButton(
-    navController: NavHostController,
+//    navController: NavHostController,
     authViewModel: AuthViewModel = koinViewModel()
 ) {
     val scope = rememberCoroutineScope()
