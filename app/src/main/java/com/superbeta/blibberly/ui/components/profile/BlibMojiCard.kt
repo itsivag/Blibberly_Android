@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -47,7 +50,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
     val screenHeight = config.screenHeightDp.dp
     val overLayTextColor = Color.White
 
-    val avatarBGColorsMap = mapOf<String, Color>(
+    val avatarBGColorsMap = mapOf(
         BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
         BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
         BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
@@ -60,7 +63,12 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
         BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
     )
 
-    Box(modifier = Modifier.height(screenHeight / 2)) {
+    Box(
+        modifier = Modifier
+            .height(screenHeight / 2)
+            .background(color = Color.White, shape = RoundedCornerShape(16.dp))
+            .padding(12.dp)
+    ) {
         avatarBGColorsMap[userDataModel.photoMetaData.bgColor]?.let {
             Modifier
                 .fillMaxWidth()
@@ -70,7 +78,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                     )
                 )
                 .height(screenHeight / 2)
-                .background(color = it)
+                .background(color = it, shape = RoundedCornerShape(16.dp))
         }?.let {
             Box(
                 modifier = it, contentAlignment = Alignment.BottomCenter
@@ -83,15 +91,17 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                 ) {
                     LazyHorizontalStaggeredGrid(
                         rows = StaggeredGridCells.Adaptive(minSize = 44.dp),
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize(),
                         userScrollEnabled = false
                     ) {
                         items(count = 300) {
                             Text(
                                 text = userDataModel.photoMetaData.bgEmoji,
-//                                fontFamily = FontProvider.notoEmojiFontFamily,
+                                fontFamily = FontProvider.notoEmojiFontFamily,
                                 fontSize = 16.sp,
-                                modifier = Modifier.padding(4.dp)
+                                modifier = Modifier.padding(4.dp),
+                                color = Color.Gray
                             )
                         }
                     }
@@ -99,7 +109,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
 
                 SubcomposeAsyncImage(
                     model = userDataModel.photoMetaData.blibmojiUrl,
-                    contentDescription = "",
+                    contentDescription = userDataModel.name + "'s Blibmoji",
                 ) {
                     val state = painter.state
                     if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
@@ -138,7 +148,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
-            Row(modifier = Modifier.padding(8.dp)) {
+            Row(modifier = Modifier.padding(horizontal = 8.dp)) {
                 //age and gender
                 Text(
                     text = userDataModel.age.toString(), fontSize = 28.sp, color = overLayTextColor
@@ -148,16 +158,19 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                 Spacer(modifier = Modifier.weight(1f))
 
                 //chat button
-                IconButton(
-                    onClick = {
-                        navigateToChat()
-                    }, colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White)
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.chat),
-                        contentDescription = "Chat",
-                    )
-                }
+//                IconButton(
+//                    onClick = {
+//                        navigateToChat()
+//                    }, colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White)
+//                ) {
+//                    Icon(
+//                        imageVector = ImageVector.vectorResource(id = R.drawable.chat),
+//                        contentDescription = "Chat",
+//                    )
+//                }
+                //city
+                Text(text = "Chennai,TN", color = overLayTextColor, fontSize = 22.sp)
+
             }
         }
 

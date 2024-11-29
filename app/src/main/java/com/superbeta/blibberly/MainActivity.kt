@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
 
                         Scaffold(topBar = {
                             if (isTopBarVisible) {
-                                BlibberlyTopAppBar(navController)
+                                BlibberlyTopAppBar()
                             }
                         }, bottomBar = {
                             if (isBottomNavBarVisible) {
