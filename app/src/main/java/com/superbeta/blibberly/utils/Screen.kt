@@ -17,4 +17,5 @@ sealed class Screen(val route: String) {
     data object AboutMe : Screen("about_me")
     data object CurateProfile : Screen("curate_Profiles")
     data object UserProfile : Screen("user_profile")
+    data object NoUsers : Screen("no_users")
 }

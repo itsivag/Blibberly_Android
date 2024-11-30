@@ -1,7 +1,13 @@
 package com.superbeta.blibberly.navigation
 
 import android.os.Build
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -10,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.superbeta.blibberly.home.filter.FilterScreen
 import com.superbeta.blibberly.home.main.presentation.ui.HomeScreen
+import com.superbeta.blibberly.home.main.presentation.ui.NoUsersScreen
 import com.superbeta.blibberly.home.main.presentation.ui.UserProfileScreen
 import com.superbeta.blibberly.notification.NotificationConsentScreen
 import com.superbeta.blibberly.profile.CurrUserProfileScreen
@@ -24,7 +31,7 @@ fun BlibberlyNavHost(
 
         authNavGraph(navController, modifier)
         onBoardingGraph(navController, modifier)
-        chatGraph(navController,modifier)
+        chatGraph(navController, modifier)
 
         composable(Screen.NotificationConsent.route) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -65,7 +72,7 @@ fun BlibberlyNavHost(
         composable(Screen.Home.route) {
             HomeScreen(modifier, navigateToChat = { email, name ->
                 navController.navigate(Screen.Message.route + "/$email/$name")
-            })
+            }, navigateToNoUsers = { navController.navigate(Screen.NoUsers.route) })
         }
 
         composable(Screen.Filter.route) {
@@ -74,6 +81,10 @@ fun BlibberlyNavHost(
 
         composable(Screen.CurrUserProfile.route) {
             CurrUserProfileScreen(modifier)
+        }
+
+        composable(Screen.NoUsers.route) {
+            NoUsersScreen(modifier)
         }
     }
 }

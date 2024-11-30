@@ -3,8 +3,15 @@ package com.superbeta.blibberly.ui.components.profile
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -14,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import com.google.gson.Gson
 
 
@@ -38,12 +46,14 @@ fun InterestsCard(interests: String) {
 //            modifier = Modifier.padding(8.dp)
             color = Color.DarkGray
 
-            )
+        )
 
-        LazyRow(
+        LazyHorizontalStaggeredGrid(
+            rows = StaggeredGridCells.Adaptive(minSize = 50.dp),
             modifier = Modifier
                 .fillMaxWidth()
-//                .padding(bottom = 8.dp),
+                .heightIn(max = 100.dp),
+            userScrollEnabled = false
         ) {
             items(count = interestsList.size) { index ->
                 Text(

@@ -19,7 +19,7 @@ import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 
 @Composable
-fun ChatOrSkipCard(navigateToChat: () -> Unit) {
+fun ChatOrSkipCard(navigateToChat: () -> Unit, skipProfile: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -30,6 +30,7 @@ fun ChatOrSkipCard(navigateToChat: () -> Unit) {
         IconButton(
             modifier = Modifier.size(72.dp),
             onClick = {
+                skipProfile()
             },
             colors = IconButtonDefaults.iconButtonColors(containerColor = ColorDisabled)
         ) {

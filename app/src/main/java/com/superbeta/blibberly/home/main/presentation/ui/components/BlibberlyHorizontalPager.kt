@@ -11,6 +11,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
@@ -20,6 +21,7 @@ import com.superbeta.blibberly.ui.components.profile.BlibMojiCard
 import com.superbeta.blibberly.ui.components.profile.InterestsCard
 import com.superbeta.blibberly.ui.components.profile.LanguageCard
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -28,9 +30,10 @@ fun BlibberlyHorizontalPager(
     pagerState: PagerState,
     modifier: Modifier,
     navigateToChat: (String, String) -> Unit,
-//    navController: NavHostController,
-    liveUsers: List<UserDataModel>
+    liveUsers: List<UserDataModel>,
+    navigateToNoUsers: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     HorizontalPager(
         state = pagerState,
         modifier = modifier.background(color = MaterialTheme.colorScheme.background)
@@ -67,6 +70,14 @@ fun BlibberlyHorizontalPager(
                             currUser.email,
                             currUser.name
                         )
+                    }, skipProfile = {
+                        scope.launch {
+                            if (pagerState.currentPage + 1 >= pagerState.pageCount) {
+                                navigateToNoUsers()
+                            } else {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            }
+                        }
                     })
                 }
             }

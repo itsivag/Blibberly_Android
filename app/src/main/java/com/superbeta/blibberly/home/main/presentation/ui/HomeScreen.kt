@@ -34,6 +34,8 @@ fun HomeScreen(
 //    homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
 //        factory = HomeViewModel.Factory
 //    ),
+    navigateToNoUsers: () -> Unit
+
 ) {
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
@@ -75,7 +77,13 @@ fun HomeScreen(
     }
     when (homeScreenState) {
         HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS -> {
-            BlibberlyHorizontalPager(pagerState, modifier, navigateToChat, liveUserProfile)
+            BlibberlyHorizontalPager(
+                pagerState,
+                modifier,
+                navigateToChat,
+                liveUserProfile,
+                navigateToNoUsers
+            )
         }
 
         HomeScreenState.LIVE_USERS_EMPTY -> {
@@ -93,7 +101,6 @@ fun HomeScreen(
         }
     }
 }
-
 
 
 enum class BLIBMOJI_BG_COLORS {
