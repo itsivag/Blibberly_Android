@@ -10,7 +10,7 @@ import retrofit2.create
 
 class NotificationRepoImpl : NotificationRepo {
     private val firebaseMessaging = Firebase.messaging
-    private val broadcast = true
+//    private val broadcast = true
 
     private val api: FCMApi = Retrofit.Builder().baseUrl("http://192.168.29.216:8080/")
         .addConverterFactory(GsonConverterFactory.create()).build().create()
@@ -26,16 +26,16 @@ class NotificationRepoImpl : NotificationRepo {
         fcmToken: String,
         notificationBody: SendNotificationDto
     ) {
-        val notificationDto = SendNotificationDto(
-            to = if (broadcast) null else fcmToken,
-            notificationBody = NotificationBody("sample title", "sample body")
-        )
+//        val notificationDto = SendNotificationDto(
+//            to = fcmToken,
+//            notificationBody = notificationBody
+//        )
         try {
-            if (broadcast) {
-                api.broadcast(notificationDto)
-            } else {
-                api.sendNotification(notificationDto)
-            }
+//            if (broadcast) {
+//                api.broadcast(notificationDto)
+//            } else {
+            api.sendNotification(notificationBody)
+//            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -81,15 +81,14 @@ class MessagesRepoImpl(
             Log.i("Message to be sent", _messageState.value.toString())
 
             val fcmToken = notificationService.getFCMToken()
-            Log.i("FCM Token", fcmToken)
 
             notificationService.sendNotification(
                 fcmToken = fcmToken,
                 notificationBody = SendNotificationDto(
                     to = fcmToken,
                     notificationBody = NotificationBody(
-                        title = "Notification from nottu",
-                        body = "Notification Body From Nottu"
+                        title = message.senderEmail,
+                        body = message.content
                     )
                 )
             )
