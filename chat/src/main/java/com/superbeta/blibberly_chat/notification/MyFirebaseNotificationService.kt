@@ -3,7 +3,6 @@ package com.superbeta.blibberly_chat.notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -24,11 +23,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
 //        message.notification?.let { sendNotification(it) }
-        sendNotification()
-        Log.i("Notification Received", message.toString())
+        message.notification?.let { sendNotification(it) }
+        Log.i("Notification Received", message.notification?.body.toString())
+//        Log.i("Notification Data Received", message.data.toString())
     }
 
-    private fun sendNotification() {
+    private fun sendNotification(notification: RemoteMessage.Notification) {
         Log.i("Sending Notification", ".......")
 
         val channelId = "default_channel_id"
@@ -64,8 +64,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Build the notification
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.chat) // Replace with your notification icon
-            .setContentTitle("New Message")
-            .setContentText("You have a new notification")
+            .setContentTitle(notification.title)
+            .setContentText(notification.body)
             .setAutoCancel(true)
 //            .setContentIntent(pendingIntent)
 
