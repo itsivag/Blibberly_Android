@@ -10,6 +10,7 @@ import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
 import com.superbeta.blibberly_chat.notification.NotificationBody
 import com.superbeta.blibberly_chat.notification.NotificationRepo
 import com.superbeta.blibberly_chat.notification.SendNotificationDto
+import com.superbeta.blibberly_chat.utils.formatTimeStamp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,22 +55,10 @@ class MessagesRepoImpl(
         userEmail: String,
         userId: String?
     ): StateFlow<List<MessageDataModel>> {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-
-        val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        outputFormat.timeZone = TimeZone.getDefault()
 
         val formattedTimeStamp = db.getMessages(userEmail).map { message ->
             try {
-                val date = inputFormat.parse(message.timeStamp)
-                val formattedDate = date?.let { outputFormat.format(it) }
-                Log.i("DATE FORMATED", formattedDate ?: "NULL")
-                if (formattedDate != null) {
-                    message.copy(timeStamp = formattedDate)
-                } else {
-                    message
-                }
+                formatTimeStamp(message)
             } catch (e: Exception) {
                 e.printStackTrace()
                 message
@@ -82,18 +71,21 @@ class MessagesRepoImpl(
 
     override suspend fun sendMessage(userId: String, message: MessageDataModel) {
         socketHandler.emitMessage(userId, message)
-//        _messageState.value += message
-//        saveMessagesToLocalDb(_messageState.value)
+
         saveSingleMessageToDb(userId, message)
+        val formattedMessage = formatTimeStamp(message)
+        _messageState.value += formattedMessage
+
         Log.i("Message to be sent", _messageState.value.toString())
-        val fcmToken = notificationService.getFCMToken()
-        notificationService.sendNotification(
-            fcmToken = fcmToken,
-            notificationBody = SendNotificationDto(
-                to = "",
-                notificationBody = NotificationBody(title = "", body = "")
-            )
-        )
+
+//        val fcmToken = notificationService.getFCMToken()
+//        notificationService.sendNotification(
+//            fcmToken = fcmToken,
+//            notificationBody = SendNotificationDto(
+//                to = "",
+//                notificationBody = NotificationBody(title = "", body = "")
+//            )
+//        )
     }
 
 

@@ -69,11 +69,12 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     suspend fun sendMessage(userEmail: String, userId: String, data: MessageDataModel) {
         viewModelScope.launch {
             messagesRepo.sendMessage(userId, data)
-            _messageState.value += data
+//            _messageState.value += data
         }
-        viewModelScope.launch {
-            collectMessages(userEmail = userEmail, userId = userId)
-        }
+
+//        viewModelScope.launch {
+//            collectMessages(userEmail = userEmail, userId = userId)
+//        }
     }
 
     suspend fun getUsers() {

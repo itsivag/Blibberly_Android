@@ -45,6 +45,7 @@ import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.presentation.ui.components.BlibMojiCircleAvatar
 import com.superbeta.blibberly_chat.presentation.ui.components.ProfileOpsMessageComponent
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -76,28 +77,25 @@ fun MessageScreen(
     }
 
     LaunchedEffect(key1 = true) {
-        currUserProfile =
-            receiverUserEmail?.let { messageViewModel.getSpecificUserProfileWithEmail(email = it) }
+        scope.launch(IO) {
+            currUserProfile =
+                messageViewModel.getSpecificUserProfileWithEmail(email = receiverUserEmail)
+        }
     }
 
     LaunchedEffect(key1 = true) {
-        scope.launch {
+        scope.launch(IO) {
             userPreferencesDataStore.data.collect { preferences ->
                 currUser = preferences[stringPreferencesKey("user_email")]
             }
         }
     }
 
-    LaunchedEffect(true) {
-        scope.launch {
-            if (receiverUserEmail != null) {
-                receiverUserName?.let { userId ->
-                    messageViewModel.collectMessages(
-                        userEmail = receiverUserEmail,
-                        userId = userId
-                    )
-                }
-            }
+    LaunchedEffect(messages) {
+        scope.launch(IO) {
+            messageViewModel.collectMessages(
+                userEmail = receiverUserEmail, userId = receiverUserName
+            )
         }
     }
 
@@ -116,8 +114,7 @@ fun MessageScreen(
                 }
             },
             title = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Row(verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
@@ -154,9 +151,7 @@ fun MessageScreen(
             ) {
                 item {
                     ProfileOpsMessageComponent(
-                        receiverUserName,
-                        profileViewModel,
-                        receiverUserEmail
+                        receiverUserName, profileViewModel, receiverUserEmail
                     )
                 }
                 items(count = messages.size) { i ->
