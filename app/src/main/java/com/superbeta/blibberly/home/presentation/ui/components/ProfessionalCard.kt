@@ -1,6 +1,5 @@
-package com.superbeta.blibberly.ui.components.profile
+package com.superbeta.blibberly.home.presentation.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -11,10 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 
 @Composable
-fun AboutCard(user: UserDataModel) {
+fun ProfessionalCard() {
     Card(
         colors = CardColors(
             containerColor = Color.White,
@@ -27,15 +25,15 @@ fun AboutCard(user: UserDataModel) {
             .padding(12.dp)
     ) {
         Text(
-            text = "About me",
+            text = "What I Do",
             color = Color.DarkGray,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-
         Text(
-            text = user.aboutMe,
+            text = "Study, Anna University, Chennai",
             style = MaterialTheme.typography.titleMedium,
         )
     }
+
 }

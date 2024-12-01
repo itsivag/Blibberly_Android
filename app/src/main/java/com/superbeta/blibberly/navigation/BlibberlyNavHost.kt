@@ -1,23 +1,16 @@
 package com.superbeta.blibberly.navigation
 
 import android.os.Build
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.superbeta.blibberly.home.filter.FilterScreen
-import com.superbeta.blibberly.home.main.presentation.ui.HomeScreen
-import com.superbeta.blibberly.home.main.presentation.ui.NoUsersScreen
-import com.superbeta.blibberly.home.main.presentation.ui.UserProfileScreen
+import com.superbeta.blibberly.home.presentation.ui.HomeScreen
+import com.superbeta.blibberly.home.presentation.ui.NoUsersScreen
+import com.superbeta.blibberly.home.presentation.ui.UserProfileScreen
 import com.superbeta.blibberly.notification.NotificationConsentScreen
 import com.superbeta.blibberly.profile.CurrUserProfileScreen
 import com.superbeta.blibberly.utils.Screen
@@ -75,9 +68,9 @@ fun BlibberlyNavHost(
             }, navigateToNoUsers = { navController.navigate(Screen.NoUsers.route) })
         }
 
-        composable(Screen.Filter.route) {
-            FilterScreen(modifier)
-        }
+//        composable(Screen.Filter.route) {
+//            FilterScreen(modifier)
+//        }
 
         composable(Screen.CurrUserProfile.route) {
             CurrUserProfileScreen(modifier)

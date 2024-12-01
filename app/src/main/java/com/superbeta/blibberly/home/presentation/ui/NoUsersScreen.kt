@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.home.main.presentation.ui
+package com.superbeta.blibberly.home.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

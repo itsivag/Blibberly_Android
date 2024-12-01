@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.home.main.presentation.viewModel
+package com.superbeta.blibberly.home.presentation.viewModel
 //
 //import android.app.Application
 //import android.util.Log

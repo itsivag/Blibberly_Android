@@ -33,7 +33,7 @@ fun LanguageCard(user: UserDataModel) {
     ) {
         Text(
             text = "Can Speak In",
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.bodyMedium,
             color = Color.DarkGray
 //            modifier = Modifier.padding(bottom = 8.dp)
         )

@@ -39,7 +39,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly.home.main.presentation.ui.BLIBMOJI_BG_COLORS
+import com.superbeta.blibberly.home.presentation.ui.BLIBMOJI_BG_COLORS
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 

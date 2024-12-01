@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.home.main.presentation.ui
+package com.superbeta.blibberly.home.presentation.ui
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.superbeta.blibberly.home.main.presentation.ui.components.BlibberlyHorizontalPager
+import com.superbeta.blibberly.home.presentation.ui.components.BlibberlyHorizontalPager
 import com.superbeta.blibberly.ui.components.HomeScreenShimmerEffect
 import com.superbeta.blibberly_chat.presentation.viewModels.HomeScreenState
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel

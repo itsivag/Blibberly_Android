@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.home.main.presentation.ui.components
+package com.superbeta.blibberly.home.presentation.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -59,9 +59,10 @@ fun BlibberlyHorizontalPager(
                 item {
                     BlibMojiCard(userDataModel = currUser,
                         navigateToChat = { navigateToChat(currUser.email, currUser.name) })
-//                        navigateToChat = { navController.navigate(Screen.Message.route + "/${currUser.email}/${currUser.name}") })
                 }
                 item { AboutCard(user = currUser) }
+                item { LookingForCard() }
+                item { ProfessionalCard() }
                 item { LanguageCard(user = currUser) }
                 item { InterestsCard(interests = currUser.interests) }
                 item {
@@ -84,4 +85,7 @@ fun BlibberlyHorizontalPager(
         }
     }
 }
+
+
+
 

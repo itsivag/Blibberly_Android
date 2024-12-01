@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.home.main.domain
+package com.superbeta.blibberly.home.domain
 
 import com.superbeta.blibberly.user.data.model.UserDataModel
 

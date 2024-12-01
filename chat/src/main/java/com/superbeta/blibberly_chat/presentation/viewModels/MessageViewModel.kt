@@ -7,6 +7,7 @@ import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.domain.MessagesRepo
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -47,10 +48,6 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         viewModelScope.launch {
             messagesRepo.subscribeToMessages()
         }
-
-//        viewModelScope.launch {
-//            collectMessages()
-//        }
     }
 
     private fun getCurrentUserEmail() {
