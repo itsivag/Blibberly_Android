@@ -71,8 +71,8 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
             socket.on(SocketEvents.MessageEvent.eventName) { msg ->
                 if (!msg.isNullOrEmpty()) {
                     try {
-                        val data = Gson().fromJson(msg[0].toString(), PrivateMessage::class.java)
-                        _messageList.value = data.content
+                        val data = Gson().fromJson(msg[0].toString(), MessageDataModel::class.java)
+                        _messageList.value = data
                         Log.i("Message from server", _messageList.value.toString())
                     } catch (e: Exception) {
                         Log.e("Invalid Message JSON", e.toString())
@@ -117,7 +117,7 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
                         val newUserList = _usersList.value.toMutableList()
                         newUserList.add(data)
                         _usersList.value = newUserList
-                        Log.i("New user connected", data.toString())
+                        Log.i("New user connected", _usersList.value.toString())
                     } catch (e: Exception) {
                         Log.e("Invalid new User JSON", e.toString())
                     }
