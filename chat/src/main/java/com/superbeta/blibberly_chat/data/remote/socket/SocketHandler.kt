@@ -9,7 +9,7 @@ interface SocketHandler {
     suspend fun connectWithSocketBackend()
 
     fun getMessageList(): StateFlow<MessageDataModel?>
-    fun getUsers(): StateFlow<List<SocketUserDataModelItem>>
+    fun getUsers(): StateFlow<List<String>>
     fun getSocket(): Socket
 
 

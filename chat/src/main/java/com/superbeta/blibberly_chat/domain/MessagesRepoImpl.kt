@@ -4,7 +4,6 @@ import android.util.Log
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.local.MessagesDao
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.data.remote.socket.SocketHandler
 import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
 import com.superbeta.blibberly_chat.notification.NotificationBody
@@ -17,9 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
 
 class MessagesRepoImpl(
     private val db: MessagesDao,
@@ -96,11 +92,11 @@ class MessagesRepoImpl(
     }
 
 
-    override fun getUsers(): StateFlow<List<SocketUserDataModelItem>> {
+    override fun getUsers(): StateFlow<List<String>> {
         return socketHandler.getUsers()
     }
 
-    override suspend fun getUsersProfile(liveUsers: List<SocketUserDataModelItem>): StateFlow<List<UserDataModel>> {
+    override suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<UserDataModel>> {
         Log.i("live user raw list", liveUsers.toString())
         try {
 //            for (email in liveUsers) {

@@ -1,3 +1,3 @@
 package com.superbeta.blibberly_chat.utils
 
-const val SOCKET_URL = "https://blibberly-chat-9ljt8.ondigitalocean.app/"
+const val SOCKET_URL = "http://192.168.29.216:8081"

@@ -11,9 +11,9 @@ interface MessagesRepo {
     suspend fun getMessages(userEmail: String, userId: String?): StateFlow<List<MessageDataModel>>
     suspend fun sendMessage(userId: String, message: MessageDataModel)
 
-    fun getUsers(): StateFlow<List<SocketUserDataModelItem>>
+    fun getUsers(): StateFlow<List<String>>
 
-    suspend fun getUsersProfile(liveUsers: List<SocketUserDataModelItem>): StateFlow<List<UserDataModel>>
+    suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<UserDataModel>>
     suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>)
 
     //    suspend fun getMessagesFromLocalDb(userId: String)

@@ -30,8 +30,8 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
     val messageState: StateFlow<List<MessageDataModel>> = _messageState.asStateFlow()
 
-    private val _usersState = MutableStateFlow<List<SocketUserDataModelItem>>(emptyList())
-    val usersState: StateFlow<List<SocketUserDataModelItem>> = _usersState.asStateFlow()
+    private val _usersState = MutableStateFlow<List<String>>(emptyList())
+    val usersState: StateFlow<List<String>> = _usersState.asStateFlow()
 
     private val _userProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
     val userProfileState: StateFlow<List<UserDataModel>> =
