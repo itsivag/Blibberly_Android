@@ -18,7 +18,7 @@ interface SocketHandler {
     fun registerNewUserConnectedListener()
     fun registerUserDisconnectedListener()
 
-    fun emitMessage(userEmail: String, data: MessageDataModel)
+    fun emitMessage(data: MessageDataModel)
     fun emitUserDisconnected()
 
     fun disconnectSocket()

@@ -5,11 +5,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.gson.Gson
-import com.itsivag.kotlin_chat_server.socket.SocketEvents
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
-import com.superbeta.blibberly_chat.data.model.PrivateMessage
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.utils.SOCKET_URL
+import io.socket.client.Ack
 import io.socket.client.IO
 import io.socket.client.Socket
 import kotlinx.coroutines.CoroutineScope
@@ -159,16 +157,11 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
     override fun getSocket(): Socket = socket
 
 
-    override fun emitMessage(userEmail: String, data: MessageDataModel) {
-//        val message = mapOf(
-//            "content" to data,
-//            "to" to data.receiverEmail
-//        )
-//        val jsonMessage = Gson().toJson(message)
-//
-//        Log.i("private message", jsonMessage)
-
-        socket.emit(SocketEvents.MessageEvent.eventName, data)
+    override fun emitMessage(data: MessageDataModel) {
+        val jsonMessage = Gson().toJson(data)
+        socket.emit(SocketEvents.MessageEvent.eventName, jsonMessage, Ack { a ->
+            Log.i("Ack", a.firstOrNull().toString())
+        })
     }
 
     override fun emitUserDisconnected() {

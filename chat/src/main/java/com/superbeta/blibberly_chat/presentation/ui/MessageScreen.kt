@@ -1,5 +1,6 @@
 package com.superbeta.blibberly_chat.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -78,6 +79,10 @@ fun MessageScreen(
 
     LaunchedEffect(key1 = true) {
         scope.launch(IO) {
+            Log.i(
+                "Message Screen",
+                "Message To Be Sent:  receiverEmail -> $receiverUserEmail "
+            )
             currUserProfile =
                 messageViewModel.getSpecificUserProfileWithEmail(email = receiverUserEmail)
         }
@@ -165,9 +170,8 @@ fun MessageScreen(
             }
             currUser?.let { currUserEmail ->
                 MessageTextField(
-                    receiverUserId = receiverUserEmail,
-                    currUserId = currUserEmail,
-                    receiverUserEmail = receiverUserEmail
+                    receiverEmail = receiverUserEmail,
+                    currUserEmail = currUserEmail,
                 )
             }
         }

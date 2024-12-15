@@ -1,4 +1,4 @@
-package com.itsivag.kotlin_chat_server.socket
+package com.superbeta.blibberly_chat.data.remote.socket
 
 sealed class SocketEvents(val eventName: String) {
     data object ConnectionEvent : SocketEvents("connection")

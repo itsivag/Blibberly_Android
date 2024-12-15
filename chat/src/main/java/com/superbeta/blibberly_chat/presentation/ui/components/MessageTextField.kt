@@ -33,22 +33,21 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MessageTextField(
-    receiverUserId: String,
-    currUserId: String,
+    receiverEmail: String,
+    currUserEmail: String,
     viewModel: MessageViewModel = koinViewModel(),
-    receiverUserEmail: String,
 ) {
     var message by remember {
         mutableStateOf(TextFieldValue())
     }
 
     val currentTimeStamp = Clock.System.now()
-    val messageId = currentTimeStamp.toString() + currUserId
+    val messageId = currentTimeStamp.toString() + currUserEmail
     val data = MessageDataModel(
         messageId = messageId,
         content = message.text,
-        senderEmail = currUserId,
-        receiverEmail = receiverUserId,
+        senderEmail = currUserEmail,
+        receiverEmail = receiverEmail,
         timeStamp = currentTimeStamp.toString(),
         isDelivered = false,
         isRead = false
@@ -84,8 +83,6 @@ fun MessageTextField(
             onClick = {
                 scope.launch {
                     viewModel.sendMessage(
-                        userEmail = receiverUserEmail,
-                        userId = currUserId,
                         data = data
                     )
                     message = TextFieldValue("")

@@ -35,6 +35,7 @@ fun BlibberlyHorizontalPager(
 ) {
     val scope = rememberCoroutineScope()
     HorizontalPager(
+        userScrollEnabled = false,
         state = pagerState,
         modifier = modifier.background(color = MaterialTheme.colorScheme.background)
     ) { page ->

@@ -65,16 +65,16 @@ class MessagesRepoImpl(
         return _messageState.asStateFlow()
     }
 
-    override suspend fun sendMessage(userId: String, message: MessageDataModel) {
+    override suspend fun sendMessage(message: MessageDataModel) {
         CoroutineScope(IO).launch {
 
-            socketHandler.emitMessage(userId, message)
+            socketHandler.emitMessage(message)
+            saveSingleMessageToDb(message)
 
-            saveSingleMessageToDb(userId, message)
             val formattedMessage = formatTimeStamp(message)
             _messageState.value += formattedMessage
 
-            Log.i("Message to be sent", _messageState.value.toString())
+            Log.i("MessageRepoImpl", "Message to be sent" + _messageState.value.last().toString())
 
             val fcmToken = notificationService.getFCMToken()
 
@@ -127,7 +127,7 @@ class MessagesRepoImpl(
         db.saveMessages(messages)
     }
 
-    private suspend fun saveSingleMessageToDb(userId: String, message: MessageDataModel) {
+    private suspend fun saveSingleMessageToDb(message: MessageDataModel) {
         db.saveSingleMessage(message)
     }
 

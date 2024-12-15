@@ -5,9 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import com.superbeta.blibberly_chat.domain.MessagesRepo
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -63,9 +61,13 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
-    suspend fun sendMessage(userEmail: String, userId: String, data: MessageDataModel) {
+    suspend fun sendMessage(data: MessageDataModel) {
         viewModelScope.launch {
-            messagesRepo.sendMessage(userId, data)
+            messagesRepo.sendMessage(data)
+//            Log.i(
+//                "MessageViewModel",
+//                "data.receiverEmail -> ${data.receiverEmail}  "
+//            )
 //            _messageState.value += data
         }
 

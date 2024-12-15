@@ -9,7 +9,7 @@ interface MessagesRepo {
     suspend fun connectSocketToBackend()
     suspend fun subscribeToMessages()
     suspend fun getMessages(userEmail: String, userId: String?): StateFlow<List<MessageDataModel>>
-    suspend fun sendMessage(userId: String, message: MessageDataModel)
+    suspend fun sendMessage(message: MessageDataModel)
 
     fun getUsers(): StateFlow<List<String>>
 
