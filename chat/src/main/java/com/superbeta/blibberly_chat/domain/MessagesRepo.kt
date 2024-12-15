@@ -2,13 +2,16 @@ package com.superbeta.blibberly_chat.domain
 
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
-import com.superbeta.blibberly_chat.data.model.SocketUserDataModelItem
 import kotlinx.coroutines.flow.StateFlow
 
 interface MessagesRepo {
     suspend fun connectSocketToBackend()
     suspend fun subscribeToMessages()
-    suspend fun getMessages(userEmail: String, userId: String?): StateFlow<List<MessageDataModel>>
+    suspend fun getMessages(
+        currUserEmail: String?,
+        receiverEmail: String
+    ): StateFlow<List<MessageDataModel>>
+
     suspend fun sendMessage(message: MessageDataModel)
 
     fun getUsers(): StateFlow<List<String>>

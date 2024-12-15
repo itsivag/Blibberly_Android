@@ -8,8 +8,8 @@ import com.superbeta.blibberly_chat.data.model.MessageDataModel
 
 @Dao
 interface MessagesDao {
-    @Query("SELECT * FROM message WHERE senderEmail = :userEmail OR receiverEmail = :userEmail")
-    suspend fun getMessages(userEmail: String): List<MessageDataModel>
+    @Query("SELECT * FROM message WHERE (senderEmail = :currUserEmail AND receiverEmail = :receiverEmail) OR (senderEmail = :receiverEmail AND receiverEmail = :currUserEmail)")
+    suspend fun getMessages(currUserEmail: String, receiverEmail: String): List<MessageDataModel>
 //    suspend fun getMessages(): List<MessageDataModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

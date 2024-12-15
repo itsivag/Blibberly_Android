@@ -48,20 +48,28 @@ class MessagesRepoImpl(
     }
 
     override suspend fun getMessages(
-        userEmail: String,
-        userId: String?
+        currUserEmail: String?,
+        receiverEmail: String
     ): StateFlow<List<MessageDataModel>> {
-
-        val formattedTimeStamp = db.getMessages(userEmail).map { message ->
-            try {
-                formatTimeStamp(message)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                message
+        Log.i(
+            "Email DB",
+            "Curr -> $currUserEmail " +
+                    "Receiver -> $receiverEmail"
+        )
+        val formattedTimeStamp = currUserEmail?.let {
+            db.getMessages(it, receiverEmail).map { message ->
+                try {
+                    formatTimeStamp(message)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    message
+                }
             }
         }
 
-        _messageState.value = formattedTimeStamp
+        if (formattedTimeStamp != null) {
+            _messageState.value = formattedTimeStamp
+        }
         return _messageState.asStateFlow()
     }
 

@@ -96,10 +96,11 @@ fun MessageScreen(
         }
     }
 
-    LaunchedEffect(messages) {
+    LaunchedEffect(messages, currUser) {
         scope.launch(IO) {
             messageViewModel.collectMessages(
-                userEmail = receiverUserEmail, userId = receiverUserName
+                currUserEmail = currUser,
+                receiverEmail = receiverUserEmail
             )
         }
     }
