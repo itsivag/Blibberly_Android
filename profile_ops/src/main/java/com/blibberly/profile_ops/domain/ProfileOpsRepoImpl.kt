@@ -1,49 +1,42 @@
 package com.blibberly.profile_ops.domain
 
+import android.util.Log
 import com.blibberly.profile_ops.data.local.ProfileOpsDao
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
+import com.blibberly.profile_ops.data.remote.ProfileOpsRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ProfileOpsRepoImpl(private val db: ProfileOpsDao) : ProfileOpsRepo {
+class ProfileOpsRepoImpl(
+    private val db: ProfileOpsDao,
+    private val profileOpsRemoteService: ProfileOpsRemoteService
+) : ProfileOpsRepo {
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
-    private val _matchedProfilesState = MutableStateFlow<List<ProfileOpsDataModel>>(emptyList())
-    private val _likedProfilesState = MutableStateFlow<List<ProfileOpsDataModel>>(emptyList())
 
-    override suspend fun getProfileOps(userId: String): StateFlow<ProfileOpsDataModel?> {
+    override suspend fun getProfileOps(userEmail: String): StateFlow<ProfileOpsDataModel?> {
         try {
-            _profileOpsState.value = db.getProfileOps(userId)
+            val remoteProfileOps = profileOpsRemoteService.getProfileOps(userEmail)
+            val localProfileOps = db.getProfileOps(userEmail)
+            if (remoteProfileOps != localProfileOps) {
+                db.setProfileOps(remoteProfileOps)
+                _profileOpsState.value = remoteProfileOps
+            } else {
+                _profileOpsState.value = localProfileOps
+            }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.i("ProfileOpsRepoImpl", "Error getting profile ops: $e")
         }
+
         return _profileOpsState.asStateFlow()
     }
 
     override suspend fun setProfileOps(profileOpsDataModel: ProfileOpsDataModel) {
         try {
             db.setProfileOps(profileOpsDataModel)
+            profileOpsRemoteService.setProfileMetadata(profileOpsDataModel)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.i("ProfileOpsRepoImpl", "Error setting profile ops: $e")
         }
-    }
-
-    override suspend fun getMatchedProfiles(): StateFlow<List<ProfileOpsDataModel>> {
-        try {
-            _matchedProfilesState.value = db.getMatchedProfiles()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return _matchedProfilesState
-    }
-
-    override suspend fun getLikedProfiles(): StateFlow<List<ProfileOpsDataModel>> {
-        try {
-            _likedProfilesState.value = db.getLikedProfiles()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return _likedProfilesState.asStateFlow()
     }
 }

@@ -75,14 +75,13 @@ class MessagesRepoImpl(
 
     override suspend fun sendMessage(message: MessageDataModel) {
         CoroutineScope(IO).launch {
-
             socketHandler.emitMessage(message)
             saveSingleMessageToDb(message)
 
             val formattedMessage = formatTimeStamp(message)
             _messageState.value += formattedMessage
 
-            Log.i("MessageRepoImpl", "Message to be sent" + _messageState.value.last().toString())
+            Log.i("MessageRepoImpl", "Message to be sent " + _messageState.value.last().toString())
 
             val fcmToken = notificationService.getFCMToken()
 

@@ -15,7 +15,7 @@ fun formatTimeStamp(message: MessageDataModel): MessageDataModel {
 
     val date = inputFormat.parse(message.timeStamp)
     val formattedDate = date?.let { outputFormat.format(it) }
-    Log.i("DATE FORMATED", formattedDate ?: "NULL")
+//    Log.i("DATE FORMATED", formattedDate ?: "NULL")
     return if (formattedDate != null) {
         message.copy(timeStamp = formattedDate)
     } else {

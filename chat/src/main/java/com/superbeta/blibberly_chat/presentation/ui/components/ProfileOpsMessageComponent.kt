@@ -11,20 +11,63 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.blibberly.profile_ops.data.model.ProfileOp
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
 import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_auth.theme.ColorSecondary
+import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @Composable
 fun ProfileOpsMessageComponent(
-    userId: String?,
-    profileViewModel: ProfileOpsViewModel,
-    userName: String?
+    receiverUserEmail: String,
+    profileOpsViewModel: ProfileOpsViewModel,
+//    userName: String?
 ) {
+
+    var currUser by remember {
+        mutableStateOf<String?>(null)
+    }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val userPreferencesDataStore = context.userPreferencesDataStore
+
+    val profileOps by profileOpsViewModel.profileOpsState.collectAsState()
+    val likedProfiles by remember {
+        mutableStateOf(profileOps?.likedProfiles ?: emptyList())
+    }
+
+    val dislikedProfiles by remember {
+        mutableStateOf(profileOps?.dislikedProfiles ?: emptyList())
+    }
+
+    LaunchedEffect(key1 = true) {
+        scope.launch(IO) {
+            userPreferencesDataStore.data.collect { preferences ->
+                currUser = preferences[stringPreferencesKey("user_email")]
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = currUser) {
+        scope.launch {
+            currUser?.let { profileOpsViewModel.getProfileOps(it) }
+        }
+    }
     Row(
         Modifier
             .fillMaxWidth()
@@ -37,18 +80,23 @@ fun ProfileOpsMessageComponent(
             icon = Icons.Outlined.Close,
             contentDescription = "Close",
             onClick = {
-                Log.i("Profile Ops", "$userId is Disliked")
-                profileViewModel.setProfileOps(
-                    ProfileOpsDataModel(
-                        userId = userId.toString(),
-                        userEmail = userName.toString(),
-                        isLiked = false,
-                        isDisliked = true,
-                        isMatched = false,
-                        isReported = false,
-                        likedTimestamp = Calendar.getInstance().time.toString()
+                val currTimeStamp = Calendar.getInstance().time.toString()
+                Log.i("Profile Ops", "$receiverUserEmail is Disliked")
+                //add disliked profile to temp disliked profile list
+                val tDislikedProfiles = likedProfiles.toMutableList()
+                tDislikedProfiles.add(
+                    ProfileOp(
+                        userEmail = receiverUserEmail,
+                        timeStamp = currTimeStamp
                     )
                 )
+                profileOps?.let {
+                    profileOpsViewModel.setProfileOps(
+                        profileOps = it.copy(
+                            dislikedProfiles = tDislikedProfiles
+                        )
+                    )
+                }
             },
             bgColor = Color.White
         )
@@ -57,18 +105,24 @@ fun ProfileOpsMessageComponent(
             icon = Icons.Outlined.Favorite,
             contentDescription = "Like",
             onClick = {
-                Log.i("Profile Ops", "$userId is Liked")
-                profileViewModel.setProfileOps(
-                    ProfileOpsDataModel(
-                        userId = userId.toString(),
-                        userEmail = userName.toString(),
-                        isLiked = true,
-                        isDisliked = false,
-                        isMatched = false,
-                        isReported = false,
-                        likedTimestamp = Calendar.getInstance().time.toString()
+
+                val currTimeStamp = Calendar.getInstance().time.toString()
+                Log.i("Profile Ops", "$receiverUserEmail is Liked")
+
+                //add liked profile to temp liked profile list
+                val tLikedProfiles = likedProfiles.toMutableList()
+                tLikedProfiles.add(
+                    ProfileOp(
+                        userEmail = receiverUserEmail,
+                        timeStamp = currTimeStamp
                     )
                 )
+
+                profileOps?.let {
+                    profileOpsViewModel.setProfileOps(
+                        it.copy(likedProfiles = tLikedProfiles)
+                    )
+                }
             },
             bgColor = Color.White
         )

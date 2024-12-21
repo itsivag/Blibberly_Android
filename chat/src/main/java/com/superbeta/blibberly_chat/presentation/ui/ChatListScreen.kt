@@ -9,12 +9,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
+import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.presentation.ui.components.ChatListItem
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -24,15 +31,26 @@ fun ChatListScreen(
     modifier: Modifier,
     navigateToMessage: (String, String) -> Unit,
     messageViewModel: MessageViewModel = koinViewModel(),
-    profileViewModel: ProfileOpsViewModel = koinViewModel(),
+    profileOpsViewModel: ProfileOpsViewModel = koinViewModel(),
 ) {
-//    val chats by messageViewModel.usersState.collectAsState()
-    val matchedProfiles by profileViewModel.matchedProfilesState.collectAsState()
-    val likedProfiles by profileViewModel.likedProfilesState.collectAsState()
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val userPreferencesDataStore = context.userPreferencesDataStore
 
+    val profileOps by profileOpsViewModel.profileOpsState.collectAsState()
     val userProfiles by messageViewModel.userProfileState.collectAsState()
 
-    val scope = rememberCoroutineScope()
+    var currUser by remember {
+        mutableStateOf<String?>(null)
+    }
+
+    LaunchedEffect(key1 = true) {
+        scope.launch(IO) {
+            userPreferencesDataStore.data.collect { preferences ->
+                currUser = preferences[stringPreferencesKey("user_email")]
+            }
+        }
+    }
 
     LaunchedEffect(key1 = true) {
         scope.launch {
@@ -46,13 +64,12 @@ fun ChatListScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
-        profileViewModel.getMatchedProfiles()
+    LaunchedEffect(key1 = currUser) {
+        scope.launch {
+            currUser?.let { profileOpsViewModel.getProfileOps(it) }
+        }
     }
 
-    LaunchedEffect(key1 = true) {
-        profileViewModel.getLikedProfiles()
-    }
 
     LazyColumn(modifier = modifier) {
 
@@ -87,8 +104,11 @@ fun ChatListScreen(
         item {
             TopAppBar(title = { Text(text = "Liked Chats") })
         }
-        items(likedProfiles.size) { i ->
-            Text(text = likedProfiles[i].userEmail, modifier = Modifier.padding(16.dp))
+        items(profileOps?.likedProfiles?.size ?: 0) { i ->
+            Text(
+                text = profileOps?.likedProfiles?.get(i)?.userEmail ?: "",
+                modifier = Modifier.padding(16.dp)
+            )
         }
     }
 }

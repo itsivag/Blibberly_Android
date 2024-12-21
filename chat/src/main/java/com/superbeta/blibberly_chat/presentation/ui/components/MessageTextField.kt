@@ -1,5 +1,6 @@
 package com.superbeta.blibberly_chat.presentation.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -82,6 +83,7 @@ fun MessageTextField(
         IconButton(
             onClick = {
                 scope.launch {
+                    Log.i("MessageTextField", "Message sent: $data")
                     viewModel.sendMessage(
                         data = data
                     )

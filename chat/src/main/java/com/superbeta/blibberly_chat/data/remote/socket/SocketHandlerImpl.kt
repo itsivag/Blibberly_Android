@@ -159,8 +159,10 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 
     override fun emitMessage(data: MessageDataModel) {
         val jsonMessage = Gson().toJson(data)
+//        Log.i("SocketHandlerImpl", jsonMessage)
+//        socket.emit(SocketEvents.MessageEvent.eventName, jsonMessage)
         socket.emit(SocketEvents.MessageEvent.eventName, jsonMessage, Ack { a ->
-            Log.i("Ack", a.firstOrNull().toString())
+            Log.i("SocketHandlerImpl Ack", a.firstOrNull().toString())
         })
     }
 

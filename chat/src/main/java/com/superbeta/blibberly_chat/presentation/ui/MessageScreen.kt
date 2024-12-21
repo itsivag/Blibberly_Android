@@ -58,7 +58,7 @@ fun MessageScreen(
     receiverUserEmail: String = "",
     navigateToProfile: (String, String) -> Unit,
     messageViewModel: MessageViewModel = koinViewModel(),
-    profileViewModel: ProfileOpsViewModel = koinViewModel(),
+    profileOpsViewModel: ProfileOpsViewModel = koinViewModel(),
 ) {
 
 
@@ -157,7 +157,9 @@ fun MessageScreen(
             ) {
                 item {
                     ProfileOpsMessageComponent(
-                        receiverUserName, profileViewModel, receiverUserEmail
+                        receiverUserEmail = receiverUserEmail,
+                        profileOpsViewModel = profileOpsViewModel,
+//                        userName = receiverUserName,
                     )
                 }
                 items(count = messages.size) { i ->

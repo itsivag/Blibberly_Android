@@ -51,8 +51,16 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
+    //supabase
+    implementation(platform("io.github.jan-tennert.supabase:bom:2.4.2"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+//    implementation("io.github.jan-tennert.supabase:compose-auth")
+
     //koin
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
+
+    //gson
+    implementation("com.google.code.gson:gson:2.11.0")
 }

@@ -50,7 +50,7 @@ data class PhotoMetaData(
 )
 
 
-class Converters {
+class UserDataModelConverters {
 
     @TypeConverter
     fun listToJson(value: List<String>?): String = Gson().toJson(value)

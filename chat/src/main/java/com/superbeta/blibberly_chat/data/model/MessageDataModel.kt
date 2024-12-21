@@ -23,7 +23,7 @@ data class MessageDataModel(
     @ColumnInfo("isRead") val isRead: Boolean
 )
 
-class Converters {
+class MessageConverters {
 
     @TypeConverter
     fun listToJson(value: List<String>?): String = Gson().toJson(value)
