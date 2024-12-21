@@ -9,7 +9,7 @@ class ProfileOpsRemoteServiceImpl(supabase: SupabaseClient) : ProfileOpsRemoteSe
     private val supabaseProfileOpsDb = supabase.from("ProfileOps")
 
     override suspend fun getProfileOps(userEmail: String): ProfileOpsDataModel {
-        return supabaseProfileOpsDb.select { filter { ProfileOpsDataModel::userEmail eq userEmail } }
+        return supabaseProfileOpsDb.select { filter { "userEmail" to userEmail } }
             .decodeSingle<ProfileOpsDataModel>()
     }
 

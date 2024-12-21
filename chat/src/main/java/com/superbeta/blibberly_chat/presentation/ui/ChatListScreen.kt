@@ -105,10 +105,15 @@ fun ChatListScreen(
             TopAppBar(title = { Text(text = "Liked Chats") })
         }
         items(profileOps?.likedProfiles?.size ?: 0) { i ->
-            Text(
-                text = profileOps?.likedProfiles?.get(i)?.userEmail ?: "",
-                modifier = Modifier.padding(16.dp)
-            )
+            val email = profileOps?.likedProfiles?.get(i)?.userEmail
+//            val userName = userProfiles[i].name
+
+            email?.let { Text(text = it) }
+//            ChatListItem(
+//                userProfile = userProfiles[i],
+//                navigateToMessage = {
+//                    navigateToMessage(email, userName)
+//                })
         }
     }
 }
