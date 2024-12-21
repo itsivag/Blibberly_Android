@@ -15,9 +15,21 @@ class ProfileOpsViewModel(private val profileOpsRepo: ProfileOpsRepo) : ViewMode
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
     val profileOpsState: StateFlow<ProfileOpsDataModel?> = _profileOpsState.asStateFlow()
 
-    fun getProfileOps(userId: String) {
+    fun getProfileOps(currUserEmail: String) {
         viewModelScope.launch(IO) {
-            _profileOpsState.value = profileOpsRepo.getProfileOps(userId).value
+            val profileOps = profileOpsRepo.getProfileOps(currUserEmail).value
+            if (profileOps == null) {
+                _profileOpsState.value = ProfileOpsDataModel(
+                    userEmail = currUserEmail,
+                    likedProfiles = emptyList(),
+                    dislikedProfiles = emptyList(),
+                    matchedProfiles = emptyList(),
+                    unMatchedProfiles = emptyList(),
+                    reportedProfiles = emptyList(),
+                )
+            } else {
+                _profileOpsState.value = profileOps
+            }
             Log.i("ProfileOpsViewModel", "Profile Ops => " + _profileOpsState.value)
         }
     }
