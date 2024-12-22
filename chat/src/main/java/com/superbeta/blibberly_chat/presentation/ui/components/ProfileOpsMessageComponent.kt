@@ -46,9 +46,10 @@ fun ProfileOpsMessageComponent(
     val userPreferencesDataStore = context.userPreferencesDataStore
 
     val profileOps by profileOpsViewModel.profileOpsState.collectAsState()
-    val likedProfiles by remember {
+    val likedEmails by remember {
         mutableStateOf(profileOps?.likedProfiles ?: emptyList())
     }
+    val likedUserProfiles by profileOpsViewModel.likeUserProfileState.collectAsState()
 
     val dislikedProfiles by remember {
         mutableStateOf(profileOps?.dislikedProfiles ?: emptyList())
@@ -63,10 +64,11 @@ fun ProfileOpsMessageComponent(
     }
 
     LaunchedEffect(key1 = currUser) {
-        scope.launch {
+        scope.launch(IO) {
             currUser?.let { profileOpsViewModel.getProfileOps(it) }
         }
     }
+
     Row(
         Modifier
             .fillMaxWidth()
@@ -82,7 +84,7 @@ fun ProfileOpsMessageComponent(
                 val currTimeStamp = Calendar.getInstance().time.toString()
                 Log.i("Profile Ops", "$receiverUserEmail is Disliked")
                 //add disliked profile to temp disliked profile list
-                val tDislikedProfiles = likedProfiles.toMutableList()
+                val tDislikedProfiles = likedEmails.toMutableList()
                 tDislikedProfiles.add(
                     ProfileOp(
                         userEmail = receiverUserEmail,
@@ -109,7 +111,7 @@ fun ProfileOpsMessageComponent(
                 Log.i("Profile Ops", "$receiverUserEmail is Liked")
 
                 //add liked profile to temp liked profile list
-                val tLikedProfiles = likedProfiles.toMutableList()
+                val tLikedProfiles = likedEmails.toMutableList()
                 tLikedProfiles.add(
                     ProfileOp(
                         userEmail = receiverUserEmail,

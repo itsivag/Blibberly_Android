@@ -3,6 +3,7 @@ package com.blibberly.profile_ops.domain
 import android.util.Log
 import com.blibberly.profile_ops.data.local.ProfileOpsDao
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
+import com.blibberly.profile_ops.data.model.UserDataModel
 import com.blibberly.profile_ops.data.remote.ProfileOpsRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,9 +11,11 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ProfileOpsRepoImpl(
     private val db: ProfileOpsDao,
-    private val profileOpsRemoteService: ProfileOpsRemoteService
+    private val profileOpsRemoteService: ProfileOpsRemoteService,
 ) : ProfileOpsRepo {
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
+    private val _likeUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
+
 
     override suspend fun getProfileOps(userEmail: String): StateFlow<ProfileOpsDataModel?> {
         try {
@@ -39,4 +42,27 @@ class ProfileOpsRepoImpl(
             Log.i("ProfileOpsRepoImpl", "Error setting profile ops: $e")
         }
     }
+
+    override suspend fun getLikedProfiles(): StateFlow<List<UserDataModel>> {
+
+        try {
+
+            val appendProfiles: (UserDataModel) -> Unit = { newProfiles ->
+                _likeUserProfileState.value += newProfiles
+            }
+            _profileOpsState.value?.let {
+                profileOpsRemoteService.getLikedUserProfiles(
+                    likedUserEmails = it.likedProfiles,
+                    appendProfiles = appendProfiles
+                )
+            }
+
+            Log.i("ProfileOpsRepoImpl", "Liked User Profiles: ${_likeUserProfileState.value}")
+        } catch (e: Exception) {
+            Log.i("ProfileOpsRepoImpl", "Error getting liked profiles: $e")
+        }
+        return _likeUserProfileState.asStateFlow()
+    }
+
+
 }
