@@ -8,8 +8,11 @@ import com.blibberly.profile_ops.data.model.UserDataModel
 import com.blibberly.profile_ops.domain.ProfileOpsRepo
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ProfileOpsViewModel(
@@ -17,8 +20,12 @@ class ProfileOpsViewModel(
 ) : ViewModel() {
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
     val profileOpsState: StateFlow<ProfileOpsDataModel?> = _profileOpsState.asStateFlow()
-    private val _likeUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
-    val likeUserProfileState: StateFlow<List<UserDataModel>> = _likeUserProfileState.asStateFlow()
+    private val _likedUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
+    val likedUserProfileState: StateFlow<List<UserDataModel>> =
+        _likedUserProfileState.map { it.distinctBy { user -> user.email } }.stateIn(
+            viewModelScope,
+            SharingStarted.Lazily, emptyList()
+        )
 
     fun getProfileOps(currUserEmail: String) {
         viewModelScope.launch(IO) {
@@ -49,8 +56,8 @@ class ProfileOpsViewModel(
 
     fun getLikedUserProfiles() {
         viewModelScope.launch(IO) {
-            _likeUserProfileState.value = profileOpsRepo.getLikedProfiles().value
-            Log.i("ProfileOpsViewModel", "Get Liked Profiles : ${_likeUserProfileState.value}")
+            _likedUserProfileState.value = profileOpsRepo.getLikedProfiles().value
+            Log.i("ProfileOpsViewModel", "Get Liked Profiles : ${_likedUserProfileState.value}")
         }
     }
 }

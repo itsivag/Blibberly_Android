@@ -49,7 +49,7 @@ fun ProfileOpsMessageComponent(
     val likedEmails by remember {
         mutableStateOf(profileOps?.likedProfiles ?: emptyList())
     }
-    val likedUserProfiles by profileOpsViewModel.likeUserProfileState.collectAsState()
+    val likedUserProfiles by profileOpsViewModel.likedUserProfileState.collectAsState()
 
     val dislikedProfiles by remember {
         mutableStateOf(profileOps?.dislikedProfiles ?: emptyList())

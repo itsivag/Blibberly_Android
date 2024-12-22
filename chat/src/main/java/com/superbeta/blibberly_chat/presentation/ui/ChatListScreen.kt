@@ -40,7 +40,7 @@ fun ChatListScreen(
 
     val profileOps by profileOpsViewModel.profileOpsState.collectAsState()
     val userProfiles by messageViewModel.userProfileState.collectAsState()
-    val likedUserProfiles by profileOpsViewModel.likeUserProfileState.collectAsState()
+    val likedUserProfiles by profileOpsViewModel.likedUserProfileState.collectAsState()
 
     var currUser by remember {
         mutableStateOf<String?>(null)

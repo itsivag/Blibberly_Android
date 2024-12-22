@@ -46,7 +46,6 @@ class ProfileOpsRepoImpl(
     override suspend fun getLikedProfiles(): StateFlow<List<UserDataModel>> {
 
         try {
-
             val appendProfiles: (UserDataModel) -> Unit = { newProfiles ->
                 _likeUserProfileState.value += newProfiles
             }
