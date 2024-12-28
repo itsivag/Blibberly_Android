@@ -47,4 +47,26 @@ class ProfileOpsRemoteServiceImpl(supabase: SupabaseClient) : ProfileOpsRemoteSe
 
     }
 
+    override suspend fun getMatchedUserProfiles(
+        matchedUserEmails: List<ProfileOp>,
+        appendProfiles: (UserDataModel) -> Unit
+    ) {
+        Log.i("ProfileOpsRemoteServiceImpl", "matched users list: $matchedUserEmails")
+
+        try {
+            for (user in matchedUserEmails) {
+                Log.i("ProfileOpsRemoteServiceImpl", "User :  $user")
+                val userProfile = supabaseUsersDb.select {
+                    filter {
+                        UserDataModel::email eq user.userEmail
+                    }
+                }.decodeSingle<UserDataModel>()
+                appendProfiles(userProfile)
+            }
+        } catch (e: Exception) {
+            Log.e("ProfileOpsRemoteServiceImpl", "Error getting user profile: $e")
+        }
+
+    }
+
 }

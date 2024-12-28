@@ -49,11 +49,14 @@ fun ProfileOpsMessageComponent(
     val likedEmails by remember {
         mutableStateOf(profileOps?.likedProfiles ?: emptyList())
     }
-    val likedUserProfiles by profileOpsViewModel.likedUserProfileState.collectAsState()
-
-    val dislikedProfiles by remember {
+    val disLikedEmails by remember {
         mutableStateOf(profileOps?.dislikedProfiles ?: emptyList())
     }
+//    val likedUserProfiles by profileOpsViewModel.likedUserProfileState.collectAsState()
+
+//    val dislikedProfiles by remember {
+//        mutableStateOf(profileOps?.dislikedProfiles ?: emptyList())
+//    }
 
     LaunchedEffect(key1 = true) {
         scope.launch(IO) {
@@ -79,21 +82,27 @@ fun ProfileOpsMessageComponent(
     ) {
         BlibberlyIconButton(
             icon = Icons.Outlined.Close,
-            contentDescription = "Close",
+            contentDescription = "Dislike profile",
             onClick = {
                 val currTimeStamp = Calendar.getInstance().time.toString()
                 Log.i("Profile Ops", "$receiverUserEmail is Disliked")
                 //add disliked profile to temp disliked profile list
-                val tDislikedProfiles = likedEmails.toMutableList()
+                val tDislikedProfiles = disLikedEmails.toMutableList()
                 tDislikedProfiles.add(
                     ProfileOp(
                         userEmail = receiverUserEmail,
                         timeStamp = currTimeStamp
                     )
                 )
+
+                //remove from liked list
+                val tLikedProfiles = likedEmails.toMutableList()
+                tLikedProfiles.removeIf { it.userEmail == receiverUserEmail }
+
                 profileOps?.let {
                     profileOpsViewModel.setProfileOps(
                         profileOps = it.copy(
+                            likedProfiles = tLikedProfiles,
                             dislikedProfiles = tDislikedProfiles
                         )
                     )

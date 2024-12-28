@@ -19,5 +19,10 @@ interface ProfileOpsRemoteService {
         appendProfiles: (UserDataModel) -> Unit
     )
 
+    suspend fun getMatchedUserProfiles(
+        matchedUserEmails: List<ProfileOp>,
+        appendProfiles: (UserDataModel) -> Unit
+    )
+
 
 }

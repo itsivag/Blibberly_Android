@@ -39,8 +39,9 @@ fun ChatListScreen(
     val userPreferencesDataStore = context.userPreferencesDataStore
 
     val profileOps by profileOpsViewModel.profileOpsState.collectAsState()
-    val userProfiles by messageViewModel.userProfileState.collectAsState()
+//    val userProfiles by messageViewModel.usersState.collectAsState()
     val likedUserProfiles by profileOpsViewModel.likedUserProfileState.collectAsState()
+    val matchedUserProfiles by profileOpsViewModel.matchedUserProfileState.collectAsState()
 
     var currUser by remember {
         mutableStateOf<String?>(null)
@@ -54,17 +55,17 @@ fun ChatListScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
-        scope.launch(IO) {
-            messageViewModel.getUsers()
-        }
-    }
+//    LaunchedEffect(key1 = true) {
+//        scope.launch(IO) {
+//            messageViewModel.getUsers()
+//        }
+//    }
 
-    LaunchedEffect(key1 = true) {
-        scope.launch(IO) {
-            messageViewModel.getUserProfile()
-        }
-    }
+//    LaunchedEffect(key1 = true) {
+//        scope.launch(IO) {
+//            messageViewModel.getUserProfile()
+//        }
+//    }
 
     LaunchedEffect(key1 = currUser) {
         scope.launch(IO) {
@@ -78,6 +79,12 @@ fun ChatListScreen(
         }
     }
 
+    LaunchedEffect(key1 = profileOps) {
+        scope.launch(IO) {
+            profileOpsViewModel.getMatchedUserProfiles()
+        }
+    }
+
 
     LazyColumn(modifier = modifier) {
 
@@ -86,19 +93,19 @@ fun ChatListScreen(
 //                messageViewModel.disconnectUserFromSocket()
 //            }, content = { Text(text = "Disconnect") })
 //        }
-        item {
-            TopAppBar(title = { Text(text = "Live Chats") })
-        }
-        items(userProfiles.size) { i ->
-            val email = userProfiles[i].email
-            val userName = userProfiles[i].name
-
-            ChatListItem(
-                userProfile = userProfiles[i],
-                navigateToMessage = {
-                    navigateToMessage(email, userName)
-                })
-        }
+//        item {
+//            TopAppBar(title = { Text(text = "Live Chats") })
+//        }
+//        items(userProfiles.size) { i ->
+//            val email = userProfiles[i].email
+//            val userName = userProfiles[i].name
+//
+//            ChatListItem(
+//                userProfile = userProfiles[i],
+//                navigateToMessage = {
+//                    navigateToMessage(email, userName)
+//                })
+//        }
 //        item {
 //            TopAppBar(title = { Text(text = "Matched Chats") })
 //        }
@@ -110,14 +117,49 @@ fun ChatListScreen(
 //                })
 //        }
         item {
+            TopAppBar(title = { Text(text = "Matched Chats") })
+        }
+
+        Log.i("ChatListScreen", matchedUserProfiles.toString())
+
+        items(matchedUserProfiles.size) { i ->
+            val email = matchedUserProfiles[i].email
+            val userName = matchedUserProfiles[i].name
+            val t = matchedUserProfiles[i]
+            val tUserDataModel = UserDataModel(
+                email = t.email,
+                name = t.name,
+                age = t.age,
+                gender = t.gender,
+                height = t.height,
+                weight = t.weight,
+                aboutMe = t.aboutMe,
+                interests = t.interests,
+                photoMetaData = PhotoMetaData(
+                    blibmojiUrl = t.photoMetaData.blibmojiUrl,
+                    bgEmoji = t.photoMetaData.bgEmoji,
+                    bgColor = t.photoMetaData.bgColor
+                ),
+                fcmToken = t.fcmToken
+            )
+
+            ChatListItem(
+                userProfile = tUserDataModel,
+                navigateToMessage = {
+                    navigateToMessage(email, userName)
+                })
+        }
+
+        item {
             TopAppBar(title = { Text(text = "Liked Chats") })
         }
+//        items() {}
 //        items(profileOps?.likedProfiles?.size ?: 0) { i ->
 //            val email = profileOps?.likedProfiles?.get(i)?.userEmail
 //            email?.let { Text(text = it) }
 //        }
 
-        Log.i("XXXTNX", likedUserProfiles.toString())
+        Log.i("ChatListScreen", likedUserProfiles.toString())
 
         items(likedUserProfiles.size) { i ->
             val email = likedUserProfiles[i].email

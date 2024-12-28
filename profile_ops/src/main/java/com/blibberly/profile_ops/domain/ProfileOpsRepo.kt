@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.StateFlow
 interface ProfileOpsRepo {
     suspend fun getProfileOps(userEmail: String): StateFlow<ProfileOpsDataModel?>
     suspend fun setProfileOps(profileOpsDataModel: ProfileOpsDataModel)
-//    suspend fun getMatchedProfiles(): StateFlow<List<ProfileOpsDataModel>>
     suspend fun getLikedProfiles(): StateFlow<List<UserDataModel>>
+    suspend fun getMatchedProfiles(): StateFlow<List<UserDataModel>>
 }

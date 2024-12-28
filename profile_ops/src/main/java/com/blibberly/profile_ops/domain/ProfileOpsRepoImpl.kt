@@ -15,6 +15,7 @@ class ProfileOpsRepoImpl(
 ) : ProfileOpsRepo {
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
     private val _likeUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
+    private val _matchedUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
 
 
     override suspend fun getProfileOps(userEmail: String): StateFlow<ProfileOpsDataModel?> {
@@ -63,5 +64,24 @@ class ProfileOpsRepoImpl(
         return _likeUserProfileState.asStateFlow()
     }
 
+    override suspend fun getMatchedProfiles(): StateFlow<List<UserDataModel>> {
+        try {
 
+            val appendProfiles: (UserDataModel) -> Unit = { newProfiles ->
+                _matchedUserProfileState.value += newProfiles
+            }
+            _profileOpsState.value?.let {
+                profileOpsRemoteService.getMatchedUserProfiles(
+                    matchedUserEmails = it.matchedProfiles,
+                    appendProfiles = appendProfiles
+                )
+            }
+
+            Log.i("ProfileOpsRepoImpl", "Matched User Profiles: ${_matchedUserProfileState.value}")
+        } catch (e: Exception) {
+            Log.i("ProfileOpsRepoImpl", "Error getting Matched profiles: $e")
+        }
+
+        return _matchedUserProfileState.asStateFlow()
+    }
 }
