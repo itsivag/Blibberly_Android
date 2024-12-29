@@ -22,14 +22,12 @@ class AuthRemoteServiceImpl(private val supabase: SupabaseClient) : AuthRemoteSe
         return supabase.auth.retrieveUserForCurrentSession(updateSession = true)
     }
 
-    override suspend fun findIfUserRegistered(): Boolean {
-        val user = supabase.from("Users").select {
-            filter {
-                retrieveSession().email?.let { eq("email", it) }
-            }
-        }.decodeSingleOrNull<UserDataModel>()
+    override suspend fun findIfUserRegistered(email: String): Boolean {
+        val userData =
+            supabase.from("Users").select { filter { UserDataModel::email eq email } }
+                .decodeSingleOrNull<UserDataModel>()
+        Log.i("AuthRemoteServiceImpl", "User Data From Supabase" + userData.toString())
 
-        Log.i("User Registration", "user registered is => ${user != null}")
-        return user != null
+        return userData != null
     }
 }

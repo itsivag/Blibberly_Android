@@ -29,6 +29,7 @@ import com.superbeta.blibberly.root.BlibberlyTopAppBar
 import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.notification.NotificationUtil
 import com.superbeta.blibberly.ui.BlibberlyTheme
+import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.utils.AuthState
@@ -130,26 +131,39 @@ class MainActivity : ComponentActivity() {
 
                         }) {
                             val authState = authViewModel.authState.collectAsState()
-                            val startNavRoute: String =
-                                when (authState.value) {
-                                    AuthState.SIGNED_IN -> Screen.Home.route
+//                            var route = ""
+                            var startNavRoute = ""
+                            when (authState.value) {
+                                AuthState.SIGNED_IN -> {
+                                    startNavRoute = Screen.Home.route
+//                                    route = ""
+                                }
 //                            AuthState.SIGNED_OUT -> Screen.SignIn.route
 //                            AuthState.USER_EMAIL_STORED -> {}
 //                            AuthState.USER_EMAIL_STORAGE_ERROR ->
-                                    AuthState.USER_NOT_REGISTERED -> Screen.OnBoarding.route
+                                AuthState.USER_NOT_REGISTERED -> {
+                                    startNavRoute = Routes.OnBoarding.graph
+//                                    route = Routes.OnBoarding.graph
+                                }
 //                            AuthState.ERROR ->
 //                            AuthState.LOADING ->
 //                            AuthState.IDLE ->
-                                    AuthState.USER_REGISTERED -> Screen.Home.route
-//                                    else ->
-                                    else -> "AUTH"
+                                AuthState.USER_REGISTERED -> {
+                                    startNavRoute = Screen.Home.route
+//                                    route = ""
                                 }
+
+                                else -> {
+                                    startNavRoute = Routes.Auth.graph
+//                                    route = Routes.Auth.graph
+                                }
+                            }
 
                             BlibberlyNavHost(
                                 navController = navController,
                                 modifier = Modifier.padding(it),
                                 startDestination = startNavRoute,
-                                route = "AUTH"
+                                route = ""
                             )
                         }
                     }

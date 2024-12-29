@@ -4,15 +4,12 @@ import android.content.Context
 import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
-import androidx.datastore.preferences.core.edit
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.superbeta.blibberly_auth.data.local.AuthDataStoreService
 import com.superbeta.blibberly_auth.data.remote.AuthRemoteService
 import com.superbeta.blibberly_auth.utils.AuthState
-import com.superbeta.blibberly_auth.utils.UserDataPreferenceKeys
-import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 //import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.gotrue.user.UserInfo
@@ -22,7 +19,6 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
@@ -45,13 +41,25 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun updateAuthState() {
-        getUsersFromDataStore().collect { user ->
-            if (!user.isNullOrEmpty()) {
-                Log.i("summa user", user.toString())
-                _authState.value = AuthState.SIGNED_IN
+//        if (_authState.value == AuthState.SIGNED_IN) {
+            getUsersFromDataStore().collect { user ->
+                if (!user.isNullOrEmpty()) {
+                    val isUserRegistered = findIfUserRegistered(user)
+                    if (isUserRegistered) {
+                        //signed in and registered
+                        Log.i("AuthRepositoryImpl", "Registered")
+                        _authState.value = AuthState.USER_REGISTERED
+                    } else {
+                        //signed in and not registered
+                        Log.i("AuthRepositoryImpl", "Not Registered")
+                        _authState.value = AuthState.USER_NOT_REGISTERED
+                    }
+                } else {
+                    _authState.value = AuthState.SIGNED_OUT
+                }
+                Log.i("AuthRepositoryImpl", "AUTH STATE : " + _authState.value.toString())
             }
-            Log.i("AUTH STATE", _authState.value.toString())
-        }
+//        }
     }
 
     override fun getAuthState(): StateFlow<AuthState> = authState
@@ -82,7 +90,7 @@ class AuthRepositoryImpl(
 
     override suspend fun signInWithGoogle() {
         _authState.value = AuthState.LOADING
-        Log.i("Auth State", "Starting Google Sign In")
+        Log.i("AuthRepositoryImpl", "Starting Google Sign In")
 
         // Generate a nonce and hash it with sha-256
         // Providing a nonce is optional but recommended
@@ -104,7 +112,7 @@ class AuthRepositoryImpl(
         val request: GetCredentialRequest =
             GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(IO).launch {
             try {
                 val credentialResponse = credentialManager.getCredential(
                     request = request,
@@ -130,14 +138,17 @@ class AuthRepositoryImpl(
                 Log.i("Google Sign In User Data => ", user.toString())
                 _authState.value = AuthState.SIGNED_IN
                 storeUserInDataStore(user)
-                Log.i("Auth State", "Ended Google Sign In => " + _authState.value.toString())
-                val isUserRegistered = findIfUserRegistered()
-
-                if (isUserRegistered) {
-                    _authState.value = AuthState.USER_REGISTERED
-                } else {
-                    _authState.value = AuthState.USER_NOT_REGISTERED
+//                Log.i("AuthRepositoryImpl", "AUTH STATE" + _authState.value.toString())
+                if (_authState.value == AuthState.SIGNED_IN) {
+                    updateAuthState()
                 }
+//                val isUserRegistered = findIfUserRegistered()
+
+//                if (isUserRegistered) {
+//                    _authState.value = AuthState.USER_REGISTERED
+//                } else {
+//                    _authState.value = AuthState.USER_NOT_REGISTERED
+//                }
 
             } catch (e: GoogleIdTokenParsingException) {
                 e.printStackTrace()
@@ -171,7 +182,8 @@ class AuthRepositoryImpl(
         return user
     }
 
-    override suspend fun findIfUserRegistered(): Boolean = authRemoteService.findIfUserRegistered()
+    override suspend fun findIfUserRegistered(email: String): Boolean =
+        authRemoteService.findIfUserRegistered(email)
 
     override suspend fun forgotPassword() {}
 }

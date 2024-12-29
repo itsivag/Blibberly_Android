@@ -11,11 +11,18 @@ sealed class Screen(val route: String) {
     data object Message : Screen("messages")
     data object Home : Screen("home")
     data object NotificationConsent : Screen("notification_consent")
-//    data object Filter : Screen("filters")
+
+    //    data object Filter : Screen("filters")
     data object OnBoarding : Screen("on_boarding")
     data object Photo : Screen("photo")
     data object AboutMe : Screen("about_me")
     data object CurateProfile : Screen("curate_Profiles")
     data object UserProfile : Screen("user_profile")
     data object NoUsers : Screen("no_users")
+}
+
+sealed class Routes(val graph: String) {
+    data object Auth : Routes("auth")
+    data object OnBoarding : Routes("onboarding")
+    data object Chat : Routes("chat")
 }

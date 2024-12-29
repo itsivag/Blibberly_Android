@@ -1,5 +1,6 @@
 package com.superbeta.blibberly_auth.di
 
+import android.app.Activity
 import androidx.credentials.CredentialManager
 import com.superbeta.blibberly_auth.data.local.AuthDataStoreService
 import com.superbeta.blibberly_auth.data.local.AuthDataStoreServiceImpl

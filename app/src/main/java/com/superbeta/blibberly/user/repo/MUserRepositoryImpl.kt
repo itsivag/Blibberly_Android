@@ -42,19 +42,24 @@ class MUserRepositoryImpl(
     override suspend fun getUser(): UserDataModel {
         val remoteUserData = getUserEmail()?.let { userRemoteService.getUser(it) }
         val localUserData = db.getUser()
+        Log.i("MUserRepositoryImpl", "Remote Data" + remoteUserData.toString())
 
-        if (localUserData.email.isEmpty()) {
-            setUserToLocalDb(remoteUserData)
-        }
+        try {
+//            if (localUserData.email.isEmpty()) {
+                setUserToLocalDb(remoteUserData)
+//            }
 
-        if (remoteUserData != null) {
-            if (remoteUserData != localUserData) {
+//            if (remoteUserData != null) {
+//                if (remoteUserData != localUserData) {
 //                setUserToLocalDb(remoteUserData)
-                setUserToRemote(localUserData)
-            }
+//                    setUserToRemote(localUserData)
+//                }
+//            }
+            Log.i("MUserRepositoryImpl", remoteUserData.toString())
+            Log.i("MUserRepositoryImpl", db.getUser().toString())
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        Log.i("Curr User Remote", remoteUserData.toString())
-        Log.i("Curr User Local", db.getUser().toString())
 
         return localUserData
     }

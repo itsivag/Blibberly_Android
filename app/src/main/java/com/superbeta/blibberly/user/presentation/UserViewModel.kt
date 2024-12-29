@@ -19,8 +19,12 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     private val _blibmojiUrls = MutableStateFlow<List<String>>(emptyList())
 
     suspend fun getUser() {
-        _userState.value = mUserRepository.getUser()
-        Log.i("USER STATE VIEWMODEL", userState.value.toString())
+        try {
+            _userState.value = mUserRepository.getUser()
+            Log.i("UserViewModel", "User Data" + userState.value.toString())
+        } catch (e: Exception) {
+            Log.e("UserViewModel", "Error getting User Data : " + e.printStackTrace())
+        }
     }
 
     suspend fun getUserEmail(): String? {

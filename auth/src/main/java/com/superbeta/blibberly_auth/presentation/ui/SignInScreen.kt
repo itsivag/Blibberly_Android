@@ -56,7 +56,7 @@ fun SignInScreen(
     navigateToHome: () -> Unit,
 ) {
 
-    val authState by authViewModel.authState.collectAsStateWithLifecycle()
+//    val authState by authViewModel.authState.collectAsStateWithLifecycle()
 
 //    LaunchedEffect(key1 = authState) {
 //        Log.i("Auth State", authState.toString())
@@ -170,7 +170,7 @@ fun SignInScreen(
 //                    AuthRepositoryImpl().signInWithEmail(email.text, password.text)
 
                 }.invokeOnCompletion {
-                    navigateToHome()
+//                    navigateToHome()
                 }
 //                navController.navigate("otp_enter")
             })

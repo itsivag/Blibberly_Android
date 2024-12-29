@@ -11,10 +11,11 @@ import com.superbeta.blibberly.onBoarding.presentation.ui.BlibmojiScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.CurateProfilesScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.OnBoardingScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.SkillsAndInterestsScreen
+import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
 
 fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: Modifier) {
-    navigation(startDestination = Screen.OnBoarding.route, route = "ONBOARDING") {
+    navigation(startDestination = Screen.OnBoarding.route, route = Routes.OnBoarding.graph) {
         composable(Screen.OnBoarding.route) {
             OnBoardingScreen(
                 modifier,

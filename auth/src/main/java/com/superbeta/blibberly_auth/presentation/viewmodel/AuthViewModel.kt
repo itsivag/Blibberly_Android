@@ -20,7 +20,9 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 //    val authState: StateFlow<AuthState> = _authState
     val authState: StateFlow<AuthState> = authRepository.getAuthState()
 
-    //    init {
+        init {
+            Log.i("AuthViewModel", "AUTH STATE :$authState")
+        }
 //        viewModelScope.launch {
 //            authRepository.getAuthState().collect { state ->
 //                _authState.value = state
