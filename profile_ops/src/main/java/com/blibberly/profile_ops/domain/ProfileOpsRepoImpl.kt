@@ -21,15 +21,15 @@ class ProfileOpsRepoImpl(
     override suspend fun getProfileOps(userEmail: String): StateFlow<ProfileOpsDataModel?> {
         try {
             val remoteProfileOps = profileOpsRemoteService.getProfileOps(userEmail)
-            val localProfileOps = db.getProfileOps(userEmail)
-            if (remoteProfileOps != localProfileOps) {
-                db.setProfileOps(remoteProfileOps)
-                _profileOpsState.value = remoteProfileOps
-            } else {
-                _profileOpsState.value = localProfileOps
-            }
+//            val localProfileOps = db.getProfileOps(userEmail)
+//            if (remoteProfileOps != localProfileOps) {
+            db.setProfileOps(remoteProfileOps)
+            _profileOpsState.value = remoteProfileOps
+//            } else {
+//                _profileOpsState.value = localProfileOps
+//            }
         } catch (e: Exception) {
-            Log.i("ProfileOpsRepoImpl", "Error getting profile ops: $e")
+            Log.e("ProfileOpsRepoImpl", "Error getting profile ops: $e")
         }
 
         return _profileOpsState.asStateFlow()
