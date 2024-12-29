@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.google.errorprone.annotations.Immutable
 import com.google.gson.Gson
+import kotlinx.serialization.Serializable
 
 @Keep
 @Entity("message")
 @Immutable
-//@Stable
-
+@Serializable
 data class MessageDataModel(
     @PrimaryKey @ColumnInfo("messageId") val messageId: String,
     @ColumnInfo("content") val content: String,

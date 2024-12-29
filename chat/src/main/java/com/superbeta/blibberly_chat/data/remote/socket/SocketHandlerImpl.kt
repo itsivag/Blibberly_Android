@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.gson.Gson
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
+import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
 import com.superbeta.blibberly_chat.utils.SOCKET_URL
 import io.socket.client.Ack
 import io.socket.client.IO
@@ -18,7 +19,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferences>) :
+class SocketHandlerImpl(
+    private val userPreferencesDataStore: DataStore<Preferences>,
+    private val chatRemoteService: ChatRemoteService
+) :
     SocketHandler {
     private lateinit var socket: Socket
 
@@ -163,6 +167,12 @@ class SocketHandlerImpl(private val userPreferencesDataStore: DataStore<Preferen
 //        socket.emit(SocketEvents.MessageEvent.eventName, jsonMessage)
         socket.emit(SocketEvents.MessageEvent.eventName, jsonMessage, Ack { a ->
             Log.i("SocketHandlerImpl Ack", a.firstOrNull().toString())
+            //if no ack is received then save in db
+            if (a.firstOrNull() == null) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    chatRemoteService.saveMessageToRemoteDb(data)
+                }
+            }
         })
     }
 

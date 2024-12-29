@@ -2,11 +2,13 @@ package com.superbeta.blibberly_chat.data.remote.supabase
 
 import android.util.Log
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 
 class ChatRemoteServiceImpl(supabase: SupabaseClient) : ChatRemoteService {
     private val supabaseUsersDb = supabase.from("Users")
+    private val supabaseMessageDb = supabase.from("Messages")
 
     override suspend fun getUsersProfile(
         liveUsers: List<String>,
@@ -27,6 +29,15 @@ class ChatRemoteServiceImpl(supabase: SupabaseClient) : ChatRemoteService {
             }
         } catch (e: Exception) {
             Log.e("ChatRemoteServiceImpl", "Error getting user profile: $e")
+        }
+    }
+
+    override suspend fun saveMessageToRemoteDb(data: MessageDataModel) {
+        Log.i("ChatRemoteServiceImpl", "Saving Message To Db : $data")
+        try {
+            supabaseMessageDb.upsert(data)
+        } catch (e: Exception) {
+            Log.e("ChatRemoteServiceImpl", "Error saving message to remote db: $e")
         }
     }
 

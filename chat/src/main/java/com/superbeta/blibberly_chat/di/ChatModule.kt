@@ -18,11 +18,12 @@ import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.scope.get
 import org.koin.dsl.module
 
 val chatModule = module {
     single<SocketHandler> {
-        SocketHandlerImpl(androidContext().userPreferencesDataStore)
+        SocketHandlerImpl(androidContext().userPreferencesDataStore, get())
     }
 
     single<MessagesDao> {
