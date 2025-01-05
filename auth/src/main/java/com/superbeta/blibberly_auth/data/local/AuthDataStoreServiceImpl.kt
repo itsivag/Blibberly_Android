@@ -24,4 +24,11 @@ class AuthDataStoreServiceImpl(private val userPreferencesDataStore: DataStore<P
             preferences[UserDataPreferenceKeys.USER_EMAIL]
         }
     }
+
+    override suspend fun deleteUserData() {
+        userPreferencesDataStore.edit { preferences ->
+            preferences.clear()
+        }
+
+    }
 }

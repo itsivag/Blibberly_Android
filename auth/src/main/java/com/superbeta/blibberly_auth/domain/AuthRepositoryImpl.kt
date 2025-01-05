@@ -42,23 +42,23 @@ class AuthRepositoryImpl(
 
     override suspend fun updateAuthState() {
 //        if (_authState.value == AuthState.SIGNED_IN) {
-            getUsersFromDataStore().collect { user ->
-                if (!user.isNullOrEmpty()) {
-                    val isUserRegistered = findIfUserRegistered(user)
-                    if (isUserRegistered) {
-                        //signed in and registered
-                        Log.i("AuthRepositoryImpl", "Registered")
-                        _authState.value = AuthState.USER_REGISTERED
-                    } else {
-                        //signed in and not registered
-                        Log.i("AuthRepositoryImpl", "Not Registered")
-                        _authState.value = AuthState.USER_NOT_REGISTERED
-                    }
+        getUsersFromDataStore().collect { user ->
+            if (!user.isNullOrEmpty()) {
+                val isUserRegistered = findIfUserRegistered(user)
+                if (isUserRegistered) {
+                    //signed in and registered
+                    Log.i("AuthRepositoryImpl", "Registered")
+                    _authState.value = AuthState.USER_REGISTERED
                 } else {
-                    _authState.value = AuthState.SIGNED_OUT
+                    //signed in and not registered
+                    Log.i("AuthRepositoryImpl", "Not Registered")
+                    _authState.value = AuthState.USER_NOT_REGISTERED
                 }
-                Log.i("AuthRepositoryImpl", "AUTH STATE : " + _authState.value.toString())
+            } else {
+                _authState.value = AuthState.SIGNED_OUT
             }
+            Log.i("AuthRepositoryImpl", "AUTH STATE : " + _authState.value.toString())
+        }
 //        }
     }
 
@@ -163,17 +163,14 @@ class AuthRepositoryImpl(
     private suspend fun storeUserInDataStore(user: UserInfo) =
         authDataStoreService.setUserData(user)
 
-//        Log.i("Storing User Data In Data Store", user.toString())
-//        context.userPreferencesDataStore.edit { preferences ->
-//            preferences[UserDataPreferenceKeys.USER_ID] = user.id
-//            preferences[UserDataPreferenceKeys.USER_EMAIL] = user.email ?: ""
-//        }
-
 
     override suspend fun getUsersFromDataStore(): Flow<String?> = authDataStoreService.getUserData()
-//        return context.userPreferencesDataStore.data.map { preferences ->
-//            preferences[UserDataPreferenceKeys.USER_EMAIL]
-//        }
+
+    override suspend fun logOut() {
+        Log.i("AuthRepositoryImpl", "Deleting data stores")
+        authDataStoreService.deleteUserData()
+        _authState.value = AuthState.SIGNED_OUT
+    }
 
 
     override suspend fun getUserData(): UserInfo {

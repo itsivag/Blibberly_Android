@@ -36,6 +36,8 @@ interface UserLocalDao {
     @Query("UPDATE userInfo set photoUri = :photoMetaData")
     suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData)
 
+    @Query("DELETE from userInfo")
+    suspend fun deleteUserInfo()
 
 
 }

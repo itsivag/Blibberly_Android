@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.StateFlow
 interface AuthDataStoreService {
     suspend fun setUserData(user: UserInfo)
     suspend fun getUserData(): Flow<String?>
+    suspend fun deleteUserData()
 }

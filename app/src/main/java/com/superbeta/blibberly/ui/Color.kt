@@ -32,7 +32,7 @@ enum class BLIBMOJI_BG_COLORS {
 }
 
 
-val avatarBGColorsMap = mapOf<String, Color>(
+val avatarBGColorsMap = mapOf(
     BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
     BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
     BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,

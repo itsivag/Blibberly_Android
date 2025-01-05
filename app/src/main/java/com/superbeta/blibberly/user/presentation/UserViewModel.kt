@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.repo.MUserRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -80,6 +79,13 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
             }
         }
     }
+
+    fun deleteLocalUserInfo() {
+        viewModelScope.launch {
+            mUserRepository.deleteLocalUserData()
+        }
+    }
+
 
 //    fun getBlibMojiUrlsFromStorage(): StateFlow<List<String>> {
 //        viewModelScope.launch {

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.superbeta.blibberly_auth.domain.AuthRepository
 import com.superbeta.blibberly_auth.domain.AuthRepositoryImpl
 import com.superbeta.blibberly_auth.utils.AuthState
@@ -20,9 +21,9 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 //    val authState: StateFlow<AuthState> = _authState
     val authState: StateFlow<AuthState> = authRepository.getAuthState()
 
-        init {
-            Log.i("AuthViewModel", "AUTH STATE :$authState")
-        }
+    init {
+        Log.i("AuthViewModel", "AUTH STATE :$authState")
+    }
 //        viewModelScope.launch {
 //            authRepository.getAuthState().collect { state ->
 //                _authState.value = state
@@ -48,4 +49,12 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     suspend fun getUserEmailFromDataStore(): Flow<String?> {
         return authRepository.getUsersFromDataStore()
     }
+
+    suspend fun logOut() {
+        viewModelScope.launch {
+            authRepository.logOut()
+        }
+    }
+
+
 }

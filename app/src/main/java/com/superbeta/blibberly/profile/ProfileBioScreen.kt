@@ -69,7 +69,7 @@ fun ProfileBioScreen(
 
     Column {
 
-        HorizontalDivider(color = ColorDisabled, modifier = Modifier.padding(bottom = 16.dp))
+//        HorizontalDivider(color = ColorDisabled, modifier = Modifier.padding(bottom = 16.dp))
         Text(
             text = "Vitals",
             style = MaterialTheme.typography.titleLarge,

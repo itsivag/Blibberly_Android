@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,17 +31,20 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly_auth.theme.ColorPrimary
-import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileAboutMeScreen(
-    viewModel: UserViewModel = koinViewModel()
+    userViewModel: UserViewModel = koinViewModel(),
+    authViewModel: AuthViewModel = koinViewModel()
 ) {
 
     var aboutMe by remember {
@@ -57,13 +59,13 @@ fun ProfileAboutMeScreen(
         FocusRequester()
     }
 
-    val userData by viewModel.userState.collectAsStateWithLifecycle()
+    val userData by userViewModel.userState.collectAsStateWithLifecycle()
 
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
         scope.launch(IO) {
-            viewModel.getUser()
+            userViewModel.getUser()
         }
     }
 
@@ -81,7 +83,7 @@ fun ProfileAboutMeScreen(
     val focusManager = LocalFocusManager.current
 
     Column {
-        HorizontalDivider(color = ColorDisabled, modifier = Modifier.padding(bottom = 16.dp))
+//        HorizontalDivider(color = ColorDisabled, modifier = Modifier.padding(bottom = 16.dp))
 
         Text(
             text = "About Me",
@@ -126,7 +128,7 @@ fun ProfileAboutMeScreen(
                         }
                         IconButton(onClick = {
                             scope.launch {
-                                viewModel.updateAboutMe(aboutMe.text)
+                                userViewModel.updateAboutMe(aboutMe.text)
                             }.invokeOnCompletion {
                                 focusManager.clearFocus()
                             }
@@ -154,5 +156,28 @@ fun ProfileAboutMeScreen(
                     }
                 }
             })
+
+        PrimaryButtonColorDisabled(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            buttonText = "Log out",
+            isButtonEnabled = true
+        ) {
+            scope.launch {
+                userViewModel.deleteLocalUserInfo()
+                authViewModel.logOut()
+            }
+        }
+
+        PrimaryButtonColorDisabled(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            buttonText = "Delete Account",
+            isButtonEnabled = true
+        ) {
+//            viewModel.deleteAccount()
+        }
     }
 }
