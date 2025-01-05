@@ -80,9 +80,15 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
         }
     }
 
-    fun deleteLocalUserInfo() {
+    suspend fun deleteLocalUserInfo() {
         viewModelScope.launch {
             mUserRepository.deleteLocalUserData()
+        }
+    }
+
+    suspend fun deleteAccount(email: String) {
+        viewModelScope.launch {
+            mUserRepository.deleteAccount(email)
         }
     }
 

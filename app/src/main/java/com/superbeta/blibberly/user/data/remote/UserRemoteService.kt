@@ -14,4 +14,5 @@ interface UserRemoteService {
     suspend fun updateAboutMe(aboutMe: String, email: String)
     suspend fun updateHeight(height: Double, email: String)
     suspend fun getUser(email: String): UserDataModel?
+    suspend fun deleteAccount(email: String)
 }

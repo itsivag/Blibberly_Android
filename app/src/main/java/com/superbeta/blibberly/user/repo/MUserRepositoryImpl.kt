@@ -147,5 +147,14 @@ class MUserRepositoryImpl(
         }
     }
 
+    override suspend fun deleteAccount(email: String) {
+        CoroutineScope(IO).launch {
+            Log.i("MUserRepositoryImpl", "Deleting User!")
+            userRemoteService.deleteAccount(email)
+            db.deleteUserInfo()
+
+        }
+    }
+
 
 }

@@ -19,5 +19,4 @@ interface AuthRepository {
     suspend fun getUsersFromDataStore(): Flow<String?>
     suspend fun logOut()
 
-
 }

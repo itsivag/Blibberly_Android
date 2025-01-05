@@ -7,9 +7,12 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 
 class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteService {
+    private val usersTable = supabase.from("Users")
+    private val deletedUsersTable = supabase.from("DeletedUsers")
+
     override suspend fun setUser(userDataModel: UserDataModel) {
         try {
-            supabase.from("Users").insert(userDataModel)
+            usersTable.insert(userDataModel)
             Log.i("Database Upload Successful", userDataModel.toString())
         } catch (e: Exception) {
             Log.e("Database Upload Error", e.toString())
@@ -18,7 +21,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 
     override suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData, email: String) {
         try {
-            supabase.from("Users")
+            usersTable
                 .update({ set("photoMetaData", photoMetaData) }) {
                     filter {
                         UserDataModel::email eq email
@@ -32,7 +35,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 
     override suspend fun updateUserName(name: String, email: String) {
         try {
-            supabase.from("Users")
+            usersTable
                 .update({ set("name", name) }) {
                     filter {
                         UserDataModel::email eq email
@@ -46,7 +49,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 
     override suspend fun updateAge(age: Int, email: String) {
         try {
-            supabase.from("Users")
+            usersTable
                 .update({ set("age", age) }) {
                     filter {
                         UserDataModel::email eq email
@@ -60,7 +63,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 
     override suspend fun updateInterests(interests: List<String>, email: String) {
         try {
-            supabase.from("Users")
+            usersTable
                 .update({ set("interests", interests) }) {
                     filter {
                         UserDataModel::email eq email
@@ -74,7 +77,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 
     override suspend fun updateWeight(weight: Double, email: String) {
         try {
-            supabase.from("Users")
+            usersTable
                 .update({ set("weight", weight) }) {
                     filter {
                         UserDataModel::email eq email
@@ -88,7 +91,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 
     override suspend fun updateAboutMe(aboutMe: String, email: String) {
         try {
-            supabase.from("Users")
+            usersTable
                 .update({ set("aboutMe", aboutMe) }) {
                     filter {
                         UserDataModel::email eq email
@@ -102,7 +105,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 
     override suspend fun updateHeight(height: Double, email: String) {
         try {
-            supabase.from("Users")
+            usersTable
                 .update({ set("height", height) }) {
                     filter {
                         UserDataModel::email eq email
@@ -117,7 +120,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
     override suspend fun getUser(email: String): UserDataModel? {
         try {
             val userData =
-                supabase.from("Users").select { filter { UserDataModel::email eq email } }
+                usersTable.select { filter { UserDataModel::email eq email } }
                     .decodeSingle<UserDataModel>()
             Log.i("UserData From Database", userData.toString())
 
@@ -125,6 +128,15 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
         } catch (e: Exception) {
             e.printStackTrace()
             return null
+        }
+    }
+
+    override suspend fun deleteAccount(email: String) {
+        try {
+            usersTable.delete { filter { UserDataModel::email eq email } }
+//            usersTable.select { filter { UserDataModel::email eq email } }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

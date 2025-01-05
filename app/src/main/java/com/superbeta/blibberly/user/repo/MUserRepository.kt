@@ -17,4 +17,5 @@ interface MUserRepository {
     suspend fun updateInterests(newInterests: List<String>)
     suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData)
     suspend fun deleteLocalUserData()
+    suspend fun deleteAccount(email: String)
 }

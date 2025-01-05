@@ -177,7 +177,13 @@ fun ProfileAboutMeScreen(
             buttonText = "Delete Account",
             isButtonEnabled = true
         ) {
-//            viewModel.deleteAccount()
+            scope.launch {
+                userData?.let {
+                    userViewModel.deleteLocalUserInfo()
+                    userViewModel.deleteAccount(it.email)
+                    authViewModel.logOut()
+                }
+            }
         }
     }
 }
