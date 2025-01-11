@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -49,20 +50,10 @@ import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-enum class HeightUnit {
-    Cm, Inch,
-}
-
-
-enum class WeightUnit {
-    Kg, Lbs,
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BioScreen(
     modifier: Modifier,
-//    navController: NavController,
     navigateBack: () -> Unit,
     navigateToAboutMe: () -> Unit,
     userViewModel: UserViewModel = koinViewModel()
@@ -71,6 +62,7 @@ fun BioScreen(
     var isButtonEnabled by remember {
         mutableStateOf(false)
     }
+
 
     var name by remember {
         mutableStateOf(TextFieldValue())
@@ -126,7 +118,6 @@ fun BioScreen(
                 weight = TextFieldValue(userData.weight.toString())
                 aboutMe = userData.aboutMe
                 interests = Gson().toJson(userData.interests)
-//                photoUri = userData.photoMetaData
                 gender = userData.gender
             }
         }
@@ -137,9 +128,14 @@ fun BioScreen(
             userFCMToken = userViewModel.getUserFCMToken()
         }
     }
+    LaunchedEffect(key1 = userData) {
+        scope.launch {
+            isButtonEnabled =
+                !(name.text.isEmpty() || age.text.isEmpty() || height.text.isEmpty() || weight.text.isEmpty())
+        }
+    }
 
-    isButtonEnabled = true
-//        !(name.text.isEmpty() || age.text.isEmpty() || height.text.isEmpty() || weight.text.isEmpty())
+
 
     LazyColumn(modifier = modifier) {
         item {
@@ -154,11 +150,7 @@ fun BioScreen(
             })
         }
 
-
-//        Spacer(modifier = Modifier.weight(1f))
-
         item {
-
             Text(
                 text = "Sharpen your profile! Add your 'Vitals' to stand out from the crowd and make a lasting impression!",
                 style = MaterialTheme.typography.bodyMedium,
@@ -173,7 +165,6 @@ fun BioScreen(
 
         }
         item {
-
             Text(
                 text = "\nYour Vitals\uD83C\uDF1F",
                 style = MaterialTheme.typography.titleLarge,
@@ -182,30 +173,30 @@ fun BioScreen(
         }
 
         item {
-
             TextFieldWithLabel(
                 textFieldValue = name,
                 onTextFieldValueChange = { value -> name = value },
                 "Name",
-                "Sankar",
-                keyboardOptions = KeyboardOptions()
+                "Mega",
+                keyboardOptions = KeyboardOptions(),
+                isError = name.text.isNotEmpty() && name.text.length < 4,
+                errorText = "name should be at least 4 characters"
             )
         }
 
         item {
-
             TextFieldWithLabel(
                 textFieldValue = age,
                 onTextFieldValueChange = { value -> age = value },
                 "Age",
                 "22",
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                isError = age.text.isNotEmpty() && (age.text.toInt() < 18 || age.text.toInt() > 110),
+                errorText = "you should be at least 18 years old"
             )
         }
 
         item {
-
             Text(
                 text = "Gender",
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -221,7 +212,7 @@ fun BioScreen(
                     .weight(1f)
                     .padding(horizontal = 8.dp)
                     .border(
-                        width = 1.dp,
+                        width = if (gender == "F") 2.dp else 1.dp,
                         color = if (gender == "F") ColorPrimary else ColorDisabled,
                         shape = RoundedCornerShape(20.dp)
                     )
@@ -236,7 +227,7 @@ fun BioScreen(
                     .weight(1f)
                     .padding(horizontal = 8.dp)
                     .border(
-                        width = 1.dp,
+                        width = if (gender == "M") 2.dp else 1.dp,
                         color = if (gender == "M") ColorPrimary else ColorDisabled,
                         shape = RoundedCornerShape(20.dp)
                     )
@@ -259,6 +250,13 @@ fun BioScreen(
                     )
 
                     OutlinedTextField(
+                        isError = height.text.isNotEmpty() && (height.text.toDouble() < 0),
+                        supportingText = {
+                            if (height.text.isNotEmpty() && (height.text.toDouble() < 0)) Text(
+                                text = "Enter a logical height",
+                                color = Color.Red
+                            ) else Text(text = "")
+                        },
                         maxLines = 1,
                         value = height,
                         modifier = Modifier.padding(16.dp),
@@ -266,7 +264,7 @@ fun BioScreen(
                         shape = RoundedCornerShape(14.dp),
                         placeholder = {
                             Text(
-                                text = "180",
+                                text = "175",
                                 color = ColorDisabled,
                             )
                         },
@@ -295,6 +293,13 @@ fun BioScreen(
 
                     OutlinedTextField(maxLines = 1,
                         value = weight,
+                        isError = weight.text.isNotEmpty() && (weight.text.toDouble() < 0),
+                        supportingText = {
+                            if (weight.text.isNotEmpty() && (weight.text.toDouble() < 0)) Text(
+                                text = "Enter a logical weight",
+                                color = Color.Red
+                            ) else Text(text = "")
+                        },
                         modifier = Modifier.padding(16.dp),
                         onValueChange = { value -> weight = value },
                         shape = RoundedCornerShape(14.dp),
@@ -321,7 +326,6 @@ fun BioScreen(
         }
 
         item {
-
             PrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth()

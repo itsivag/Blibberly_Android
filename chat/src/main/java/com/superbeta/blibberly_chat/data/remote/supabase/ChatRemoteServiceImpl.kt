@@ -11,8 +11,7 @@ class ChatRemoteServiceImpl(supabase: SupabaseClient) : ChatRemoteService {
     private val supabaseMessageDb = supabase.from("Messages")
 
     override suspend fun getUsersProfile(
-        liveUsers: List<String>,
-        appendProfiles: (UserDataModel) -> Unit
+        liveUsers: List<String>, appendProfiles: (UserDataModel) -> Unit
     ) {
         Log.i("ChatRemoteServiceImpl", "Live user list: $liveUsers")
 
@@ -41,4 +40,31 @@ class ChatRemoteServiceImpl(supabase: SupabaseClient) : ChatRemoteService {
         }
     }
 
+    override suspend fun getMessagesFromRemoteDb(
+        currUserEmail: String, receiverEmail: String
+    ): List<MessageDataModel> {
+        return supabaseMessageDb.select {
+            filter {
+                and {
+                    eq("senderEmail", receiverEmail)
+                    eq("receiverEmail", currUserEmail)
+                }
+            }
+        }.decodeList<MessageDataModel>()
+    }
+
+    override suspend fun deleteMessagesFromRemoteDb(currUserEmail: String, receiverEmail: String) {
+        try {
+            supabaseMessageDb.delete {
+                filter {
+                    and {
+                        eq("senderEmail", receiverEmail)
+                        eq("receiverEmail", currUserEmail)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("ChatRemoteServiceImpl", "Error deleting messages from remote db: $e")
+        }
+    }
 }

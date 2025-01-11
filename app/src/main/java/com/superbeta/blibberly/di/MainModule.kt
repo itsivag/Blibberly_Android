@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.di
 
+import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.remote.UserRemoteService
 import com.superbeta.blibberly.user.data.remote.UserRemoteServiceImpl
 import com.superbeta.blibberly.user.presentation.UserViewModel
@@ -19,7 +20,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val mainModule = module {
-    single {
+    single<UserLocalDao> {
         RoomInstanceProvider.getDb(androidContext()).userLocalDao()
     }
 

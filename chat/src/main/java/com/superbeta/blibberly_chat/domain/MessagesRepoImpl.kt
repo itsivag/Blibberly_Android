@@ -29,6 +29,7 @@ class MessagesRepoImpl(
 
 //    private val supabaseUsersDb = supabase.from("Users")
 
+
     override suspend fun connectSocketToBackend() {
         socketHandler.connectWithSocketBackend()
 //        Log.i("SOCKET CONNECT", socketHandler.getSocket().connected().toString())
@@ -56,6 +57,8 @@ class MessagesRepoImpl(
             "Curr -> $currUserEmail " +
                     "Receiver -> $receiverEmail"
         )
+
+
         val formattedTimeStamp = currUserEmail?.let {
             db.getMessages(it, receiverEmail).map { message ->
                 try {
@@ -67,9 +70,29 @@ class MessagesRepoImpl(
             }
         }
 
+        val messagesFromRemoteDb =
+            currUserEmail?.let {
+                try {
+                    chatRemoteService.getMessagesFromRemoteDb(it, receiverEmail).map { msg ->
+                        formatTimeStamp(msg)
+                    }
+                } catch (e: Exception) {
+                    Log.e("MessagesRepoImpl", "Error getting messages from remote db")
+                    e.printStackTrace()
+                    null
+                }
+            }
+//        messagesFromRemoteDb?.let { saveMessagesToLocalDb(it) }
+
         if (formattedTimeStamp != null) {
             _messageState.value = formattedTimeStamp
         }
+        if (messagesFromRemoteDb != null) {
+            _messageState.value = messagesFromRemoteDb
+        }
+
+        currUserEmail?.let { chatRemoteService.deleteMessagesFromRemoteDb(it, receiverEmail) }
+
         return _messageState.asStateFlow()
     }
 

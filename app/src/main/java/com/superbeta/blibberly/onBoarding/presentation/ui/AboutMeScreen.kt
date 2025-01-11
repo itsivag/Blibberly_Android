@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -53,7 +54,6 @@ fun AboutMeScreen(
     }
 
     val scope = rememberCoroutineScope()
-    isButtonEnabled = true
 
     val userData: UserDataModel? = viewModel.userState.collectAsStateWithLifecycle().value
 
@@ -71,6 +71,11 @@ fun AboutMeScreen(
         }
     }
 
+    LaunchedEffect(key1 = aboutMe) {
+        scope.launch {
+            isButtonEnabled = aboutMe.text.isNotEmpty() && aboutMe.text.length >= 100
+        }
+    }
 
     Column(modifier = modifier) {
 
@@ -106,6 +111,13 @@ fun AboutMeScreen(
         )
 
         OutlinedTextField(
+            isError = aboutMe.text.isNotEmpty() && (aboutMe.text.length < 100),
+            supportingText = {
+                if (aboutMe.text.isNotEmpty() && (aboutMe.text.length < 100))
+                    Text(text = "about me must be at least 100 chars", color = Color.Red) else Text(
+                    ""
+                )
+            },
             minLines = 3,
             value = aboutMe,
             modifier = Modifier

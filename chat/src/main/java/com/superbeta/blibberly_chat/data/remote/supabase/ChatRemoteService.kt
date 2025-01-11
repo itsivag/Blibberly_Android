@@ -10,4 +10,11 @@ interface ChatRemoteService {
     )
 
     suspend fun saveMessageToRemoteDb(data: MessageDataModel) {}
+    suspend fun getMessagesFromRemoteDb(
+        currUserEmail: String,
+        receiverEmail: String
+    ): List<MessageDataModel>
+
+    suspend fun deleteMessagesFromRemoteDb(currUserEmail: String, receiverEmail: String)
+
 }

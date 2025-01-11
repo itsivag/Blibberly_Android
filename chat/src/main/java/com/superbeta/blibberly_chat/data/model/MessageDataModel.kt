@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.google.errorprone.annotations.Immutable
 import com.google.gson.Gson
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Keep
@@ -14,13 +15,13 @@ import kotlinx.serialization.Serializable
 @Immutable
 @Serializable
 data class MessageDataModel(
-    @PrimaryKey @ColumnInfo("messageId") val messageId: String,
-    @ColumnInfo("content") val content: String,
-    @ColumnInfo("senderEmail") val senderEmail: String,
-    @ColumnInfo("receiverEmail") val receiverEmail: String,
-    @ColumnInfo("timeStamp") val timeStamp: String,
-    @ColumnInfo("isDelivered") val isDelivered: Boolean,
-    @ColumnInfo("isRead") val isRead: Boolean
+    @SerialName("messageId") @PrimaryKey @ColumnInfo("messageId") val messageId: String,
+    @SerialName("content") @ColumnInfo("content") val content: String,
+    @SerialName("senderEmail") @ColumnInfo("senderEmail") val senderEmail: String,
+    @SerialName("receiverEmail") @ColumnInfo("receiverEmail") val receiverEmail: String,
+    @SerialName("timeStamp") @ColumnInfo("timeStamp") val timeStamp: String,
+    @SerialName("isDelivered") @ColumnInfo("isDelivered") val isDelivered: Boolean,
+    @SerialName("isRead") @ColumnInfo("isRead") val isRead: Boolean
 )
 
 class MessageConverters {

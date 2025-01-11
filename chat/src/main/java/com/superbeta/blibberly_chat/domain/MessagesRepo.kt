@@ -22,4 +22,8 @@ interface MessagesRepo {
     //    suspend fun getMessagesFromLocalDb(userId: String)
     fun disconnectUserFromSocket()
     fun getSpecificUserProfileWithEmail(email: String): UserDataModel?
+
+
+
+
 }

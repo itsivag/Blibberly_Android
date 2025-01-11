@@ -23,7 +23,9 @@ fun TextFieldWithLabel(
     labelText: String,
     placeHolderText: String,
     keyboardOptions: KeyboardOptions,
-    isEnabled: Boolean = true
+    isEnabled: Boolean = true,
+    isError: Boolean = false,
+    errorText: String = ""
 ) {
     Text(
         text = labelText,
@@ -44,13 +46,19 @@ fun TextFieldWithLabel(
             Text(
                 text = placeHolderText,
                 color = ColorDisabled,
-//                    modifier = Modifier.padding(vertical = 8.dp)
             )
         },
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = ColorPrimary,
             unfocusedBorderColor = ColorDisabled,
         ),
-        keyboardOptions = keyboardOptions
+        keyboardOptions = keyboardOptions,
+        isError = isError,
+        supportingText = {
+            if (isError) Text(
+                text = errorText,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
     )
 }
