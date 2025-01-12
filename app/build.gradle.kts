@@ -37,7 +37,7 @@ android {
 //    println(localProperties)
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -118,16 +118,16 @@ dependencies {
     //FCM
 //    implementation(libs.firebase.messaging)
 
-    implementation("androidx.compose.material:material:1.6.7")
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.material.icons.extended)
     //compose animation
-    implementation("androidx.compose.animation:animation:1.6.6")
+    implementation(libs.androidx.animation)
 
     //navigation
     implementation(libs.navigation.compose)
 
     //ktor client for supabase
-    implementation("io.ktor:ktor-client-android:2.3.11")
+    implementation(libs.ktor.client.android)
 
     //supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:2.4.2"))
@@ -136,7 +136,7 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:storage-kt")
 
     //gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.gson)
 
     //coil
     implementation(libs.coil.kt)
@@ -150,17 +150,17 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
 
     //fonts
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.1")
+    implementation(libs.androidx.ui.text.google.fonts)
 
     //lottie
-    implementation("com.airbnb.android:lottie-compose:6.4.1")
+    implementation(libs.lottie.compose)
     //socket io
     implementation("io.socket:socket.io-client:2.0.0") {
         exclude(group = "org.json", module = "json")
     }
 
     //datastore
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation(libs.androidx.datastore.preferences)
 
     //shimmer effect
     implementation(libs.compose.shimmer)
