@@ -62,7 +62,7 @@ fun BlibberlyHorizontalPager(
                         navigateToChat = { navigateToChat(currUser.email, currUser.name) })
                 }
                 item { AboutCard(user = currUser) }
-                item { LookingForCard() }
+//                item { LookingForCard() }
                 item { ProfessionalCard() }
                 item { LanguageCard(user = currUser) }
                 item { InterestsCard(interests = currUser.interests) }

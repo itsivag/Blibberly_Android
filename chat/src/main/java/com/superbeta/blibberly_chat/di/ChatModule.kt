@@ -1,6 +1,7 @@
 package com.superbeta.blibberly_chat.di
 
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
+import com.superbeta.blibberly_chat.BuildConfig
 import com.superbeta.blibberly_chat.data.local.BlibberlyRoomInstanceProvider
 import com.superbeta.blibberly_chat.data.local.MessagesDao
 import com.superbeta.blibberly_chat.data.remote.socket.SocketHandler
@@ -32,8 +33,8 @@ val chatModule = module {
 
     single<SupabaseClient> {
         createSupabaseClient(
-            supabaseUrl = "https://dxyahfscoumjwjuwlgje.supabase.co",
-            supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4eWFoZnNjb3VtandqdXdsZ2plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY5MTUzOTMsImV4cCI6MjAzMjQ5MTM5M30.DqthAS5M1CSeBFQf87TAxv57eMCalxxiPAbRp_XQ8AE"
+            supabaseUrl = BuildConfig.SUPABASE_DEBUG_URL,
+            supabaseKey = BuildConfig.SUPABASE_DEBUG_KEY
         ) {
             install(Postgrest)
             install(Auth)

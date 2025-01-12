@@ -3,7 +3,9 @@ package com.superbeta.blibberly.ui.components.profile
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,10 +31,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
@@ -40,6 +45,9 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.home.presentation.ui.BLIBMOJI_BG_COLORS
+import com.superbeta.blibberly.ui.ColorPrimary
+import com.superbeta.blibberly.ui.ColorSecondary
+import com.superbeta.blibberly.ui.ColorTertiary
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 
@@ -49,6 +57,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
     val overLayTextColor = Color.White
+    val outlineTextColor = Color.Black
 
     val avatarBGColorsMap = mapOf(
         BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
@@ -100,7 +109,8 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                                 text = userDataModel.photoMetaData.bgEmoji,
                                 fontFamily = FontProvider.notoEmojiFontFamily,
                                 fontSize = 16.sp,
-                                modifier = Modifier.padding(4.dp),
+                                modifier = Modifier
+                                    .padding(4.dp),
                                 color = Color.Gray
                             )
                         }
@@ -130,7 +140,8 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
             Row {
                 //name
                 Text(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier
+                        .padding(8.dp),
                     text = userDataModel.name,
                     fontFamily = FontProvider.bebasFontFamily,
                     fontSize = 28.sp,

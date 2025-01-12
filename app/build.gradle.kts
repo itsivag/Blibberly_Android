@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -23,6 +25,16 @@ android {
         }
     }
 
+    val localProperties = Properties()
+    val localPropertiesFile = File(rootDir, "secret.properties")
+    if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
+        localPropertiesFile.inputStream().use {
+            localProperties.load(it)
+        }
+    }
+
+
+//    println(localProperties)
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -31,7 +43,32 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("debug")
+            buildConfigField(
+                "String",
+                "SUPABASE_DEBUG_URL",
+                localProperties.getProperty("SUPABASE_DEBUG_URL")
+            )
+            buildConfigField(
+                "String",
+                "SUPABASE_DEBUG_KEY",
+                localProperties.getProperty("SUPABASE_DEBUG_KEY")
+            )
         }
+
+        debug {
+            buildConfigField(
+                "String",
+                "SUPABASE_DEBUG_URL",
+                localProperties.getProperty("SUPABASE_DEBUG_URL")
+            )
+            buildConfigField(
+                "String",
+                "SUPABASE_DEBUG_KEY",
+                localProperties.getProperty("SUPABASE_DEBUG_KEY")
+            )
+        }
+
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -42,6 +79,8 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+//        resValues = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -67,7 +106,6 @@ dependencies {
     implementation(project(":chat"))
     implementation(libs.androidx.compose.material)
     implementation(project(":auth"))
-//    implementation(project(":blibberly_supabase"))
     implementation(project(":profile_ops"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

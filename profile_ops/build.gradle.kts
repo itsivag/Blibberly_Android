@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -16,12 +18,45 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    val localProperties = Properties()
+    val localPropertiesFile = File(rootDir, "secret.properties")
+    if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
+        localPropertiesFile.inputStream().use {
+            localProperties.load(it)
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
+            )
+
+            buildConfigField(
+                "String",
+                "SUPABASE_DEBUG_URL",
+                localProperties.getProperty("SUPABASE_DEBUG_URL")
+            )
+            buildConfigField(
+                "String",
+                "SUPABASE_DEBUG_KEY",
+                localProperties.getProperty("SUPABASE_DEBUG_KEY")
+            )
+        }
+
+
+        debug {
+            buildConfigField(
+                "String",
+                "SUPABASE_DEBUG_URL",
+                localProperties.getProperty("SUPABASE_DEBUG_URL")
+            )
+            buildConfigField(
+                "String",
+                "SUPABASE_DEBUG_KEY",
+                localProperties.getProperty("SUPABASE_DEBUG_KEY")
             )
         }
     }
@@ -31,6 +66,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
