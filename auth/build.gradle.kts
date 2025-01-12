@@ -89,7 +89,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     //ktor client for supabase
-    implementation("io.ktor:ktor-client-android:2.3.11")
+    implementation(libs.ktor.client.android)
 
     //supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:2.4.2"))
@@ -103,20 +103,20 @@ dependencies {
     androidTestImplementation(composeBom)
 
     //material3
-    implementation("androidx.compose.material3:material3")
+    implementation(libs.androidx.compose.material3.material3)
 
     //preview
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation(libs.androidx.compose.ui.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.ui.tooling)
 
     //navigation
     implementation(libs.navigation.compose)
 
     //datastore
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation(libs.androidx.datastore.preferences)
 
     //gson
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation(libs.gson)
 
     //room
     val room_version = "2.6.1"

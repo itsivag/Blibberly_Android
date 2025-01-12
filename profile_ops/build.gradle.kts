@@ -100,5 +100,5 @@ dependencies {
     implementation(libs.koin.compose)
 
     //gson
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation(libs.gson)
 }
