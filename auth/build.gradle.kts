@@ -43,6 +43,11 @@ android {
                 "SUPABASE_DEBUG_KEY",
                 localProperties.getProperty("SUPABASE_DEBUG_KEY")
             )
+            buildConfigField(
+                "String",
+                "WEB_GOOGLE_CLIENT_ID",
+                localProperties.getProperty("WEB_GOOGLE_CLIENT_ID")
+            )
         }
 
         debug {
@@ -55,6 +60,11 @@ android {
                 "String",
                 "SUPABASE_DEBUG_KEY",
                 localProperties.getProperty("SUPABASE_DEBUG_KEY")
+            )
+            buildConfigField(
+                "String",
+                "WEB_GOOGLE_CLIENT_ID",
+                localProperties.getProperty("WEB_GOOGLE_CLIENT_ID")
             )
         }
     }
@@ -131,4 +141,18 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
 
+    //firebase auth
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.google.firebase.auth)
+    implementation(libs.play.services.auth)
+
+    //cred manager
+    implementation("androidx.credentials:credentials:1.2.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.2.0")
+//    implementation (libs.androidx.credentials)
+//    implementation (libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+//    implementation ("androidx.credentials:credentials:<latest version>")
+//    implementation ("androidx.credentials:credentials-play-services-auth:<latest version>")
+//    implementation ("com.google.android.libraries.identity.googleid:googleid:<latest version>")
 }

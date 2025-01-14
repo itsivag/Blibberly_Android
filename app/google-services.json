@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "680631497033",
-    "project_id": "blibberly-9d83b",
-    "storage_bucket": "blibberly-9d83b.appspot.com"
+    "project_number": "597777960037",
+    "project_id": "blibberly-b505c",
+    "storage_bucket": "blibberly-b505c.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:680631497033:android:5f744e7ab767da6fd5ea98",
+        "mobilesdk_app_id": "1:597777960037:android:06cbdc79891202f187ca8c",
         "android_client_info": {
           "package_name": "com.superbeta.blibberly"
         }
       },
       "oauth_client": [
         {
-          "client_id": "680631497033-8g1f3m0dfskk9cc3g4a5g3panbvbiedc.apps.googleusercontent.com",
+          "client_id": "597777960037-aef2o6emskgm0rgl4og9i452lgdt2of0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCOgiSRArkl1M4FfsJT1ARHcUNiKUqUxCA"
+          "current_key": "AIzaSyAfVatVrxCduQNectmH8vxjlS1aoXGVbiE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "680631497033-8g1f3m0dfskk9cc3g4a5g3panbvbiedc.apps.googleusercontent.com",
+              "client_id": "597777960037-aef2o6emskgm0rgl4og9i452lgdt2of0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

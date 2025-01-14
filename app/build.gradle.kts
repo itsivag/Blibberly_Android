@@ -15,9 +15,9 @@ android {
     defaultConfig {
         applicationId = "com.superbeta.blibberly"
         minSdk = 25
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 35
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -66,6 +66,8 @@ android {
                 "SUPABASE_DEBUG_KEY",
                 localProperties.getProperty("SUPABASE_DEBUG_KEY")
             )
+            signingConfig = signingConfigs.getByName("debug")
+
         }
 
 
@@ -169,4 +171,11 @@ dependencies {
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
+
+    //splashscreen
+    implementation(libs.androidx.core.splashscreen)
+
+    //creds manager
+    implementation (libs.googleid)
+    
 }

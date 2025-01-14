@@ -10,7 +10,7 @@ interface AuthRepository {
     fun getAuthState(): StateFlow<AuthState>
     suspend fun createUser(mEmail: String, mPassword: String)
     suspend fun signInWithEmail(mEmail: String, mPassword: String)
-    suspend fun signInWithGoogle()
+    suspend fun signInWithGoogle(idToken: String)
 
     suspend fun getUserData(): UserInfo
     suspend fun findIfUserRegistered(email: String): Boolean
@@ -18,5 +18,6 @@ interface AuthRepository {
 
     suspend fun getUsersFromDataStore(): Flow<String?>
     suspend fun logOut()
+    suspend fun linkAccountWithGoogle(idToken: String)
 
 }
