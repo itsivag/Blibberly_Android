@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.superbeta.blibberly.auth.presentation.ui.SignUpScreen
+import com.superbeta.blibberly_auth.presentation.ui.SignUpScreen
 import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_auth.presentation.ui.OTPScreen
@@ -24,7 +24,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, modifier: Mod
         }
 
         composable(Screen.SignUp.route) {
-            SignUpScreen(modifier = modifier, navController = navController)
+            SignUpScreen(modifier = modifier, navigateBack = { navController.popBackStack() })
         }
 
         composable(Screen.OTPEnter.route) {

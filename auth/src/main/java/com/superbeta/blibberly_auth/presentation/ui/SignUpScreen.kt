@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.auth.presentation.ui
+package com.superbeta.blibberly_auth.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,14 +32,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.theme.components.PrimaryButton
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(modifier: Modifier, navController: NavHostController) {
+fun SignUpScreen(
+    modifier: Modifier,
+    navigateBack: () -> Unit,
+    authViewModel: AuthViewModel = koinViewModel()
+) {
 
 
     var email by remember {
@@ -71,7 +77,7 @@ fun SignUpScreen(modifier: Modifier, navController: NavHostController) {
             .padding(vertical = 8.dp)
 
         TopAppBar(title = {}, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = { navigateBack() }) {
 //                Icon(
 //                    imageVector = ImageVector.vectorResource(id = R.drawable.arrow_back),
 //                    contentDescription = "Go back"
@@ -132,17 +138,8 @@ fun SignUpScreen(modifier: Modifier, navController: NavHostController) {
             isButtonEnabled = isButtonEnabled,
             onClickMethod = {
                 scope.launch {
-//                    AuthRepositoryImpl().createUser(
-//                        mEmail = email.text, mPassword = password.text
-//                    )
-
-//                    AuthRepositoryImpl().createUser(
-//                        email.text,
-//                        password.text
-//                    )
-
+                    authViewModel.signUpWithEmail(email.text, password.text)
                 }
-//                navController.navigate("otp_enter")
             })
 
     }

@@ -1,6 +1,5 @@
 package com.superbeta.blibberly_auth.presentation.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,8 +20,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,12 +32,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.credentials.CredentialManager
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.superbeta.blibberly_auth.presentation.ui.components.GoogleSignInButton
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
-import com.superbeta.blibberly_auth.utils.AuthState
 import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.theme.components.PrimaryButton
@@ -165,7 +158,7 @@ fun SignInScreen(
 //                    AuthRepositoryImpl().createUser(
 //                        mEmail = email.text, mPassword = password.text
 //                    )
-
+                authViewModel.signInWithEmail(email.text,password.text)
 //                    val notificationRepo = NotificationRepoImpl()
 //                    AuthRepositoryImpl().signInWithEmail(email.text, password.text)
 

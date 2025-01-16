@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface AuthRepository {
-    suspend fun updateAuthState()
+//    suspend fun updateAuthState()
     fun getAuthState(): StateFlow<AuthState>
     suspend fun createUser(mEmail: String, mPassword: String)
     suspend fun signInWithEmail(mEmail: String, mPassword: String)
@@ -18,5 +18,6 @@ interface AuthRepository {
 
     suspend fun getUsersFromDataStore(): Flow<String?>
     suspend fun logOut()
+    suspend fun signUpWithEmail(email: String, password: String)
 
 }

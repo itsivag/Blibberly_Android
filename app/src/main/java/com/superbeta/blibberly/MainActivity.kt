@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -131,31 +132,19 @@ class MainActivity : ComponentActivity() {
 
                         }) {
                             val authState = authViewModel.authState.collectAsState()
-//                            var route = ""
+                            Log.i("AUTH STATE --->>", authState.value.toString())
                             var startNavRoute = ""
-                            when (authState.value) {
+                            startNavRoute = when (authState.value) {
                                 AuthState.SIGNED_IN -> {
-                                    startNavRoute = Screen.Home.route
-//                                    route = ""
+                                    Screen.Home.route
                                 }
-//                            AuthState.SIGNED_OUT -> Screen.SignIn.route
-//                            AuthState.USER_EMAIL_STORED -> {}
-//                            AuthState.USER_EMAIL_STORAGE_ERROR ->
-                                AuthState.USER_NOT_REGISTERED -> {
-                                    startNavRoute = Routes.OnBoarding.graph
-//                                    route = Routes.OnBoarding.graph
-                                }
-//                            AuthState.ERROR ->
-//                            AuthState.LOADING ->
-//                            AuthState.IDLE ->
-                                AuthState.USER_REGISTERED -> {
-                                    startNavRoute = Screen.Home.route
-//                                    route = ""
+
+                                AuthState.SIGNED_UP -> {
+                                    Routes.OnBoarding.graph
                                 }
 
                                 else -> {
-                                    startNavRoute = Routes.Auth.graph
-//                                    route = Routes.Auth.graph
+                                    Routes.Auth.graph
                                 }
                             }
 

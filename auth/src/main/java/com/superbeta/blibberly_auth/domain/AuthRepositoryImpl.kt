@@ -2,6 +2,7 @@ package com.superbeta.blibberly_auth.domain
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -14,7 +15,6 @@ import com.superbeta.blibberly_auth.utils.AuthState
 import io.github.jan.supabase.exceptions.RestException
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,65 +31,64 @@ class AuthRepositoryImpl(
     private val authDataStoreService: AuthDataStoreService
 ) : AuthRepository {
 
-    private val _authState = MutableStateFlow(AuthState.IDLE)
-    private val authState: StateFlow<AuthState> = _authState
-
-    init {
-        CoroutineScope(IO).launch {
-            updateAuthState()
-        }
+    //    private val _authState = MutableStateFlow(AuthState.IDLE)
+    override fun getAuthState(): StateFlow<AuthState> {
+        return authRemoteService.getAuthState()
     }
 
-    override suspend fun updateAuthState() {
-//        if (_authState.value == AuthState.SIGNED_IN) {
-        getUsersFromDataStore().collect { user ->
-            if (!user.isNullOrEmpty()) {
-                val isUserRegistered = findIfUserRegistered(user)
-                if (isUserRegistered) {
-                    //signed in and registered
-                    Log.i("AuthRepositoryImpl", "Registered")
-                    _authState.value = AuthState.USER_REGISTERED
-                } else {
-                    //signed in and not registered
-                    Log.i("AuthRepositoryImpl", "Not Registered")
-                    _authState.value = AuthState.USER_NOT_REGISTERED
-                }
-            } else {
-                _authState.value = AuthState.SIGNED_OUT
-            }
-            Log.i("AuthRepositoryImpl", "AUTH STATE : " + _authState.value.toString())
-        }
+
+//    init {
+//        CoroutineScope(IO).launch {
+//            updateAuthState()
 //        }
-    }
+//    }
 
-    override fun getAuthState(): StateFlow<AuthState> = authState
+//    override suspend fun updateAuthState() {
+////        if (_authState.value == AuthState.SIGNED_IN) {
+//        getUsersFromDataStore().collect { user ->
+//            if (!user.isNullOrEmpty()) {
+//                val isUserRegistered = findIfUserRegistered(user)
+//                if (isUserRegistered) {
+//                    //signed in and registered
+//                    Log.i("AuthRepositoryImpl", "Registered")
+//                    _authState.value = AuthState.USER_REGISTERED
+//                } else {
+//                    //signed in and not registered
+//                    Log.i("AuthRepositoryImpl", "Not Registered")
+//                    _authState.value = AuthState.USER_NOT_REGISTERED
+//                }
+//            } else {
+//                _authState.value = AuthState.SIGNED_OUT
+//            }
+//            Log.i("AuthRepositoryImpl", "AUTH STATE : " + _authState.value.toString())
+//        }
+////        }
+//    }
+
+//    override fun getAuthState(): StateFlow<AuthState> = authState
+
 
     override suspend fun createUser(mEmail: String, mPassword: String) {
-        _authState.value = AuthState.LOADING
+//        _authState.value = AuthState.LOADING
         try {
-//            supabase.auth.signUpWith(Email) {
-//                email = mEmail
-//                password = mPassword
-//            }
+            authRemoteService.signUpWithEmail(mEmail, mPassword)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     override suspend fun signInWithEmail(mEmail: String, mPassword: String) {
-        _authState.value = AuthState.LOADING
+//        _authState.value = AuthState.LOADING
         try {
-//            supabase.auth.signInWith(Email) {
-//                email = mEmail
-//                password = mPassword
-//            }
+            authRemoteService.signInWithEmail(mEmail, mPassword)
         } catch (e: Exception) {
-            e.printStackTrace()
+//            _authState.value = AuthState.ERROR
+            Log.e("AuthRepositoryImpl", "Failed to sign in with email: $e")
         }
     }
 
     override suspend fun signInWithGoogle() {
-        _authState.value = AuthState.LOADING
+//        _authState.value = AuthState.LOADING
         Log.i("AuthRepositoryImpl", "Starting Google Sign In")
 
         // Generate a nonce and hash it with sha-256
@@ -136,12 +135,12 @@ class AuthRepositoryImpl(
 //                val user = supabase.auth.retrieveUserForCurrentSession(updateSession = true)
                 val user = authRemoteService.retrieveSession()
                 Log.i("Google Sign In User Data => ", user.toString())
-                _authState.value = AuthState.SIGNED_IN
+//                _authState.value = AuthState.SIGNED_IN
                 storeUserInDataStore(user)
 //                Log.i("AuthRepositoryImpl", "AUTH STATE" + _authState.value.toString())
-                if (_authState.value == AuthState.SIGNED_IN) {
-                    updateAuthState()
-                }
+//                if (_authState.value == AuthState.SIGNED_IN) {
+//                    updateAuthState()
+//                }
 //                val isUserRegistered = findIfUserRegistered()
 
 //                if (isUserRegistered) {
@@ -169,7 +168,15 @@ class AuthRepositoryImpl(
     override suspend fun logOut() {
         Log.i("AuthRepositoryImpl", "Deleting data stores")
         authDataStoreService.deleteUserData()
-        _authState.value = AuthState.SIGNED_OUT
+//        _authState.value = AuthState.SIGNED_OUT
+    }
+
+    override suspend fun signUpWithEmail(email: String, password: String) {
+        try {
+            authRemoteService.signUpWithEmail(email, password)
+        } catch (e: Exception) {
+            Log.e("AuthRepositoryImpl", "Failed to sign up with email: $e")
+        }
     }
 
 
