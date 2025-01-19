@@ -24,7 +24,7 @@ import org.koin.dsl.module
 
 val chatModule = module {
     single<SocketHandler> {
-        SocketHandlerImpl(androidContext().userPreferencesDataStore, get())
+        SocketHandlerImpl(get())
     }
 
     single<MessagesDao> {

@@ -2,10 +2,11 @@ package com.superbeta.blibberly.user.repo
 
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
+import io.github.jan.supabase.gotrue.user.UserInfo
 
 interface MUserRepository {
     suspend fun getUser(): UserDataModel
-    suspend fun getUserEmail(): String?
+    suspend fun getUserEmail(): UserInfo?
     suspend fun getUserFCMToken(): String
     suspend fun setUserToLocalDb(userDataModel: UserDataModel?)
     suspend fun setUserToRemote(userDataModel: UserDataModel)

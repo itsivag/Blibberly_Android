@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SocketHandlerImpl(
-    private val userPreferencesDataStore: DataStore<Preferences>,
+//    private val userPreferencesDataStore: DataStore<Preferences>,
     private val chatRemoteService: ChatRemoteService
 ) :
     SocketHandler {
@@ -38,8 +38,8 @@ class SocketHandlerImpl(
     override suspend fun connectWithSocketBackend() {
         try {
             val options = IO.Options()
-            val preferences = userPreferencesDataStore.data.first()
-            val email = preferences[stringPreferencesKey("user_email")]
+//            val preferences = userPreferencesDataStore.data.first()
+            val email = chatRemoteService.retrieveSession()?.email
 
             if (email != null) {
 //                options.auth = mapOf("username" to email)

@@ -48,7 +48,7 @@ val mainModule = module {
         MUserRepositoryImpl(
             db = get(),
             notificationRepo = get(),
-            userPreferencesDataStore = androidContext().userPreferencesDataStore,
+//            userPreferencesDataStore = androidContext().userPreferencesDataStore,
             userRemoteService = get()
         )
     }

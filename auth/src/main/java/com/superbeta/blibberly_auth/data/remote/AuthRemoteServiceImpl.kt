@@ -48,7 +48,7 @@ class AuthRemoteServiceImpl(private val supabase: SupabaseClient) : AuthRemoteSe
     override suspend fun findIfUserRegistered(email: String): Boolean {
         val userData = supabase.from("Users").select { filter { UserDataModel::email eq email } }
             .decodeSingleOrNull<UserDataModel>()
-        Log.i("AuthRemoteServiceImpl", "User Data From Supabase" + userData.toString())
+//        Log.i("AuthRemoteServiceImpl", "User Data From Supabase" + userData.toString())
         return userData != null
     }
 
@@ -71,29 +71,34 @@ class AuthRemoteServiceImpl(private val supabase: SupabaseClient) : AuthRemoteSe
         supabase.auth.sessionStatus.collect {
             when (it) {
                 is SessionStatus.Authenticated -> {
-                    println("Received new authenticated session.")
+//                    println("Received new authenticated session.")
                     when (it.source) {
                         SessionSource.External -> {}
                         is SessionSource.Refresh -> {}
                         is SessionSource.SignIn -> {
                             retrieveSession().apply {
                                 if (this.email?.let { it1 -> findIfUserRegistered(it1) } == true) {
+//                                    println("signed in success 1")
                                     _authState.value = AuthState.SIGNED_IN
                                 } else {
+//                                    println("signed up success")
                                     _authState.value = AuthState.SIGNED_UP
                                 }
                             }
                         }
 
                         is SessionSource.SignUp -> {
+//                            println("signed up success")
                             _authState.value = AuthState.SIGNED_UP
                         }
 
                         SessionSource.Storage -> {
                             retrieveSession().apply {
                                 if (this.email?.let { it1 -> findIfUserRegistered(it1) } == true) {
+//                                    println("signed in success 2")
                                     _authState.value = AuthState.SIGNED_IN
                                 } else {
+//                                    println("signed up success")
                                     _authState.value = AuthState.SIGNED_UP
                                 }
                             }
@@ -109,10 +114,10 @@ class AuthRemoteServiceImpl(private val supabase: SupabaseClient) : AuthRemoteSe
                 is SessionStatus.NotAuthenticated -> {
                     if (it.isSignOut) {
                         _authState.value = AuthState.SIGNED_OUT
-                        Log.i("AuthRemoteServiceImpl", "User Signed out")
+//                        Log.i("AuthRemoteServiceImpl", "User Signed out")
                     } else {
                         _authState.value = AuthState.NOT_SIGNED_IN
-                        Log.i("AuthRemoteServiceImpl", "User Not signed in")
+//                        Log.i("AuthRemoteServiceImpl", "User Not signed in")
                     }
                 }
 

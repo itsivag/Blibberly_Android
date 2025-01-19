@@ -4,11 +4,18 @@ import android.util.Log
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.from
 
-class ChatRemoteServiceImpl(supabase: SupabaseClient) : ChatRemoteService {
+class ChatRemoteServiceImpl(private val supabase: SupabaseClient) : ChatRemoteService {
     private val supabaseUsersDb = supabase.from("Users")
     private val supabaseMessageDb = supabase.from("Messages")
+
+
+    override suspend fun retrieveSession(): UserInfo {
+        return supabase.auth.retrieveUserForCurrentSession()
+    }
 
     override suspend fun getUsersProfile(
         liveUsers: List<String>, appendProfiles: (UserDataModel) -> Unit

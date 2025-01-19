@@ -2,6 +2,7 @@ package com.superbeta.blibberly.user.data.remote
 
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
+import io.github.jan.supabase.gotrue.user.UserInfo
 
 
 interface UserRemoteService {
@@ -15,4 +16,5 @@ interface UserRemoteService {
     suspend fun updateHeight(height: Double, email: String)
     suspend fun getUser(email: String): UserDataModel?
     suspend fun deleteAccount(email: String)
+    suspend fun retrieveSession(): UserInfo?
 }

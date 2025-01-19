@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly_auth.domain.AuthRepository
 import com.superbeta.blibberly_auth.utils.AuthState
-import kotlinx.coroutines.flow.Flow
+import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -37,8 +37,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    suspend fun getUserEmailFromDataStore(): Flow<String?> {
-        return authRepository.getUsersFromDataStore()
+    suspend fun retrieveSession(): UserInfo? {
+        return authRepository.retrieveSession()
     }
 
     suspend fun logOut() {

@@ -4,6 +4,8 @@ import android.util.Log
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.from
 
 class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteService {
@@ -127,6 +129,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
             return userData
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.e("Error getting UserData From Database", e.toString())
             return null
         }
     }
@@ -137,6 +140,16 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 //            usersTable.select { filter { UserDataModel::email eq email } }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    override suspend fun retrieveSession(): UserInfo? {
+        try {
+            Log.i("UserRemoteServiceImpl", "Retrieving Session")
+            return supabase.auth.retrieveUserForCurrentSession()
+        } catch (e: Exception) {
+            Log.e("UserRemoteServiceImpl", "Error retrieving session: $e")
+            return null
         }
     }
 

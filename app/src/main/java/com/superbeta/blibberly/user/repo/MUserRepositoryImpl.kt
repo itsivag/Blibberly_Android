@@ -9,6 +9,7 @@ import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.data.remote.UserRemoteService
 import com.superbeta.blibberly_auth.utils.UserDataPreferenceKeys
 import com.superbeta.blibberly_chat.notification.NotificationRepo
+import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 class MUserRepositoryImpl(
     private val db: UserLocalDao,
     private val notificationRepo: NotificationRepo,
-    private val userPreferencesDataStore: DataStore<Preferences>,
+//    private val userPreferencesDataStore: DataStore<Preferences>,
     private val userRemoteService: UserRemoteService
 ) : MUserRepository {
 
@@ -39,7 +40,11 @@ class MUserRepositoryImpl(
     }
 
     override suspend fun getUser(): UserDataModel {
-        val remoteUserData = getUserEmail()?.let { userRemoteService.getUser(it) }
+        val remoteUserData = userRemoteService.retrieveSession()?.email?.let {
+            userRemoteService.getUser(
+                it
+            )
+        }
         val localUserData = db.getUser()
         Log.i("MUserRepositoryImpl", "Remote Data" + remoteUserData.toString())
 
@@ -63,10 +68,8 @@ class MUserRepositoryImpl(
         return localUserData
     }
 
-    override suspend fun getUserEmail(): String? {
-        return userPreferencesDataStore.data.map { preferences ->
-            preferences[UserDataPreferenceKeys.USER_EMAIL]
-        }.firstOrNull()
+    override suspend fun getUserEmail(): UserInfo? {
+        return userRemoteService.retrieveSession()
     }
 
     override suspend fun getUserFCMToken(): String {

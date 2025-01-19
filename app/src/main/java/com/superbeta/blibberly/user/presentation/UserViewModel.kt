@@ -27,7 +27,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     }
 
     suspend fun getUserEmail(): String? {
-        return mUserRepository.getUserEmail()
+        return mUserRepository.getUserEmail()?.email
     }
 
     suspend fun getUserFCMToken(): String {

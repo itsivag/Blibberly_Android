@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.superbeta.blibberly.root.BlibberlyBottomBar
@@ -121,20 +123,14 @@ class MainActivity : ComponentActivity() {
 
                         }
 
-                        Scaffold(topBar = {
-                            if (isTopBarVisible) {
-                                BlibberlyTopAppBar()
-                            }
-                        }, bottomBar = {
-                            if (isBottomNavBarVisible) {
-                                BlibberlyBottomBar(navController, bottomNavScreens, selectedScreen)
-                            }
+                        val authState by authViewModel.authState.collectAsStateWithLifecycle()
+                        var startNavRoute by remember {
+                            mutableStateOf(Routes.Auth.graph)
+                        }
 
-                        }) {
-                            val authState = authViewModel.authState.collectAsState()
-                            Log.i("AUTH STATE --->>", authState.value.toString())
-                            var startNavRoute = ""
-                            startNavRoute = when (authState.value) {
+                        LaunchedEffect(authState) {
+                            Log.i("AUTH STATE --->>", authState.toString())
+                            startNavRoute = when (authState) {
                                 AuthState.SIGNED_IN -> {
                                     Screen.Home.route
                                 }
@@ -147,7 +143,18 @@ class MainActivity : ComponentActivity() {
                                     Routes.Auth.graph
                                 }
                             }
+                        }
 
+                        Scaffold(topBar = {
+                            if (isTopBarVisible) {
+                                BlibberlyTopAppBar()
+                            }
+                        }, bottomBar = {
+                            if (isBottomNavBarVisible) {
+                                BlibberlyBottomBar(navController, bottomNavScreens, selectedScreen)
+                            }
+
+                        }) {
                             BlibberlyNavHost(
                                 navController = navController,
                                 modifier = Modifier.padding(it),

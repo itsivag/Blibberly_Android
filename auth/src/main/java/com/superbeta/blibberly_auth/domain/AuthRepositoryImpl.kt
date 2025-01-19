@@ -163,7 +163,7 @@ class AuthRepositoryImpl(
         authDataStoreService.setUserData(user)
 
 
-    override suspend fun getUsersFromDataStore(): Flow<String?> = authDataStoreService.getUserData()
+//    override suspend fun getUsersFromDataStore(): Flow<String?> = authDataStoreService.getUserData()
 
     override suspend fun logOut() {
         Log.i("AuthRepositoryImpl", "Deleting data stores")
@@ -176,6 +176,15 @@ class AuthRepositoryImpl(
             authRemoteService.signUpWithEmail(email, password)
         } catch (e: Exception) {
             Log.e("AuthRepositoryImpl", "Failed to sign up with email: $e")
+        }
+    }
+
+    override suspend fun retrieveSession(): UserInfo? {
+        try {
+            return authRemoteService.retrieveSession()
+        } catch (e: Exception) {
+            Log.e("AuthRepositoryImpl", "Failed to retrieve session: $e")
+            return null
         }
     }
 
