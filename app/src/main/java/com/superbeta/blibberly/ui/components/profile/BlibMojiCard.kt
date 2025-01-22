@@ -74,7 +74,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
 
     Box(
         modifier = Modifier
-            .height(screenHeight / 2)
+            .height(screenHeight / 2.3f)
             .background(color = Color.White, shape = RoundedCornerShape(16.dp))
             .padding(12.dp)
     ) {
