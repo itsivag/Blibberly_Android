@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,9 +60,9 @@ fun BioScreen(
     userViewModel: UserViewModel = koinViewModel()
 ) {
 
-    var isButtonEnabled by remember {
-        mutableStateOf(false)
-    }
+//    var isButtonEnabled by remember {
+//        mutableStateOf(false)
+//    }
 
 
     var name by remember {
@@ -128,18 +129,24 @@ fun BioScreen(
             userFCMToken = userViewModel.getUserFCMToken()
         }
     }
-    LaunchedEffect(key1 = userData) {
-        scope.launch {
-            isButtonEnabled =
-                !(name.text.isEmpty() || age.text.isEmpty() || height.text.isEmpty() || weight.text.isEmpty())
-        }
+//    LaunchedEffect(name.text, age.text, height.text, weight.text) {
+//        isButtonEnabled = (name.text.isNotEmpty() ||
+//                age.text.isNotEmpty() ||
+//                height.text.isNotEmpty() ||
+//                weight.text.isNotEmpty())
+//    }
+    val isButtonEnabled by remember(name.text, age.text, height.text, weight.text) {
+        mutableStateOf(
+            name.text.isNotEmpty() &&
+                    age.text.isNotEmpty() &&
+                    height.text.isNotEmpty() &&
+                    weight.text.isNotEmpty()
+        )
     }
 
 
-
-    LazyColumn(modifier = modifier) {
+    LazyColumn(modifier = modifier.imePadding()) {
         item {
-
             TopAppBar(title = { }, navigationIcon = {
                 IconButton(onClick = { navigateBack() }) {
                     Icon(

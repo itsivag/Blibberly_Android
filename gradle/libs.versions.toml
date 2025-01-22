@@ -4,6 +4,7 @@ animation = "1.7.6"
 composeShimmer = "1.3.1"
 converterGson = "2.11.0"
 datastorePreferences = "1.1.1"
+firebaseBom = "33.0.0"
 gson = "2.11.0"
 kotlin = "1.9.0"
 coreKtx = "1.12.0"
@@ -32,6 +33,7 @@ firebaseFirestore = "25.0.0"
 firebaseAuth = "23.0.0"
 media3CommonKtx = "1.4.1"
 koin-bom = "4.0.0"
+crashlytics = "3.0.2"
 
 [libraries]
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
@@ -45,6 +47,9 @@ androidx-material-icons-extended = { module = "androidx.compose.material:materia
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "composeShimmer" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -79,7 +84,7 @@ androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-
 #koin
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
 koin-android = { module = "io.insert-koin:koin-android" }
-koin-compose = {module = "io.insert-koin:koin-androidx-compose"}
+koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -90,4 +95,5 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "devtools-ksp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 
