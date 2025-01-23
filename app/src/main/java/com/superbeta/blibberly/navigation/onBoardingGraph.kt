@@ -10,6 +10,7 @@ import com.superbeta.blibberly.onBoarding.presentation.ui.BioScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.BlibmojiScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.CurateProfilesScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.OnBoardingScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.QueueScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.SkillsAndInterestsScreen
 import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
@@ -60,6 +61,10 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
                 navController.navigate(Screen.Home.route)
 
             })
+        }
+
+        composable(Screen.Queue.route) {
+            QueueScreen(modifier)
         }
     }
 }

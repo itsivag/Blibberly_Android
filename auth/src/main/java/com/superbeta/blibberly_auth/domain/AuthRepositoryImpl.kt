@@ -2,6 +2,7 @@ package com.superbeta.blibberly_auth.domain
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.collectAsState
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
@@ -31,7 +32,6 @@ class AuthRepositoryImpl(
     private val authDataStoreService: AuthDataStoreService
 ) : AuthRepository {
 
-    //    private val _authState = MutableStateFlow(AuthState.IDLE)
     override fun getAuthState(): StateFlow<AuthState> {
         return authRemoteService.getAuthState()
     }
@@ -65,8 +65,7 @@ class AuthRepositoryImpl(
 ////        }
 //    }
 
-//    override fun getAuthState(): StateFlow<AuthState> = authState
-
+    //    override fun getAuthState(): StateFlow<AuthState> = authState
 
     override suspend fun createUser(mEmail: String, mPassword: String) {
 //        _authState.value = AuthState.LOADING
@@ -175,6 +174,9 @@ class AuthRepositoryImpl(
         try {
             authRemoteService.signUpWithEmail(email, password)
         } catch (e: Exception) {
+            if (e.message?.contains("Invalid login credentials") == true) {
+                Toast.makeText(context, "Invalid login credentials!", Toast.LENGTH_SHORT).show()
+            }
             Log.e("AuthRepositoryImpl", "Failed to sign up with email: $e")
         }
     }
