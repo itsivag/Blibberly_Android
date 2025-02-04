@@ -15,12 +15,14 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, modifier: Mod
     navigation(startDestination = Screen.SignIn.route, route = Routes.Auth.graph) {
 
         composable(Screen.SignIn.route) {
-            SignInScreen(modifier, navigateToHome = {
-                navController.navigate(Screen.Home.route)
-
-            }, navigateToSignUp = {
-                navController.navigate(Screen.SignUp.route)
-            })
+            SignInScreen(modifier,
+//                navigateToHome = {
+//                navController.navigate(Screen.Home.route)
+//            }
+//                ,
+                navigateToSignUp = {
+                    navController.navigate(Screen.SignUp.route)
+                })
         }
 
         composable(Screen.SignUp.route) {

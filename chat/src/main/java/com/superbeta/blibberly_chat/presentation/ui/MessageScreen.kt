@@ -43,6 +43,7 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubbl
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
+import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.presentation.ui.components.BlibMojiCircleAvatar
 import com.superbeta.blibberly_chat.presentation.ui.components.ProfileOpsMessageComponent
@@ -59,6 +60,7 @@ fun MessageScreen(
     navigateToProfile: (String, String) -> Unit,
     messageViewModel: MessageViewModel = koinViewModel(),
     profileOpsViewModel: ProfileOpsViewModel = koinViewModel(),
+    authViewModel: AuthViewModel = koinViewModel()
 ) {
 
 
@@ -90,9 +92,10 @@ fun MessageScreen(
 
     LaunchedEffect(key1 = true) {
         scope.launch(IO) {
-            userPreferencesDataStore.data.collect { preferences ->
-                currUser = preferences[stringPreferencesKey("user_email")]
-            }
+            currUser = authViewModel.retrieveSession()?.email
+//            userPreferencesDataStore.data.collect { preferences ->
+//                currUser = preferences[stringPreferencesKey("user_email")]
+//            }
         }
     }
 

@@ -46,7 +46,7 @@ fun SignInScreen(
 //    navController: NavHostController,
     authViewModel: AuthViewModel = koinViewModel(),
     navigateToSignUp: () -> Unit,
-    navigateToHome: () -> Unit,
+//    navigateToHome: () -> Unit,
 ) {
 
 //    val authState by authViewModel.authState.collectAsStateWithLifecycle()

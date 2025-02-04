@@ -69,29 +69,29 @@ class MessagesRepoImpl(
                 }
             }
         }
-
-        val messagesFromRemoteDb =
-            currUserEmail?.let {
-                try {
-                    chatRemoteService.getMessagesFromRemoteDb(it, receiverEmail).map { msg ->
-                        formatTimeStamp(msg)
-                    }
-                } catch (e: Exception) {
-                    Log.e("MessagesRepoImpl", "Error getting messages from remote db")
-                    e.printStackTrace()
-                    null
-                }
-            }
+//TODO remote db
+//        val messagesFromRemoteDb =
+//            currUserEmail?.let {
+//                try {
+//                    chatRemoteService.getMessagesFromRemoteDb(it, receiverEmail).map { msg ->
+//                        formatTimeStamp(msg)
+//                    }
+//                } catch (e: Exception) {
+//                    Log.e("MessagesRepoImpl", "Error getting messages from remote db")
+//                    e.printStackTrace()
+//                    null
+//                }
+//            }
 //        messagesFromRemoteDb?.let { saveMessagesToLocalDb(it) }
 
         if (formattedTimeStamp != null) {
             _messageState.value = formattedTimeStamp
         }
-        if (messagesFromRemoteDb != null) {
-            _messageState.value = messagesFromRemoteDb
-        }
+//        if (messagesFromRemoteDb != null) {
+//            _messageState.value = messagesFromRemoteDb
+//        }
 
-        currUserEmail?.let { chatRemoteService.deleteMessagesFromRemoteDb(it, receiverEmail) }
+//        currUserEmail?.let { chatRemoteService.deleteMessagesFromRemoteDb(it, receiverEmail) }
 
         return _messageState.asStateFlow()
     }
