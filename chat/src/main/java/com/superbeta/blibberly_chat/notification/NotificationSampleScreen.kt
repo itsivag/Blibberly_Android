@@ -18,7 +18,7 @@ import kotlinx.coroutines.tasks.await
 
 @Composable
 fun NotificationSampleScreen(
-    viewModel: NotificationViewModel = viewModel()
+    viewModel: ChatNotificationViewModel = viewModel()
 ) {
     val scope = rememberCoroutineScope()
 

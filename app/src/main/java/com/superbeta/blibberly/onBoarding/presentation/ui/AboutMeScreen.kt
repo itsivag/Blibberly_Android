@@ -142,14 +142,17 @@ fun AboutMeScreen(
         PrimaryButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp), buttonText = "Next", isButtonEnabled = isButtonEnabled
-        ) {
-            scope.launch {
-                viewModel.updateAboutMe(aboutMe.text)
-            }.invokeOnCompletion {
-                navController.navigate(Screen.SkillsAndInterests.route)
+                .padding(16.dp),
+            buttonText = "Next",
+            isButtonEnabled = isButtonEnabled,
+            onClickMethod = {
+                scope.launch {
+                    viewModel.updateAboutMe(aboutMe.text)
+                }.invokeOnCompletion {
+                    navController.navigate(Screen.SkillsAndInterests.route)
+                }
             }
-        }
+        )
     }
 
 }

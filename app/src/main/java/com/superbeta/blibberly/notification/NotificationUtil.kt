@@ -1,23 +1,23 @@
 package com.superbeta.blibberly.notification
 
 import android.Manifest
-import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 class NotificationUtil(
-    private val activity: Activity,
-    private val requestPermissionLauncher: ActivityResultLauncher<String>
+    private val context: Context,
 ) {
-    fun askNotificationPermission() {
+    fun askNotificationPermission(
+        requestPermissionLauncher: ActivityResultLauncher<String>
+    ) {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
-                    activity,
+                    context,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) ==
                 PackageManager.PERMISSION_GRANTED

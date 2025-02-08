@@ -338,35 +338,35 @@ fun BioScreen(
                     .fillMaxWidth()
                     .padding(16.dp),
                 buttonText = "Next",
-                isButtonEnabled = isButtonEnabled
-            ) {
-                scope.launch {
-                    try {
-                        userViewModel.getUserEmail()?.let { email ->
-                            UserDataModel(
-                                email = email,
-                                name = name.text,
-                                age = age.text.toInt(),
-                                height = height.text.toDouble(),
-                                weight = weight.text.toDouble(),
-                                aboutMe = aboutMe,
-                                interests = interests,
-                                gender = gender,
-                                photoMetaData = PhotoMetaData("", "", ""),
-                                fcmToken = userFCMToken
-                            ).let {
-                                userViewModel.setUser(
-                                    it
-                                )
+                isButtonEnabled = isButtonEnabled, onClickMethod = {
+
+                    scope.launch {
+                        try {
+                            userViewModel.getUserEmail()?.let { email ->
+                                UserDataModel(
+                                    email = email,
+                                    name = name.text,
+                                    age = age.text.toInt(),
+                                    height = height.text.toDouble(),
+                                    weight = weight.text.toDouble(),
+                                    aboutMe = aboutMe,
+                                    interests = interests,
+                                    gender = gender,
+                                    photoMetaData = PhotoMetaData("", "", ""),
+                                    fcmToken = userFCMToken
+                                ).let {
+                                    userViewModel.setUser(
+                                        it
+                                    )
+                                }
                             }
+                        } catch (e: Exception) {
+                            Log.e("Error Storing data in room BioScreen", e.toString())
                         }
-                    } catch (e: Exception) {
-                        Log.e("Error Storing data in room BioScreen", e.toString())
+                    }.invokeOnCompletion {
+                        navigateToAboutMe()
                     }
-                }.invokeOnCompletion {
-                    navigateToAboutMe()
-                }
-            }
+                })
         }
     }
 

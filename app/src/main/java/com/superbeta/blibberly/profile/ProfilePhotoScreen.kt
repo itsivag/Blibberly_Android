@@ -367,20 +367,20 @@ fun ProfilePhotoScreen(
                             .weight(1f)
                             .padding(horizontal = 8.dp, vertical = 16.dp),
                         buttonText = "Save",
-                        isButtonEnabled = isButtonEnabled
-                    ) {
-                        scope.launch {
-                            viewModel.updatePhotoMetaData(
-                                PhotoMetaData(
-                                    blibmojiUrl = selectedBlibmoji,
-                                    bgEmoji = selectedBGEmoji,
-                                    bgColor = selectedBGColor
+                        isButtonEnabled = isButtonEnabled,
+                        onClickMethod = {
+                            scope.launch {
+                                viewModel.updatePhotoMetaData(
+                                    PhotoMetaData(
+                                        blibmojiUrl = selectedBlibmoji,
+                                        bgEmoji = selectedBGEmoji,
+                                        bgColor = selectedBGColor
+                                    )
                                 )
-                            )
-                        }.invokeOnCompletion {
-                            isEditing = false
-                        }
-                    }
+                            }.invokeOnCompletion {
+                                isEditing = false
+                            }
+                        })
                 }
             }
 

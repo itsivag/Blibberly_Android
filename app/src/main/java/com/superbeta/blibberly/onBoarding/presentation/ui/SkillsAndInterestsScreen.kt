@@ -219,14 +219,14 @@ fun SkillsAndInterestsScreen(
                     .fillMaxWidth()
                     .padding(16.dp),
                 buttonText = "Continue",
-                isButtonEnabled = isButtonEnabled
-            ) {
-                scope.launch {
-                    viewModel.updateInterests(selectedInterests)
-                }.invokeOnCompletion {
-                    navigateToPhoto()
-                }
-            }
+                isButtonEnabled = isButtonEnabled,
+                onClickMethod = {
+                    scope.launch {
+                        viewModel.updateInterests(selectedInterests)
+                    }.invokeOnCompletion {
+                        navigateToPhoto()
+                    }
+                })
 
         }
     }

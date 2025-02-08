@@ -426,21 +426,21 @@ fun BlibmojiScreen(
                                     .weight(1f)
                                     .padding(horizontal = 8.dp, vertical = 16.dp),
                                 buttonText = "Save",
-                                isButtonEnabled = isButtonEnabled
-                            ) {
-                                showBottomSheet = false
-                                scope.launch {
-                                    viewModel.updatePhotoMetaData(
-                                        PhotoMetaData(
-                                            blibmojiUrl = selectedBlibmoji,
-                                            bgEmoji = selectedBGEmoji,
-                                            bgColor = selectedBGColor
+                                isButtonEnabled = isButtonEnabled,
+                                onClickMethod = {
+                                    showBottomSheet = false
+                                    scope.launch {
+                                        viewModel.updatePhotoMetaData(
+                                            PhotoMetaData(
+                                                blibmojiUrl = selectedBlibmoji,
+                                                bgEmoji = selectedBGEmoji,
+                                                bgColor = selectedBGColor
+                                            )
                                         )
-                                    )
-                                }.invokeOnCompletion {
-                                    navigateToCurateProfile()
-                                }
-                            }
+                                    }.invokeOnCompletion {
+                                        navigateToCurateProfile()
+                                    }
+                                })
                         }
                     }
                 }

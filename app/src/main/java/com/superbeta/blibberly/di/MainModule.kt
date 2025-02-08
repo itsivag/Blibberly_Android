@@ -1,6 +1,8 @@
 package com.superbeta.blibberly.di
 
 import com.superbeta.blibberly.BuildConfig
+import com.superbeta.blibberly.notification.NotificationUtil
+import com.superbeta.blibberly.notification.NotificationViewModel
 import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.remote.UserRemoteService
 import com.superbeta.blibberly.user.data.remote.UserRemoteServiceImpl
@@ -31,7 +33,7 @@ val mainModule = module {
 
     single<SupabaseClient> {
         createSupabaseClient(
-            supabaseUrl =  BuildConfig.SUPABASE_DEBUG_URL,
+            supabaseUrl = BuildConfig.SUPABASE_DEBUG_URL,
             supabaseKey = BuildConfig.SUPABASE_DEBUG_KEY
         ) {
             install(Postgrest)
@@ -55,5 +57,19 @@ val mainModule = module {
 
     viewModel {
         UserViewModel(mUserRepository = get())
+    }
+
+
+    /*
+    * Notification permission
+    * */
+    single {
+        NotificationUtil(
+            context = androidContext(),
+        )
+    }
+
+    viewModel {
+        NotificationViewModel(notificationUtil = get())
     }
 }

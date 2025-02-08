@@ -25,21 +25,6 @@ fun BlibberlyNavHost(
         authNavGraph(navController, modifier)
         onBoardingGraph(navController, modifier)
         chatGraph(navController, modifier)
-
-        composable(Screen.NotificationConsent.route) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationConsentScreen(
-                    modifier,
-//                    navController
-                )
-            }
-        }
-
-        composable("notification_sample") {
-            NotificationSampleScreen()
-        }
-
-
         composable(
             route = Screen.UserProfile.route + "/{userEmail}/{userName}", arguments = listOf(
                 navArgument(name = "userEmail", builder = { type = NavType.StringType }),

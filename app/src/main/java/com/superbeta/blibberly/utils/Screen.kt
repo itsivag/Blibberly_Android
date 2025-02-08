@@ -17,7 +17,7 @@ sealed class Screen(val route: String) {
     data object OnBoarding : Screen("on_boarding")
     data object Photo : Screen("photo")
     data object AboutMe : Screen("about_me")
-    data object CurateProfile : Screen("curate_Profiles")
+    data object InitialLoading : Screen("initial_loading")
     data object UserProfile : Screen("user_profile")
     data object NoUsers : Screen("no_users")
 }

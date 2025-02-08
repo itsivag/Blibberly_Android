@@ -11,11 +11,14 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 
-val ColorPrimary = Color(0xff6D57FC)
-val ColorSecondary = Color(0x2F261E58)
+val ColorPrimary = Color(0xff9736FF)
+val ColorSecondary = Color(0xFF407EF6)
 val ColorTertiary = Color(0xFFB0A4FD)
 
 val ColorDisabled = Color(0xffd3d3d3)
+val WhiteWithAlpha = Color.White.copy(alpha = 0.15f)
+
+val TextColorGrey = Color(0xFF3C3C3C)
 
 enum class BLIBMOJI_BG_COLORS {
     BLUE,

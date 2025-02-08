@@ -1,23 +1,15 @@
 package com.superbeta.blibberly
 
-//noinspection UsingMaterialAndMaterial3Libraries
-//noinspection UsingMaterialAndMaterial3Libraries
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,7 +22,6 @@ import androidx.navigation.compose.rememberNavController
 import com.superbeta.blibberly.root.BlibberlyBottomBar
 import com.superbeta.blibberly.root.BlibberlyTopAppBar
 import com.superbeta.blibberly.navigation.BlibberlyNavHost
-import com.superbeta.blibberly.notification.NotificationUtil
 import com.superbeta.blibberly.ui.BlibberlyTheme
 import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
@@ -50,29 +41,29 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//notification permission
-        val requestPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                if (isGranted) {
-                    Toast.makeText(this, "Notifications permission granted", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        val settingsIntent: Intent =
-                            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-                        startActivity(settingsIntent)
-                    }
-                }
-            }
+////notification permission
+//        val requestPermissionLauncher =
+//            registerForActivityResult(
+//                ActivityResultContracts.RequestPermission()
+//            ) { isGranted: Boolean ->
+//                if (isGranted) {
+//                    Toast.makeText(this, "Notifications permission granted", Toast.LENGTH_SHORT)
+//                        .show()
+//                } else {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                        val settingsIntent: Intent =
+//                            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+//                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+//                        startActivity(settingsIntent)
+//                    }
+//                }
+//            }
 
-        NotificationUtil(
-            activity = this,
-            requestPermissionLauncher = requestPermissionLauncher
-        ).askNotificationPermission()
+//        NotificationUtil(
+//            activity = this,
+//            requestPermissionLauncher = requestPermissionLauncher
+//        ).askNotificationPermission()
 
 
         var isTopBarVisible by mutableStateOf(false)
@@ -158,7 +149,8 @@ class MainActivity : ComponentActivity() {
                             BlibberlyNavHost(
                                 navController = navController,
                                 modifier = Modifier.padding(it),
-                                startDestination = startNavRoute,
+//                                startDestination = startNavRoute,
+                                startDestination = Routes.OnBoarding.graph,
                                 route = ""
                             )
                         }

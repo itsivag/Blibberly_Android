@@ -4,36 +4,53 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.superbeta.blibberly.utils.FontProvider
 
 @Composable
 fun PrimaryButton(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    buttonContainerColor: Color = Color.White,
     buttonText: String,
     isButtonEnabled: Boolean,
-    onClickMethod: () -> (Unit)
+    textColor: Color = Color.White,
+    hapticsEnabled: Boolean = false,
+    onClickMethod: () -> (Unit),
 ) {
 
 //    val internalModifier = Modifier
 //        .fillMaxWidth()
 //        .padding(vertical = 8.dp)
 
+    val haptic = LocalHapticFeedback.current
     Button(
         modifier = modifier,
-        onClick = { onClickMethod() },
-        shape = RoundedCornerShape(14.dp),
+        onClick = {
+            if (hapticsEnabled) {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            }
+            onClickMethod()
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = buttonContainerColor),
+        shape = RoundedCornerShape(24.dp),
         enabled = isButtonEnabled,
-//        colors = ButtonDefaults.buttonColors(disabledContainerColor = Color.Blue)
     ) {
         Text(
             text = buttonText,
             modifier = Modifier.padding(8.dp),
-            style = MaterialTheme.typography.bodyMedium
+            style = androidx.compose.ui.text.TextStyle(
+                fontSize = 16.sp,
+                fontFamily = FontProvider.dmSansFontFamily, fontWeight = FontWeight.SemiBold,
+                color = textColor
+            )
         )
     }
 }
