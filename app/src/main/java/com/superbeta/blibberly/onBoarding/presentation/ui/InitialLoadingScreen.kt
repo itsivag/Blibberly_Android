@@ -89,9 +89,11 @@ fun InitialLoadingScreen(
     LaunchedEffect(key1 = true) {
         scope.launch {
             viewModel.uploadUserToDB()
+            //TODO remove this
+            delay(5000)
         }.invokeOnCompletion {
             Log.i("User", "Email -> ${userState.value?.email}")
-//            navigateToHome()
+            navigateToHome()
         }
     }
 
@@ -100,19 +102,19 @@ fun InitialLoadingScreen(
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        Text(
-            text = "Loading fresh connections",
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(16.dp),
-            style = TextStyle(
-                textAlign = TextAlign.Center,
-                color = ColorPrimary,
-                fontFamily = FontProvider.poppinsFontFamily,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 24.sp
-            )
-        )
+//        Text(
+//            text = "Loading fresh connections",
+//            modifier = Modifier
+//                .align(Alignment.TopCenter)
+//                .padding(16.dp),
+//            style = TextStyle(
+//                textAlign = TextAlign.Center,
+//                color = ColorPrimary,
+//                fontFamily = FontProvider.poppinsFontFamily,
+//                fontWeight = FontWeight.SemiBold,
+//                fontSize = 24.sp
+//            )
+//        )
 
         LottieAnimation(
             modifier = Modifier

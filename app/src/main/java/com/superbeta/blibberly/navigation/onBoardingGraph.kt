@@ -18,7 +18,7 @@ import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
 
 fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: Modifier) {
-    navigation(startDestination = Screen.InitialLoading.route, route = Routes.OnBoarding.graph) {
+    navigation(startDestination = Screen.Blibmoji.route, route = Routes.OnBoarding.graph) {
         composable(Screen.OnBoarding.route) {
             OnBoardingScreen(
                 modifier,
@@ -45,16 +45,16 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
                 modifier = modifier,
                 navigateBack = { navController.popBackStack() },
                 navigateToPhoto = {
-                    navController.navigate(Screen.Photo.route)
+                    navController.navigate(Screen.Blibmoji.route)
                 })
         }
 
-        composable(Screen.Photo.route) {
+        composable(Screen.Blibmoji.route) {
             BlibmojiScreen(
                 modifier,
                 navigateBack = { navController.popBackStack() },
-                navigateToCurateProfile = {
-                    navController.navigate(Screen.InitialLoading.route)
+                navigateToNotificationConsent = {
+                    navController.navigate(Screen.NotificationConsent.route)
                 })
         }
 
@@ -72,7 +72,9 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationConsentScreen(
                     modifier,
-//                    navController
+                    navigateToInitialLoading = {
+                        navController.navigate(Screen.InitialLoading.route)
+                    }
                 )
             }
         }

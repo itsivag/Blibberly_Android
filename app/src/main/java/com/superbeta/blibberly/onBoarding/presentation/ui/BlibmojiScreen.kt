@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,7 +53,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
@@ -60,39 +60,28 @@ import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.superbeta.blibberly.BuildConfig
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
-import com.superbeta.blibberly.ui.components.SwipeButton
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.FontProvider
-import com.superbeta.blibberly.utils.Screen
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.storage.Storage
-//import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 enum class BLIBMOJI_BG_COLORS {
-    BLUE,
-    WHITE,
-    RED,
-    GRAY,
-    CYAN,
-    BLACK,
-    DARKGRAY,
-    GREEN,
-    MAGENTA,
-    YELLOW
+    BLUE, WHITE, RED, GRAY, CYAN, BLACK, DARKGRAY, GREEN, MAGENTA, YELLOW
 
 }
 
-val avatarBGColorsMap = mapOf<String, Color>(
+val avatarBGColorsMap = mapOf(
     BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
     BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
     BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
@@ -112,26 +101,23 @@ val avatarBGColorsMap = mapOf<String, Color>(
 fun BlibmojiScreen(
     modifier: Modifier,
 //    navController: NavHostController,
-    viewModel: UserViewModel = koinViewModel(),
-    navigateBack: () -> Unit,
-    navigateToCurateProfile: () -> Unit
+    viewModel: UserViewModel = koinViewModel(), navigateBack: () -> Unit,
+//    navigateToCurateProfile: () -> Unit
+    navigateToNotificationConsent: () -> Unit
 ) {
     val supabase = createSupabaseClient(
-        supabaseUrl = BuildConfig.SUPABASE_DEBUG_URL,
-        supabaseKey = BuildConfig.SUPABASE_DEBUG_KEY
+        supabaseUrl = BuildConfig.SUPABASE_DEBUG_URL, supabaseKey = BuildConfig.SUPABASE_DEBUG_KEY
     ) {
         install(Postgrest)
         install(Auth)
         install(Storage)
     }
 
-    var showBottomSheet by remember { mutableStateOf(true) }
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false,
-        confirmValueChange = {
-            true
-        }
-    )
+//    var showBottomSheet by remember { mutableStateOf(true) }
+//    val sheetState =
+//        rememberModalBottomSheetState(skipPartiallyExpanded = false, confirmValueChange = {
+//            true
+//        })
     val scope = rememberCoroutineScope()
 
 
@@ -146,7 +132,6 @@ fun BlibmojiScreen(
         "\uD83E\uDD70", "🧁", "🍰", "🎁", "🎂", "🎈", "🎺",
     )
 
-
     var blibmojiUrlList by remember {
         mutableStateOf(listOf<String>())
     }
@@ -155,18 +140,13 @@ fun BlibmojiScreen(
         mutableStateOf(BLIBMOJI_BG_COLORS.BLUE.toString())
     }
 
-
     var selectedBGEmoji by remember {
         mutableStateOf(avatarBGEmojiList[0])
     }
 
-
     var selectedBlibmoji by remember {
         mutableStateOf("https://dxyahfscoumjwjuwlgje.supabase.co/storage/v1/object/public/blibmoji/boy_1.webp?t=2024-07-25T07%3A34%3A55.514Z")
     }
-
-    val config = LocalConfiguration.current
-    val screenHeight = config.screenHeightDp.dp
 
     LaunchedEffect(key1 = true) {
         scope.launch(IO) {
@@ -184,8 +164,7 @@ fun BlibmojiScreen(
             }
         }
     }
-
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = true) {
         scope.launch {
             viewModel.getUser()
             val userData: UserDataModel? = viewModel.userState.value
@@ -196,255 +175,221 @@ fun BlibmojiScreen(
             }
         }
     }
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        TopAppBar(title = { }, navigationIcon = {
-            IconButton(onClick = { navigateBack() }) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
-                    contentDescription = "back"
-                )
-            }
-        })
-
-        avatarBGColorsMap[selectedBGColor]?.let {
-            Modifier
-                .fillMaxWidth()
-                .animateContentSize(
-                    animationSpec = SpringSpec(
-                        stiffness = Spring.StiffnessLow,
-                        dampingRatio = Spring.DampingRatioLowBouncy
-                    )
-                )
-                .fillMaxHeight(fraction = if (showBottomSheet) 0.5f else 0.75f)
-                .background(color = it)
-        }?.let {
-            Box(
-                modifier = it,
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Box(
-                    modifier = Modifier
-                        .rotate(45f)
-                        .fillMaxSize()
-                        .scale(2f)
-                ) {
-                    LazyHorizontalStaggeredGrid(
-                        rows = StaggeredGridCells.Adaptive(minSize = 44.dp),
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        userScrollEnabled = false
-                    ) {
-                        items(count = 300) {
-                            Text(
-                                text = selectedBGEmoji,
-                                fontFamily = FontProvider.notoEmojiFontFamily,
-                                fontSize = 16.sp,
-                                modifier = Modifier.padding(4.dp)
-                            )
-                        }
-                    }
-                }
-
-                SubcomposeAsyncImage(
-                    model = selectedBlibmoji,
-                    contentDescription = "",
-                ) {
-                    val state = painter.state
-                    if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                        CircularProgressIndicator()
-                    } else {
-                        SubcomposeAsyncImageContent()
-                    }
-                }
-
-                IconButton(
-                    onClick = {
-                        showBottomSheet = true
-                    },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(16.dp)
-                        .background(color = Color.White, shape = CircleShape)
-                ) {
+        item {
+            TopAppBar(title = { }, navigationIcon = {
+                IconButton(onClick = { navigateBack() }) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.edit),
-                        contentDescription = "Edit Blibmoji"
+                        imageVector = ImageVector.vectorResource(R.drawable.arrow_back),
+                        contentDescription = "back"
                     )
                 }
-            }
+            })
         }
-
-        val (isComplete, setIsComplete) = remember {
-            mutableStateOf(false)
-        }
-        Spacer(modifier = Modifier)
-        SwipeButton(
-            modifier = Modifier.padding(top = 16.dp),
-            text = "Swipe to Find a Date",
-            isComplete = isComplete,
-            onSwipe = {
-                scope.launch {
-//                    delay(2000)
-                    setIsComplete(true)
-                }.invokeOnCompletion {
-                    navigateToCurateProfile()
-                }
-            },
-        )
-        if (showBottomSheet) {
-            ModalBottomSheet(
-                scrimColor = Color.Transparent,
-                modifier = Modifier.fillMaxHeight(fraction = 0.5f),
-                sheetState = sheetState,
-                onDismissRequest = {
-                    showBottomSheet = false
-                }
-            ) {
-                LazyColumn {
-                    item {
-                        Text(text = "Bg Color", modifier = Modifier.padding(8.dp))
-                        LazyRow {
-                            items(count = avatarBGColorsMap.size) { i ->
-                                val (key: String, value: Color) = avatarBgColorList[i]
-
-                                Box(modifier = Modifier
-                                    .padding(10.dp)
-                                    .size(48.dp)
-                                    .background(
-                                        color = value,
-                                        shape = CircleShape
-                                    )
-                                    .border(
-                                        width = 2.dp,
-                                        shape = CircleShape,
-                                        brush = Brush.linearGradient(
-                                            listOf(
-                                                Color.Black,
-                                                Color.Black
-                                            )
-                                        )
-                                    )
-                                    .clickable {
-                                        selectedBGColor = key
-                                    })
-                            }
-                        }
-                    }
-
-                    item {
-                        Text(text = "Bg Emoji", modifier = Modifier.padding(8.dp))
-                        LazyRow {
-                            items(count = avatarBGEmojiList.size) { emoji ->
-                                Box(
-                                    modifier = Modifier
-                                        .padding(10.dp)
-                                        .size(48.dp)
-                                        .border(
-                                            width = 2.dp,
-                                            shape = CircleShape,
-                                            brush = Brush.linearGradient(
-                                                listOf(
-                                                    Color.Black,
-                                                    Color.Black
-                                                )
-                                            )
-                                        )
-                                        .clickable {
-                                            selectedBGEmoji = avatarBGEmojiList[emoji]
-                                        }, contentAlignment = Alignment.Center
-                                ) {
-                                    Text(text = avatarBGEmojiList[emoji])
-                                }
-                            }
-                        }
-                    }
-
-
-                    item {
-                        Text(text = "Blibmoji", modifier = Modifier.padding(8.dp))
-                        LazyRow {
-                            items(count = blibmojiUrlList.size) { i ->
-
-                                if (i != 0)
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(10.dp)
-                                            .size(48.dp)
-                                            .background(color = Color.White, shape = CircleShape)
-                                            .border(
-                                                width = 2.dp,
-                                                shape = CircleShape,
-                                                brush = Brush.linearGradient(
-                                                    listOf(
-                                                        Color.Black,
-                                                        Color.Black
-                                                    )
-                                                )
-                                            )
-                                            .padding(8.dp)
-                                            .clickable {
-                                                selectedBlibmoji = blibmojiUrlList[i]
-                                            }
-                                    ) {
-                                        AsyncImage(
-                                            model = ImageRequest.Builder(LocalContext.current)
-                                                .data(blibmojiUrlList[i])
-                                                .crossfade(true)
-                                                .build(),
-                                            placeholder = painterResource(R.drawable.placeholder),
-                                            contentDescription = "Emoji For People",
-                                            contentScale = ContentScale.Crop,
-                                            modifier = Modifier
-                                                .clip(CircleShape)
-                                                .fillMaxSize()
-                                        )
-
-                                    }
-                            }
-                        }
-                    }
-
-                    item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
+        //blibmoji preview component
+        item {
+            avatarBGColorsMap[selectedBGColor]?.let {
+                Modifier
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = SpringSpec(
+                            stiffness = Spring.StiffnessLow,
+                            dampingRatio = Spring.DampingRatioLowBouncy
+                        )
+                    )
+                    .height(400.dp)
+                    .background(color = it)
+            }?.let {
+                Box(
+                    modifier = it, contentAlignment = Alignment.BottomCenter
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .rotate(45f)
+                            .fillMaxSize()
+                            .scale(2f)
+                    ) {
+                        LazyHorizontalStaggeredGrid(
+                            rows = StaggeredGridCells.Adaptive(minSize = 44.dp),
+                            modifier = Modifier.fillMaxSize(),
+                            userScrollEnabled = false
                         ) {
-                            PrimaryButtonColorDisabled(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(horizontal = 8.dp, vertical = 16.dp),
-                                buttonText = "Cancel",
-                                isButtonEnabled = isButtonEnabled
-                            ) {
-                                showBottomSheet = false
+                            items(count = 300) {
+                                Text(
+                                    text = selectedBGEmoji,
+                                    fontFamily = FontProvider.notoEmojiFontFamily,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.padding(4.dp)
+                                )
                             }
-                            PrimaryButton(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(horizontal = 8.dp, vertical = 16.dp),
-                                buttonText = "Save",
-                                isButtonEnabled = isButtonEnabled,
-                                onClickMethod = {
-                                    showBottomSheet = false
-                                    scope.launch {
-                                        viewModel.updatePhotoMetaData(
-                                            PhotoMetaData(
-                                                blibmojiUrl = selectedBlibmoji,
-                                                bgEmoji = selectedBGEmoji,
-                                                bgColor = selectedBGColor
-                                            )
-                                        )
-                                    }.invokeOnCompletion {
-                                        navigateToCurateProfile()
-                                    }
-                                })
                         }
+                    }
+
+                    SubcomposeAsyncImage(
+                        model = selectedBlibmoji,
+                        contentDescription = "",
+                    ) {
+                        val state = painter.state
+                        if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
+                            CircularProgressIndicator()
+                        } else {
+                            SubcomposeAsyncImageContent()
+                        }
+                    }
+
+//                    IconButton(
+//                        onClick = {
+////                            showBottomSheet = true
+//                        },
+//                        modifier = Modifier
+//                            .align(Alignment.TopEnd)
+//                            .padding(16.dp)
+//                            .background(color = Color.White, shape = CircleShape)
+//                    ) {
+//                        Icon(
+//                            imageVector = ImageVector.vectorResource(id = R.drawable.edit),
+//                            contentDescription = "Edit Blibmoji"
+//                        )
+//                    }
+                }
+            }
+        }
+
+//        Spacer(modifier = Modifier)
+//        if (showBottomSheet) {
+//            ModalBottomSheet(
+//                scrimColor = Color.Transparent,
+//                modifier = Modifier.fillMaxHeight(fraction = 0.5f),
+//                sheetState = sheetState,
+//                onDismissRequest = {
+//                    showBottomSheet = false
+//                }
+//            ) {
+        item {
+            Text(text = "Bg Color", modifier = Modifier.padding(8.dp))
+            LazyRow {
+                items(count = avatarBGColorsMap.size) { i ->
+                    val (key: String, value: Color) = avatarBgColorList[i]
+
+                    Box(modifier = Modifier
+                        .padding(10.dp)
+                        .size(48.dp)
+                        .background(
+                            color = value, shape = CircleShape
+                        )
+                        .border(
+                            width = 2.dp, shape = CircleShape, brush = Brush.linearGradient(
+                                listOf(
+                                    Color.Black, Color.Black
+                                )
+                            )
+                        )
+                        .clickable {
+                            selectedBGColor = key
+                        })
+                }
+            }
+        }
+        item {
+            Text(text = "Bg Emoji", modifier = Modifier.padding(8.dp))
+            LazyRow {
+                items(count = avatarBGEmojiList.size) { emoji ->
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(48.dp)
+                            .border(
+                                width = 2.dp, shape = CircleShape, brush = Brush.linearGradient(
+                                    listOf(
+                                        Color.Black, Color.Black
+                                    )
+                                )
+                            )
+                            .clickable {
+                                selectedBGEmoji = avatarBGEmojiList[emoji]
+                            }, contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = avatarBGEmojiList[emoji])
                     }
                 }
             }
         }
+        item {
+            Text(text = "Blibmoji", modifier = Modifier.padding(8.dp))
+            LazyRow {
+                items(count = blibmojiUrlList.size) { i ->
+
+                    if (i != 0) Box(modifier = Modifier
+                        .padding(10.dp)
+                        .size(48.dp)
+                        .background(color = Color.White, shape = CircleShape)
+                        .border(
+                            width = 2.dp, shape = CircleShape, brush = Brush.linearGradient(
+                                listOf(
+                                    Color.Black, Color.Black
+                                )
+                            )
+                        )
+                        .padding(8.dp)
+                        .clickable {
+                            selectedBlibmoji = blibmojiUrlList[i]
+                        }) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(blibmojiUrlList[i]).crossfade(true).build(),
+                            placeholder = painterResource(R.drawable.placeholder),
+                            contentDescription = "Emoji For People",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .fillMaxSize()
+                        )
+
+                    }
+                }
+            }
+        }
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+//                PrimaryButtonColorDisabled(
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .padding(horizontal = 8.dp, vertical = 16.dp),
+//                    buttonText = "Cancel",
+//                    isButtonEnabled = isButtonEnabled
+//                ) {
+//                    showBottomSheet = false
+//                }
+
+                PrimaryButton(modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp, vertical = 16.dp),
+                    buttonText = "Save",
+                    buttonContainerColor = ColorPrimary,
+                    isButtonEnabled = isButtonEnabled,
+                    onClickMethod = {
+//                        showBottomSheet = false
+                        scope.launch {
+                            viewModel.updatePhotoMetaData(
+                                PhotoMetaData(
+                                    blibmojiUrl = selectedBlibmoji,
+                                    bgEmoji = selectedBGEmoji,
+                                    bgColor = selectedBGColor
+                                )
+                            )
+                        }.invokeOnCompletion {
+//                                        navigateToCurateProfile()
+                        }
+                    })
+            }
+        }
+//            }
+//        }
     }
 }

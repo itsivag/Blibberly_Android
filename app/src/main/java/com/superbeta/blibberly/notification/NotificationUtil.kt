@@ -7,6 +7,9 @@ import android.os.Build
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class NotificationUtil(
     private val context: Context,
@@ -19,8 +22,7 @@ class NotificationUtil(
             if (ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.POST_NOTIFICATIONS
-                ) ==
-                PackageManager.PERMISSION_GRANTED
+                ) == PackageManager.PERMISSION_GRANTED
             ) {
                 Log.i("Notification Permission", "PERMISSION_GRANTED")
                 // FCM SDK (and your app) can post notifications.
@@ -30,6 +32,6 @@ class NotificationUtil(
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
-
     }
+
 }

@@ -27,7 +27,7 @@ fun PrimaryButtonColorDisabled(
     Button(
         modifier = modifier,
         onClick = { onClickMethod() },
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(24.dp),
         enabled = isButtonEnabled,
         colors = ButtonDefaults.buttonColors(containerColor = ColorDisabled)
     ) {
