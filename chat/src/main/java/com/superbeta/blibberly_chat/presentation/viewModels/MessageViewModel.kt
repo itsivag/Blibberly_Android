@@ -3,15 +3,12 @@ package com.superbeta.blibberly_chat.presentation.viewModels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.domain.MessagesRepo
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
@@ -19,17 +16,17 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
     val messageState: StateFlow<List<MessageDataModel>> = _messageState.asStateFlow()
 
-    private val _usersState = MutableStateFlow<List<String>>(emptyList())
-    val usersState: StateFlow<List<String>> = _usersState.asStateFlow()
+//    private val _usersState = MutableStateFlow<List<String>>(emptyList())
+//    val usersState: StateFlow<List<String>> = _usersState.asStateFlow()
 
-    private val _userProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
-    val userProfileState: StateFlow<List<UserDataModel>> =
-        _userProfileState.map { it.distinctBy { user -> user.email } }.stateIn(
-            viewModelScope,
-            SharingStarted.Lazily, emptyList()
-        )
+//    private val _userProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
+//    val userProfileState: StateFlow<List<UserDataModel>> =
+//        _userProfileState.map { it.distinctBy { user -> user.email } }.stateIn(
+//            viewModelScope,
+//            SharingStarted.Lazily, emptyList()
+//        )
 
-//    private val _homeScreenState =
+    //    private val _homeScreenState =
 //        MutableStateFlow(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
 //    val homeScreenState: StateFlow<HomeScreenState> = _homeScreenState.asStateFlow()
 //
@@ -39,26 +36,30 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         }
     }
 
-    private fun getCurrentUserEmail() {
-        viewModelScope.launch {
-            messagesRepo.connectSocketToBackend()
-        }
-    }
+//    private fun getCurrentUserEmail() {
+//        viewModelScope.launch {
+//            messagesRepo.connectSocketToBackend()
+//        }
+//    }
 
     suspend fun collectMessages(
         currUserEmail: String?,
-        receiverEmail: String) {
-        messagesRepo.getMessages(
-            currUserEmail = currUserEmail,
-            receiverEmail = receiverEmail)
-            .collect { messages ->
-                Log.i("MessageViewModel", "Collecting messages from Viewmodel: $messages")
-                _messageState.value = messages
-            }
+        receiverEmail: String
+    ) {
+        viewModelScope.launch(IO) {
+            messagesRepo.getMessages(
+                currUserEmail = currUserEmail,
+                receiverEmail = receiverEmail
+            )
+                .collect { messages ->
+                    Log.i("MessageViewModel", "Collecting messages from Viewmodel: $messages")
+                    _messageState.value = messages
+                }
+        }
     }
 
     suspend fun sendMessage(data: MessageDataModel) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             messagesRepo.sendMessage(data)
 //            Log.i(
 //                "MessageViewModel",
@@ -115,9 +116,9 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
 //        }
 //    }
 
-    suspend fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
-        return messagesRepo.getSpecificUserProfileWithEmail(email)
-    }
+//    suspend fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
+//        return messagesRepo.getSpecificUserProfileWithEmail(email)
+//    }
 
     fun disconnectUserFromSocket() {
         messagesRepo.disconnectUserFromSocket()

@@ -1,7 +1,9 @@
 package com.superbeta.blibberly.di
 
 import com.superbeta.blibberly.BuildConfig
-import com.superbeta.blibberly.home.presentation.viewModel.HomeViewModel
+import com.superbeta.blibberly_home.domain.HomeRepo
+import com.superbeta.blibberly_home.domain.HomeRepoImpl
+import com.superbeta.blibberly_home.presentation.viewModel.HomeViewModel
 import com.superbeta.blibberly.notification.NotificationUtil
 import com.superbeta.blibberly.notification.NotificationViewModel
 import com.superbeta.blibberly.user.data.local.UserLocalDao
@@ -11,7 +13,6 @@ import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.user.repo.MUserRepository
 import com.superbeta.blibberly.user.repo.MUserRepositoryImpl
 import com.superbeta.blibberly.utils.RoomInstanceProvider
-import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.notification.NotificationRepo
 import com.superbeta.blibberly_chat.notification.NotificationRepoImpl
 import io.github.jan.supabase.SupabaseClient
@@ -56,12 +57,19 @@ val mainModule = module {
         )
     }
 
+    single<HomeRepo> {
+        HomeRepoImpl(
+            socketHandler = get(),
+            chatRemoteService = get()
+        )
+    }
+
     viewModel {
         UserViewModel(mUserRepository = get())
     }
 
     viewModel {
-        HomeViewModel(messagesRepo = get())
+        HomeViewModel(homeRepo = get())
     }
 
     /*

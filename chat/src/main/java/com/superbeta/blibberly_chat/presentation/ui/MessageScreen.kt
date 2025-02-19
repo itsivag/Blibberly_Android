@@ -85,8 +85,9 @@ fun MessageScreen(
                 "Message Screen",
                 "Message To Be Sent:  receiverEmail -> $receiverUserEmail "
             )
-            currUserProfile =
-                messageViewModel.getSpecificUserProfileWithEmail(email = receiverUserEmail)
+            //TODO create a separate view model
+//            currUserProfile =
+//                messageViewModel.getSpecificUserProfileWithEmail(email = receiverUserEmail)
         }
     }
 

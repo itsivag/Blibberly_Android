@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.superbeta.blibberly.ui.ColorPrimary
-import com.superbeta.blibberly.utils.FontProvider
+import com.superbeta.blibberly_home.utils.FontProvider
 
 @Composable
 fun PrimaryButton(

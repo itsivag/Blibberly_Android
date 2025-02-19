@@ -14,16 +14,12 @@ interface MessagesRepo {
 
     suspend fun sendMessage(message: MessageDataModel)
 
-    fun getUsers(): StateFlow<List<String>>
+//    fun getUsers(): StateFlow<List<String>>
+//    suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<UserDataModel>>
 
-    suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<UserDataModel>>
     suspend fun saveMessagesToLocalDb(messages: List<MessageDataModel>)
 
     //    suspend fun getMessagesFromLocalDb(userId: String)
     fun disconnectUserFromSocket()
-    fun getSpecificUserProfileWithEmail(email: String): UserDataModel?
-
-
-
-
+//    fun getSpecificUserProfileWithEmail(email: String): UserDataModel?
 }

@@ -31,7 +31,7 @@ import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.TextColorGrey
 import com.superbeta.blibberly.ui.WhiteWithAlpha
 import com.superbeta.blibberly.ui.components.PrimaryButton
-import com.superbeta.blibberly.utils.FontProvider
+import com.superbeta.blibberly_home.utils.FontProvider
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

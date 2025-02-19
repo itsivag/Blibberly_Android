@@ -8,9 +8,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.superbeta.blibberly.home.presentation.ui.HomeScreen
-import com.superbeta.blibberly.home.presentation.ui.NoUsersScreen
-import com.superbeta.blibberly.home.presentation.ui.UserProfileScreen
+import com.superbeta.blibberly_home.presentation.ui.HomeScreen
+import com.superbeta.blibberly_home.presentation.ui.NoUsersScreen
+import com.superbeta.blibberly_home.presentation.ui.UserProfileScreen
 import com.superbeta.blibberly.notification.NotificationConsentScreen
 import com.superbeta.blibberly.profile.CurrUserProfileScreen
 import com.superbeta.blibberly.utils.Screen
@@ -31,7 +31,9 @@ fun BlibberlyNavHost(
                 navArgument(name = "userName", builder = { type = NavType.StringType })
             )
         ) {
-            UserProfileScreen(userEmail = it.arguments?.getString("userEmail")!!,
+            com.superbeta.blibberly_home.presentation.ui.UserProfileScreen(userEmail = it.arguments?.getString(
+                "userEmail"
+            )!!,
                 userName = it.arguments?.getString("userName")!!,
                 navigateToMessageScreen = {
                     navController.navigate(
@@ -48,9 +50,12 @@ fun BlibberlyNavHost(
 
 
         composable(Screen.Home.route) {
-            HomeScreen(modifier, navigateToChat = { email, name ->
-                navController.navigate(Screen.Message.route + "/$email/$name")
-            }, navigateToNoUsers = { navController.navigate(Screen.NoUsers.route) })
+            com.superbeta.blibberly_home.presentation.ui.HomeScreen(
+                modifier,
+                navigateToChat = { email, name ->
+                    navController.navigate(Screen.Message.route + "/$email/$name")
+                },
+                navigateToNoUsers = { navController.navigate(Screen.NoUsers.route) })
         }
 
 //        composable(Screen.Filter.route) {
@@ -62,7 +67,7 @@ fun BlibberlyNavHost(
         }
 
         composable(Screen.NoUsers.route) {
-            NoUsersScreen(modifier)
+            com.superbeta.blibberly_home.presentation.ui.NoUsersScreen(modifier)
         }
     }
 }

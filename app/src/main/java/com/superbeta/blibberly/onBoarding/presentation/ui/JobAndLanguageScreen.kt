@@ -33,7 +33,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorDisabled
@@ -41,7 +40,7 @@ import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.TextColorGrey
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly.utils.FontProvider
+import com.superbeta.blibberly_home.utils.FontProvider
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

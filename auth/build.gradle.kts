@@ -86,7 +86,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(libs.androidx.lifecycle.runtime.compose)
 
     //ktor client for supabase
     implementation(libs.ktor.client.android)
@@ -98,6 +97,7 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:storage-kt")
 
     //compose
+    implementation(libs.androidx.lifecycle.runtime.compose)
     val composeBom = platform("androidx.compose:compose-bom:2024.05.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)

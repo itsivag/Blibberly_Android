@@ -34,6 +34,7 @@ firebaseAuth = "23.0.0"
 media3CommonKtx = "1.4.1"
 koin-bom = "4.0.0"
 crashlytics = "3.0.2"
+lifecycleViewmodelAndroid = "2.8.7"
 
 [libraries]
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
@@ -88,6 +89,7 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

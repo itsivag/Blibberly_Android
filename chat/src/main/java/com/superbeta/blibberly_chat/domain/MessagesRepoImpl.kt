@@ -25,7 +25,7 @@ class MessagesRepoImpl(
 ) : MessagesRepo {
 
     private val _messageState = MutableStateFlow<List<MessageDataModel>>(arrayListOf())
-    private val _liveUserProfilesState = MutableStateFlow<List<UserDataModel>>(emptyList())
+//    private val _liveUserProfilesState = MutableStateFlow<List<UserDataModel>>(emptyList())
 
 //    private val supabaseUsersDb = supabase.from("Users")
 
@@ -122,32 +122,32 @@ class MessagesRepoImpl(
     }
 
 
-    override fun getUsers(): StateFlow<List<String>> {
-        return socketHandler.getUsers()
-    }
-
-    override suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<UserDataModel>> {
-        Log.i("live user raw list", liveUsers.toString())
-        try {
-//            for (email in liveUsers) {
-//                val userProfile = supabaseUsersDb.select {
-//                    filter {
-//                        UserDataModel::email eq email.username
-//                    }
-//                }.decodeSingle<UserDataModel>()
-//                _liveUserProfilesState.value += userProfile
+//    override fun getUsers(): StateFlow<List<String>> {
+//        return socketHandler.getUsers()
+//    }
+//
+//    override suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<UserDataModel>> {
+//        Log.i("live user raw list", liveUsers.toString())
+//        try {
+////            for (email in liveUsers) {
+////                val userProfile = supabaseUsersDb.select {
+////                    filter {
+////                        UserDataModel::email eq email.username
+////                    }
+////                }.decodeSingle<UserDataModel>()
+////                _liveUserProfilesState.value += userProfile
+////            }
+//            val appendProfiles: (UserDataModel) -> Unit = { newProfiles ->
+//                _liveUserProfilesState.value += newProfiles
 //            }
-            val appendProfiles: (UserDataModel) -> Unit = { newProfiles ->
-                _liveUserProfilesState.value += newProfiles
-            }
-            chatRemoteService.getUsersProfile(liveUsers, appendProfiles)
-            Log.i("live user", _liveUserProfilesState.value.toString())
-        } catch (e: Exception) {
-            Log.e("Error getting live user profile", e.toString())
-        }
-
-        return _liveUserProfilesState.asStateFlow()
-    }
+//            chatRemoteService.getUsersProfile(liveUsers, appendProfiles)
+//            Log.i("live user", _liveUserProfilesState.value.toString())
+//        } catch (e: Exception) {
+//            Log.e("Error getting live user profile", e.toString())
+//        }
+//
+//        return _liveUserProfilesState.asStateFlow()
+//    }
 
 //    override suspend fun getNewUserConnected(): StateFlow<SocketUserDataModelItem?> {
 //        return socketHandler.getNewUser()
@@ -169,7 +169,7 @@ class MessagesRepoImpl(
         }
     }
 
-    override fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
-        return _liveUserProfilesState.value.firstOrNull { profile -> profile.email == email }
-    }
+//    override fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
+//        return _liveUserProfilesState.value.firstOrNull { profile -> profile.email == email }
+//    }
 }

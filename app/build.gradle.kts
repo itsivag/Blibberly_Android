@@ -94,20 +94,22 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    //compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+
+    //material
     implementation(libs.androidx.material3)
-    implementation(project(":chat"))
     implementation(libs.androidx.compose.material)
-    implementation(project(":auth"))
-    implementation(project(":profile_ops"))
+
+    //test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -116,6 +118,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(project(":home"))
+    implementation(project(":chat"))
+    implementation(project(":auth"))
+    implementation(project(":profile_ops"))
     //FCM
 //    implementation(libs.firebase.messaging)
 
@@ -162,9 +168,9 @@ dependencies {
 
     //datastore
     implementation(libs.androidx.datastore.preferences)
-
-    //shimmer effect
-    implementation(libs.compose.shimmer)
+//
+//    //shimmer effect
+//    implementation(libs.compose.shimmer)
 
     //koin
     implementation(project.dependencies.platform(libs.koin.bom))
