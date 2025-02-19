@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.superbeta.blibberly.root.BlibberlyBottomBar
 import com.superbeta.blibberly.root.BlibberlyTopAppBar
 import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.ui.BlibberlyTheme
@@ -136,16 +135,27 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        Scaffold(topBar = {
-                            if (isTopBarVisible) {
-                                BlibberlyTopAppBar()
-                            }
-                        }, bottomBar = {
-                            if (isBottomNavBarVisible) {
-                                BlibberlyBottomBar(navController, bottomNavScreens, selectedScreen)
-                            }
-
-                        }) {
+                        Scaffold(
+                            topBar = {
+                                if (isTopBarVisible) {
+                                    BlibberlyTopAppBar(navigateToCurrUserProfile = {
+                                        navController.navigate(
+                                            Screen.CurrUserProfile.route
+                                        )
+                                    }, navigateToChatListScreen = {
+                                        navController.navigate(
+                                            Screen.ChatList.route
+                                        )
+                                    })
+                                }
+                            },
+//                            bottomBar = {
+//                            if (isBottomNavBarVisible) {
+//                                BlibberlyBottomBar(navController, bottomNavScreens, selectedScreen)
+//                            }
+//
+//                        }
+                        ) {
                             BlibberlyNavHost(
                                 navController = navController,
                                 modifier = Modifier.padding(it),

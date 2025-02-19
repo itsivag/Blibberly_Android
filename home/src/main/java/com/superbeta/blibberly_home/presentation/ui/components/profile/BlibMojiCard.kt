@@ -35,6 +35,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly_home.utils.FontProvider
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS
 
 @Composable
 fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
@@ -45,21 +46,21 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
     val outlineTextColor = Color.Black
 
     val avatarBGColorsMap = mapOf(
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.GRAY.toString() to Color.Gray,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.CYAN.toString() to Color.Cyan,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.BLACK.toString() to Color.Black,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.GREEN.toString() to Color.Green,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.MAGENTA.toString() to Color.Magenta,
-        com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
+        BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
+        BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
+        BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
+        BLIBMOJI_BG_COLORS.GRAY.toString() to Color.Gray,
+        BLIBMOJI_BG_COLORS.CYAN.toString() to Color.Cyan,
+        BLIBMOJI_BG_COLORS.BLACK.toString() to Color.Black,
+        BLIBMOJI_BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
+        BLIBMOJI_BG_COLORS.GREEN.toString() to Color.Green,
+        BLIBMOJI_BG_COLORS.MAGENTA.toString() to Color.Magenta,
+        BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
     )
 
     Box(
         modifier = Modifier
-            .height(screenHeight / 2.3f)
+            .height(screenHeight / 2f)
             .background(color = Color.White, shape = RoundedCornerShape(16.dp))
             .padding(12.dp)
     ) {

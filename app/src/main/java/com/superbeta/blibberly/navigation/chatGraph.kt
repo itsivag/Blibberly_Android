@@ -20,7 +20,7 @@ fun NavGraphBuilder.chatGraph(navController: NavHostController, modifier: Modifi
                 navController.navigate(
                     Screen.Message.route + "/$userEmail/$userName"
                 )
-            })
+            }, navigateBack = { navController.popBackStack() })
         }
 
         composable(

@@ -3,6 +3,8 @@ package com.superbeta.blibberly_chat.presentation.ui
 import android.util.Log
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -14,7 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_auth.user.data.model.PhotoMetaData
@@ -25,6 +29,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_chat.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,6 +38,7 @@ fun ChatListScreen(
     navigateToMessage: (String, String) -> Unit,
     messageViewModel: MessageViewModel = koinViewModel(),
     profileOpsViewModel: ProfileOpsViewModel = koinViewModel(),
+    navigateBack: () -> Boolean,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -48,7 +54,7 @@ fun ChatListScreen(
     }
 
     LaunchedEffect(key1 = true) {
-        scope.launch(IO) {
+        scope.launch {
             userPreferencesDataStore.data.collect { preferences ->
                 currUser = preferences[stringPreferencesKey("user_email")]
             }
@@ -117,7 +123,16 @@ fun ChatListScreen(
 //                })
 //        }
         item {
-            TopAppBar(title = { Text(text = "Matched Chats") })
+            TopAppBar(navigationIcon = {
+                IconButton(onClick = {
+                    navigateBack()
+                }) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.arrow_back),
+                        contentDescription = "back"
+                    )
+                }
+            }, title = { Text(text = "Chats") })
         }
 
         Log.i("ChatListScreen", matchedUserProfiles.toString())

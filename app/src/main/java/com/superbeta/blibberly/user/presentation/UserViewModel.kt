@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.repo.MUserRepository
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,12 +18,18 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
 
     private val _blibmojiUrls = MutableStateFlow<List<String>>(emptyList())
 
-    suspend fun getUser() {
-        try {
-            _userState.value = mUserRepository.getUser()
-            Log.i("UserViewModel", "User Data" + userState.value.toString())
-        } catch (e: Exception) {
-            Log.e("UserViewModel", "Error getting User Data : " + e.printStackTrace())
+    init {
+        getUser()
+    }
+
+    fun getUser() {
+        viewModelScope.launch(IO) {
+            try {
+                _userState.value = mUserRepository.getUser()
+                Log.i("UserViewModel", "User Data" + userState.value.toString())
+            } catch (e: Exception) {
+                Log.e("UserViewModel", "Error getting User Data : " + e.printStackTrace())
+            }
         }
     }
 
@@ -35,39 +42,39 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     }
 
     suspend fun setUser(userDataModel: UserDataModel) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             mUserRepository.setUserToLocalDb(userDataModel)
             getUser()
         }
     }
 
     suspend fun updateAboutMe(newAboutMe: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             mUserRepository.updateAboutMe(newAboutMe)
         }
     }
 
     suspend fun updateName(name: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             mUserRepository.updateName(name)
         }
     }
 
     suspend fun updateInterests(newInterests: List<String>) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             mUserRepository.updateInterests(newInterests)
         }
     }
 
     fun updatePhotoMetaData(photoMetaData: PhotoMetaData) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             mUserRepository.updatePhotoMetaData(photoMetaData)
         }
     }
 
 
     suspend fun uploadUserToDB() {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             getUser()
             val u: UserDataModel? = userState.value
             if (u != null) {
@@ -81,13 +88,13 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     }
 
     suspend fun deleteLocalUserInfo() {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             mUserRepository.deleteLocalUserData()
         }
     }
 
     suspend fun deleteAccount(email: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(IO) {
             mUserRepository.deleteAccount(email)
         }
     }
@@ -101,24 +108,4 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
 //        }
 //        return _blibmojiUrls.asStateFlow()
 //    }
-
-
-//    companion object {
-//        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-//            @Suppress("UNCHECKED_CAST")
-//            override fun <T : ViewModel> create(
-//                modelClass: Class<T>, extras: CreationExtras
-//            ): T {
-//                val application =
-//                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-//                val db = RoomInstanceProvider.getDb(application.applicationContext)
-//                val notificationRepo = NotificationRepoImpl()
-//                val mUserRepository = MUserRepositoryImpl(db.userLocalDao(), notificationRepo)
-//                return UserViewModel(
-//                    mUserRepository
-//                ) as T
-//            }
-//        }
-//    }
-
 }

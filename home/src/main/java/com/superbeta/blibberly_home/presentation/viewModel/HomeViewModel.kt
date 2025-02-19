@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 
-
 class HomeViewModel(private val homeRepo: HomeRepo) : ViewModel() {
 //    private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
 //    val messageState: StateFlow<List<MessageDataModel>> = _messageState.asStateFlow()
@@ -36,8 +35,10 @@ class HomeViewModel(private val homeRepo: HomeRepo) : ViewModel() {
     val homeScreenState: StateFlow<HomeScreenState> = _homeScreenState.asStateFlow()
 
 //    init {
-//        viewModelScope.launch {
-//            messagesRepo.subscribeToMessages()
+//        viewModelScope.launch(IO) {
+////            messagesRepo.subscribeToMessages()
+//            getUsers()
+//            getUserProfile()
 //        }
 //    }
 

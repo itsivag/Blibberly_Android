@@ -71,6 +71,7 @@ fun HomeScreen(
             }
         }
     }
+
     when (homeScreenState) {
         HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS -> {
             BlibberlyHorizontalPager(
