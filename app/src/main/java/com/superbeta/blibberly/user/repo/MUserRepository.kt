@@ -13,7 +13,7 @@ interface MUserRepository {
     suspend fun updateName(newName: String)
     suspend fun updateAge(newAge: Int)
     suspend fun updateHeight(newHeight: Double)
-    suspend fun updateWeight(newWeight: Double)
+//    suspend fun updateWeight(newWeight: Double)
     suspend fun updateAboutMe(newAboutMe: String)
     suspend fun updateInterests(newInterests: List<String>)
     suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData)

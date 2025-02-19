@@ -13,12 +13,13 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.utils.FontProvider
 
 @Composable
 fun PrimaryButton(
     modifier: Modifier = Modifier,
-    buttonContainerColor: Color = Color.White,
+    buttonContainerColor: Color = ColorPrimary,
     buttonText: String,
     isButtonEnabled: Boolean,
     textColor: Color = Color.White,

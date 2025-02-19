@@ -28,7 +28,7 @@ data class UserDataModel(
 
     @SerialName("height") @ColumnInfo("height") val height: Double,
 
-    @SerialName("weight") @ColumnInfo("weight") val weight: Double,
+//    @SerialName("weight") @ColumnInfo("weight") val weight: Double,
 
     @SerialName("aboutMe") @ColumnInfo("aboutMe") val aboutMe: String,
 

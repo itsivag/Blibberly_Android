@@ -110,12 +110,12 @@ class MUserRepositoryImpl(
         }
     }
 
-    override suspend fun updateWeight(newWeight: Double) {
-        CoroutineScope(IO).launch {
-            _userState.value?.let { userRemoteService.updateWeight(newWeight, it.email) }
-            db.updateWeight(newWeight)
-        }
-    }
+//    override suspend fun updateWeight(newWeight: Double) {
+//        CoroutineScope(IO).launch {
+//            _userState.value?.let { userRemoteService.updateWeight(newWeight, it.email) }
+////            db.updateWeight(newWeight)
+//        }
+//    }
 
     override suspend fun updateAboutMe(newAboutMe: String) {
         CoroutineScope(IO).launch {

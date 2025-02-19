@@ -13,12 +13,13 @@ import com.superbeta.blibberly.onBoarding.presentation.ui.BlibmojiScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.InitialLoadingScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.OnBoardingScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.QueueScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.SkillsAndInterestsScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.InterestsScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.JobAndLanguageScreen
 import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
 
 fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: Modifier) {
-    navigation(startDestination = Screen.Blibmoji.route, route = Routes.OnBoarding.graph) {
+    navigation(startDestination = Screen.JobAndLanguage.route, route = Routes.OnBoarding.graph) {
         composable(Screen.OnBoarding.route) {
             OnBoardingScreen(
                 modifier,
@@ -28,9 +29,6 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
                 })
         }
 
-        composable(Screen.AboutMe.route) {
-            AboutMeScreen(modifier, navController)
-        }
         composable(Screen.Bio.route) {
             BioScreen(
                 modifier = modifier,
@@ -40,13 +38,24 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
                 })
         }
 
-        composable(Screen.SkillsAndInterests.route) {
-            SkillsAndInterestsScreen(
+        composable(Screen.AboutMe.route) {
+            AboutMeScreen(modifier, navController)
+        }
+
+        composable(Screen.Interests.route) {
+            InterestsScreen(
                 modifier = modifier,
                 navigateBack = { navController.popBackStack() },
-                navigateToPhoto = {
-                    navController.navigate(Screen.Blibmoji.route)
+                navigateToJobAndLanguage = {
+                    navController.navigate(Screen.JobAndLanguage.route)
                 })
+        }
+
+        composable(Screen.JobAndLanguage.route) {
+            JobAndLanguageScreen(
+                modifier = modifier,
+                navigateBack = { navController.popBackStack() },
+                navigateToPhoto = { navController.navigate(Screen.Blibmoji.route) })
         }
 
         composable(Screen.Blibmoji.route) {

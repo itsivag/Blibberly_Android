@@ -73,7 +73,7 @@ fun AboutMeScreen(
 
     LaunchedEffect(key1 = aboutMe) {
         scope.launch {
-            isButtonEnabled = aboutMe.text.isNotEmpty() && aboutMe.text.length >= 100
+            isButtonEnabled = aboutMe.text.isNotEmpty() && aboutMe.text.length >= 50
         }
     }
 
@@ -114,7 +114,7 @@ fun AboutMeScreen(
             isError = aboutMe.text.isNotEmpty() && (aboutMe.text.length < 100),
             supportingText = {
                 if (aboutMe.text.isNotEmpty() && (aboutMe.text.length < 100))
-                    Text(text = "about me must be at least 100 chars", color = Color.Red) else Text(
+                    Text(text = "about me must be at least 50 chars", color = Color.Red) else Text(
                     ""
                 )
             },
@@ -149,7 +149,7 @@ fun AboutMeScreen(
                 scope.launch {
                     viewModel.updateAboutMe(aboutMe.text)
                 }.invokeOnCompletion {
-                    navController.navigate(Screen.SkillsAndInterests.route)
+                    navController.navigate(Screen.Interests.route)
                 }
             }
         )

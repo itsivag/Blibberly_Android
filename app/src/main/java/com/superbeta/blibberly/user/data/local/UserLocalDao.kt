@@ -24,8 +24,8 @@ interface UserLocalDao {
     @Query("UPDATE userInfo set height = :newHeight")
     suspend fun updateHeight(newHeight: Double)
 
-    @Query("UPDATE userInfo set weight = :newWeight")
-    suspend fun updateWeight(newWeight: Double)
+//    @Query("UPDATE userInfo set weight = :newWeight")
+//    suspend fun updateWeight(newWeight: Double)
 
     @Query("UPDATE userInfo set aboutMe = :newAboutMe")
     suspend fun updateAboutMe(newAboutMe: String)

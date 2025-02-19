@@ -77,9 +77,9 @@ fun BioScreen(
         mutableStateOf(TextFieldValue())
     }
 
-    var weight by remember {
-        mutableStateOf(TextFieldValue())
-    }
+//    var weight by remember {
+//        mutableStateOf(TextFieldValue())
+//    }
 
     var aboutMe by remember {
         mutableStateOf("")
@@ -116,7 +116,7 @@ fun BioScreen(
                 name = TextFieldValue(userData.name)
                 age = TextFieldValue(userData.age.toString())
                 height = TextFieldValue(userData.height.toString())
-                weight = TextFieldValue(userData.weight.toString())
+//                weight = TextFieldValue(userData.weight.toString())
                 aboutMe = userData.aboutMe
                 interests = Gson().toJson(userData.interests)
                 gender = userData.gender
@@ -129,21 +129,18 @@ fun BioScreen(
             userFCMToken = userViewModel.getUserFCMToken()
         }
     }
-//    LaunchedEffect(name.text, age.text, height.text, weight.text) {
-//        isButtonEnabled = (name.text.isNotEmpty() ||
-//                age.text.isNotEmpty() ||
-//                height.text.isNotEmpty() ||
-//                weight.text.isNotEmpty())
-//    }
-    val isButtonEnabled by remember(name.text, age.text, height.text, weight.text) {
+
+    var isButtonEnabled by remember(name.text, age.text, height.text, gender) {
         mutableStateOf(
-            name.text.isNotEmpty() &&
-                    age.text.isNotEmpty() &&
-                    height.text.isNotEmpty() &&
-                    weight.text.isNotEmpty()
+            name.text.isNotEmpty() && age.text.isNotEmpty() && height.text.isNotEmpty() && gender.isNotEmpty()
         )
     }
 
+    LaunchedEffect(name.text, age.text, height.text, gender) {
+        isButtonEnabled =
+            (name.text.isNotEmpty() && age.text.isNotEmpty() && height.text.isNotEmpty() && gender.isNotEmpty())
+//                weight.text.isNotEmpty())
+    }
 
     LazyColumn(modifier = modifier.imePadding()) {
         item {
@@ -247,99 +244,99 @@ fun BioScreen(
             }
         }
         item {
+//            Row(modifier = Modifier.padding(vertical = 8.dp)) {
+            Column(modifier = Modifier.padding(top = 16.dp)) {
+                Text(
+                    text = "Height",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
 
-            Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Height",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-
-                    OutlinedTextField(
-                        isError = height.text.isNotEmpty() && (height.text.toDouble() < 0),
-                        supportingText = {
-                            if (height.text.isNotEmpty() && (height.text.toDouble() < 0)) Text(
-                                text = "Enter a logical height",
-                                color = Color.Red
-                            ) else Text(text = "")
-                        },
-                        maxLines = 1,
-                        value = height,
-                        modifier = Modifier.padding(16.dp),
-                        onValueChange = { value -> height = value },
-                        shape = RoundedCornerShape(14.dp),
-                        placeholder = {
-                            Text(
-                                text = "175",
-                                color = ColorDisabled,
-                            )
-                        },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = ColorPrimary,
-                            unfocusedBorderColor = ColorDisabled,
-                        ),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        trailingIcon = {
-                            Text(
-                                text = "cm",
-                                color = ColorDisabled,
-                                style = MaterialTheme.typography.labelLarge
-                            )
-                        },
-
+                OutlinedTextField(
+                    isError = height.text.isNotEmpty() && (height.text.toDouble() < 0),
+                    supportingText = {
+                        if (height.text.isNotEmpty() && (height.text.toDouble() < 0)) Text(
+                            text = "Enter a logical height", color = Color.Red
+                        ) else Text(text = "")
+                    },
+                    maxLines = 1,
+                    value = height,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    onValueChange = { value -> height = value },
+                    shape = RoundedCornerShape(14.dp),
+                    placeholder = {
+                        Text(
+                            text = "175",
+                            color = ColorDisabled,
                         )
-                }
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = ColorPrimary,
+                        unfocusedBorderColor = ColorDisabled,
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    trailingIcon = {
+                        Text(
+                            text = "cm",
+                            color = ColorDisabled,
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    },
 
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "Weight",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
-
-                    OutlinedTextField(maxLines = 1,
-                        value = weight,
-                        isError = weight.text.isNotEmpty() && (weight.text.toDouble() < 0),
-                        supportingText = {
-                            if (weight.text.isNotEmpty() && (weight.text.toDouble() < 0)) Text(
-                                text = "Enter a logical weight",
-                                color = Color.Red
-                            ) else Text(text = "")
-                        },
-                        modifier = Modifier.padding(16.dp),
-                        onValueChange = { value -> weight = value },
-                        shape = RoundedCornerShape(14.dp),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        placeholder = {
-                            Text(
-                                text = "80",
-                                color = ColorDisabled,
-                            )
-                        },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = ColorPrimary,
-                            unfocusedBorderColor = ColorDisabled,
-                        ),
-                        trailingIcon = {
-                            Text(
-                                text = "kg",
-                                color = ColorDisabled,
-                                style = MaterialTheme.typography.labelLarge
-                            )
-                        })
-                }
             }
         }
 
-        item {
-            PrimaryButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                buttonText = "Next",
-                isButtonEnabled = isButtonEnabled, onClickMethod = {
+////                Column(modifier = Modifier.weight(1f)) {
+////                    Text(
+////                        text = "Weight",
+////                        style = MaterialTheme.typography.bodyMedium,
+////                        modifier = Modifier.padding(horizontal = 16.dp)
+////                    )
+////
+////                    OutlinedTextField(maxLines = 1,
+////                        value = weight,
+////                        isError = weight.text.isNotEmpty() && (weight.text.toDouble() < 0),
+////                        supportingText = {
+////                            if (weight.text.isNotEmpty() && (weight.text.toDouble() < 0)) Text(
+////                                text = "Enter a logical weight",
+////                                color = Color.Red
+////                            ) else Text(text = "")
+////                        },
+////                        modifier = Modifier.padding(16.dp),
+////                        onValueChange = { value -> weight = value },
+////                        shape = RoundedCornerShape(14.dp),
+////                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+////                        placeholder = {
+////                            Text(
+////                                text = "80",
+////                                color = ColorDisabled,
+////                            )
+////                        },
+////                        colors = OutlinedTextFieldDefaults.colors(
+////                            focusedBorderColor = ColorPrimary,
+////                            unfocusedBorderColor = ColorDisabled,
+////                        ),
+////                        trailingIcon = {
+////                            Text(
+////                                text = "kg",
+////                                color = ColorDisabled,
+////                                style = MaterialTheme.typography.labelLarge
+////                            )
+////                        })
+////                }
+////            }
+//        }
 
+        item {
+            PrimaryButton(modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+                buttonText = "Next",
+                isButtonEnabled = isButtonEnabled,
+                onClickMethod = {
                     scope.launch {
                         try {
                             userViewModel.getUserEmail()?.let { email ->
@@ -347,8 +344,8 @@ fun BioScreen(
                                     email = email,
                                     name = name.text,
                                     age = age.text.toInt(),
-                                    height = height.text.toDouble(),
-                                    weight = weight.text.toDouble(),
+                                    height = height.text.toDoubleOrNull() ?: 0.0,
+//                                    weight = weight.text.toDouble(),
                                     aboutMe = aboutMe,
                                     interests = interests,
                                     gender = gender,
