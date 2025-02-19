@@ -21,7 +21,7 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     buttonContainerColor: Color = ColorPrimary,
     buttonText: String,
-    isButtonEnabled: Boolean,
+    isButtonEnabled: Boolean = true,
     textColor: Color = Color.White,
     hapticsEnabled: Boolean = false,
     onClickMethod: () -> (Unit),

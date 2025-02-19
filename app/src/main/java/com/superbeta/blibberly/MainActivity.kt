@@ -149,8 +149,8 @@ class MainActivity : ComponentActivity() {
                             BlibberlyNavHost(
                                 navController = navController,
                                 modifier = Modifier.padding(it),
-//                                startDestination = startNavRoute,
-                                startDestination = Routes.OnBoarding.graph,
+                                startDestination = startNavRoute,
+//                                startDestination = Routes.OnBoarding.graph,
                                 route = ""
                             )
                         }

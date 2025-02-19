@@ -1,9 +1,6 @@
 package com.superbeta.blibberly.notification
 
-import android.content.Intent
 import android.os.Build
-import android.provider.Settings
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -18,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.TextColorGrey
@@ -46,7 +40,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NotificationConsentScreen(
     modifier: Modifier,
     notificationViewModel: NotificationViewModel = koinViewModel(),
-    navigateToInitialLoading: () -> Unit
+    navigateToQueueScreen: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -58,9 +52,9 @@ fun NotificationConsentScreen(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                navigateToInitialLoading()
+                navigateToQueueScreen()
             } else {
-                navigateToInitialLoading()
+                navigateToQueueScreen()
                 //open settings
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 //                    val settingsIntent: Intent =
@@ -130,14 +124,15 @@ fun NotificationConsentScreen(
                 buttonText = "May be later",
                 isButtonEnabled = true, textColor = Color.White,
                 onClickMethod = {
-                    navigateToInitialLoading()
+                    navigateToQueueScreen()
                 })
 
             PrimaryButton(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 8.dp),
-                buttonText = "Prompt",
+                buttonText = "Allow",
+                buttonContainerColor = Color.White,
                 isButtonEnabled = true,
                 textColor = TextColorGrey,
                 hapticsEnabled = true,

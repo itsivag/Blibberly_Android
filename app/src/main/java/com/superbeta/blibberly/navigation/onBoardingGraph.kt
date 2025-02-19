@@ -19,7 +19,10 @@ import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
 
 fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: Modifier) {
-    navigation(startDestination = Screen.JobAndLanguage.route, route = Routes.OnBoarding.graph) {
+    navigation(
+        startDestination = Screen.Bio.route,
+        route = Routes.OnBoarding.graph
+    ) {
         composable(Screen.OnBoarding.route) {
             OnBoardingScreen(
                 modifier,
@@ -63,7 +66,10 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
                 modifier,
                 navigateBack = { navController.popBackStack() },
                 navigateToNotificationConsent = {
-                    navController.navigate(Screen.NotificationConsent.route)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        navController.navigate(Screen.NotificationConsent.route)
+                    else
+                        navController.navigate(Screen.Queue.route)
                 })
         }
 
@@ -74,15 +80,17 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
         }
 
         composable(Screen.Queue.route) {
-            QueueScreen(modifier)
+            QueueScreen(
+                modifier,
+                navigateToInitialLoadingScreen = { navController.navigate(Screen.InitialLoading.route) })
         }
 
         composable(Screen.NotificationConsent.route) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationConsentScreen(
                     modifier,
-                    navigateToInitialLoading = {
-                        navController.navigate(Screen.InitialLoading.route)
+                    navigateToQueueScreen = {
+                        navController.navigate(Screen.Queue.route)
                     }
                 )
             }

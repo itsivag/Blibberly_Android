@@ -1,42 +1,104 @@
 package com.superbeta.blibberly.home.presentation.viewModel
-//
-//import android.app.Application
-//import android.util.Log
-//import androidx.lifecycle.ViewModel
-//import androidx.lifecycle.ViewModelProvider
-//import androidx.lifecycle.viewModelScope
-//import androidx.lifecycle.viewmodel.CreationExtras
-//import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
-//import com.superbeta.blibberly_chat.data.local.MessageRoomInstanceProvider
-//import com.superbeta.blibberly_chat.data.remote.socket.SocketHandlerImpl
-//import com.superbeta.blibberly_chat.domain.MessagesRepoImpl
-//import kotlinx.coroutines.launch
-//
-//@Suppress("UNCHECKED_CAST")
-//class HomeViewModel(private val messagesRepoImpl: MessagesRepoImpl) : ViewModel() {
-//
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.superbeta.blibberly.home.presentation.HomeScreenState
+import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_chat.data.model.MessageDataModel
+import com.superbeta.blibberly_chat.domain.MessagesRepo
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+
+
+
+class HomeViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
+//    private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
+//    val messageState: StateFlow<List<MessageDataModel>> = _messageState.asStateFlow()
+
+    private val _usersState = MutableStateFlow<List<String>>(emptyList())
+    val usersState: StateFlow<List<String>> = _usersState.asStateFlow()
+
+    private val _userProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
+    val userProfileState: StateFlow<List<UserDataModel>> =
+        _userProfileState.map { it.distinctBy { user -> user.email } }.stateIn(
+            viewModelScope,
+            SharingStarted.Lazily, emptyList()
+        )
+
+    private val _homeScreenState =
+        MutableStateFlow(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
+    val homeScreenState: StateFlow<HomeScreenState> = _homeScreenState.asStateFlow()
+
 //    init {
 //        viewModelScope.launch {
-//            messagesRepoImpl.connectSocketToBackend()
-//            Log.i("Connected to socket", "SUCCESS")
+//            messagesRepo.subscribeToMessages()
 //        }
 //    }
-//
-//    companion object {
-//        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-//            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-//
-//                val application =
-//                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-//                val db = MessageRoomInstanceProvider.getDb(application.applicationContext)
-//                val socketHandlerImpl =
-//                    SocketHandlerImpl(application.applicationContext.userPreferencesDataStore)
-//
-//                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), socketHandlerImpl)
-//
-//                return HomeViewModel(messagesRepo) as T
-//            }
-//        }
-//    }
-//
-//}
+
+    private fun getCurrentUserEmail() {
+        viewModelScope.launch(IO) {
+            messagesRepo.connectSocketToBackend()
+        }
+    }
+
+    suspend fun getUsers() {
+        viewModelScope.launch(IO) {
+            _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING
+            try {
+
+                messagesRepo.getUsers().collect { users ->
+                    Log.i("MessageViewModel", "Collecting users from Viewmodel: $users")
+                    _usersState.value = users
+                    if (_usersState.value.isEmpty()) {
+                        _homeScreenState.value = HomeScreenState.LIVE_USERS_EMPTY
+                    } else {
+                        _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("MessageViewModel", e.toString())
+                _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_ERROR
+            }
+        }
+    }
+
+    suspend fun getUserProfile() {
+        viewModelScope.launch(IO) {
+            if (_homeScreenState.value == HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS) {
+                _homeScreenState.value = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_LOADING
+                _usersState.collect { liveUsers ->
+                    messagesRepo.getUsersProfile(liveUsers).collect { liveUserProfiles ->
+                        _userProfileState.value = liveUserProfiles
+                        Log.i(
+                            "MessageViewModel",
+                            "Collecting live user profile from Viewmodel: $liveUserProfiles"
+                        )
+                        if (_userProfileState.value.isNotEmpty()) {
+                            _homeScreenState.value =
+                                HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS
+                        } else {
+                            _homeScreenState.value =
+                                HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_ERROR
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
+        return messagesRepo.getSpecificUserProfileWithEmail(email)
+    }
+
+    fun disconnectUserFromSocket() {
+        messagesRepo.disconnectUserFromSocket()
+    }
+
+}

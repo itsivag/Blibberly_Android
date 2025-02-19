@@ -14,15 +14,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-enum class HomeScreenState {
-    LIVE_USERS_RETRIEVAL_SUCCESS,
-    LIVE_USERS_RETRIEVAL_LOADING,
-    LIVE_USERS_RETRIEVAL_ERROR,
-    LIVE_USERS_EMPTY,
-    LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS,
-    LIVE_USERS_PROFILE_RETRIEVAL_LOADING,
-    LIVE_USERS_PROFILE_RETRIEVAL_ERROR,
-}
 
 class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
     private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
@@ -38,10 +29,10 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
             SharingStarted.Lazily, emptyList()
         )
 
-    private val _homeScreenState =
-        MutableStateFlow(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
-    val homeScreenState: StateFlow<HomeScreenState> = _homeScreenState.asStateFlow()
-
+//    private val _homeScreenState =
+//        MutableStateFlow(HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING)
+//    val homeScreenState: StateFlow<HomeScreenState> = _homeScreenState.asStateFlow()
+//
     init {
         viewModelScope.launch {
             messagesRepo.subscribeToMessages()
@@ -81,48 +72,48 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
 //        }
     }
 
-    suspend fun getUsers() {
-        _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING
-        try {
+//    suspend fun getUsers() {
+//        _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_LOADING
+//        try {
+//
+//            messagesRepo.getUsers().collect { users ->
+//                Log.i("MessageViewModel", "Collecting users from Viewmodel: $users")
+//                _usersState.value = users
+//                if (_usersState.value.isEmpty()) {
+//                    _homeScreenState.value = HomeScreenState.LIVE_USERS_EMPTY
+//                } else {
+//                    _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
+//                }
+//            }
+//        } catch (e: Exception) {
+//            Log.e("MessageViewModel", e.toString())
+//            _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_ERROR
+//        }
+//    }
 
-            messagesRepo.getUsers().collect { users ->
-                Log.i("MessageViewModel", "Collecting users from Viewmodel: $users")
-                _usersState.value = users
-                if (_usersState.value.isEmpty()) {
-                    _homeScreenState.value = HomeScreenState.LIVE_USERS_EMPTY
-                } else {
-                    _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("MessageViewModel", e.toString())
-            _homeScreenState.value = HomeScreenState.LIVE_USERS_RETRIEVAL_ERROR
-        }
-    }
-
-    suspend fun getUserProfile() {
-        viewModelScope.launch {
-            if (_homeScreenState.value == HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS) {
-                _homeScreenState.value = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_LOADING
-                _usersState.collect { liveUsers ->
-                    messagesRepo.getUsersProfile(liveUsers).collect { liveUserProfiles ->
-                        _userProfileState.value = liveUserProfiles
-                        Log.i(
-                            "MessageViewModel",
-                            "Collecting live user profile from Viewmodel: $liveUserProfiles"
-                        )
-                        if (_userProfileState.value.isNotEmpty()) {
-                            _homeScreenState.value =
-                                HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS
-                        } else {
-                            _homeScreenState.value =
-                                HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_ERROR
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    suspend fun getUserProfile() {
+//        viewModelScope.launch {
+//            if (_homeScreenState.value == HomeScreenState.LIVE_USERS_RETRIEVAL_SUCCESS) {
+//                _homeScreenState.value = HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_LOADING
+//                _usersState.collect { liveUsers ->
+//                    messagesRepo.getUsersProfile(liveUsers).collect { liveUserProfiles ->
+//                        _userProfileState.value = liveUserProfiles
+//                        Log.i(
+//                            "MessageViewModel",
+//                            "Collecting live user profile from Viewmodel: $liveUserProfiles"
+//                        )
+//                        if (_userProfileState.value.isNotEmpty()) {
+//                            _homeScreenState.value =
+//                                HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_SUCCESS
+//                        } else {
+//                            _homeScreenState.value =
+//                                HomeScreenState.LIVE_USERS_PROFILE_RETRIEVAL_ERROR
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     suspend fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
         return messagesRepo.getSpecificUserProfileWithEmail(email)
@@ -132,21 +123,4 @@ class MessageViewModel(private val messagesRepo: MessagesRepo) : ViewModel() {
         messagesRepo.disconnectUserFromSocket()
     }
 
-    //    companion object {
-//        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-//            @Suppress("UNCHECKED_CAST")
-//            override fun <T : ViewModel> create(
-//                modelClass: Class<T>, extras: CreationExtras
-//            ): T {
-//                val application =
-//                    extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
-//                val db = BlibberlyRoomInstanceProvider.getMessagesDb(application.applicationContext)
-//    val socketHandlerImpl =
-//        SocketHandlerImpl.getInstance(application.applicationContext.userPreferencesDataStore)
-//
-//                val messagesRepo = MessagesRepoImpl(db.MessagesDao(), socketHandlerImpl)
-//                return MessageViewModel(messagesRepo) as T
-//            }
-//        }
-//    }
 }

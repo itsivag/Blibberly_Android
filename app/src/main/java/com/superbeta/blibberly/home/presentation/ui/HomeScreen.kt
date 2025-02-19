@@ -1,7 +1,6 @@
 package com.superbeta.blibberly.home.presentation.ui
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,34 +15,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.superbeta.blibberly.home.presentation.HomeScreenState
 import com.superbeta.blibberly.home.presentation.ui.components.BlibberlyHorizontalPager
+import com.superbeta.blibberly.home.presentation.viewModel.HomeViewModel
 import com.superbeta.blibberly.ui.components.HomeScreenShimmerEffect
-import com.superbeta.blibberly_chat.presentation.viewModels.HomeScreenState
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier,
-//    navController: NavHostController,
     navigateToChat: (String, String) -> Unit,
-    messageViewModel: MessageViewModel = koinViewModel(),
-//    homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-//        factory = HomeViewModel.Factory
-//    ),
+//    messageViewModel: MessageViewModel = koinViewModel(),
+    homeViewModel: HomeViewModel = koinViewModel(),
     navigateToNoUsers: () -> Unit
-
 ) {
     val config = LocalConfiguration.current
     val screenHeight = config.screenHeightDp.dp
 
-    val homeScreenState by messageViewModel.homeScreenState.collectAsStateWithLifecycle()
-    val liveUsers by messageViewModel.usersState.collectAsStateWithLifecycle()
+    val homeScreenState by homeViewModel.homeScreenState.collectAsStateWithLifecycle()
+    val liveUsers by homeViewModel.usersState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope { Dispatchers.IO }
-    val liveUserProfile by messageViewModel.userProfileState.collectAsStateWithLifecycle()
+    val liveUserProfile by homeViewModel.userProfileState.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(pageCount = {
         liveUserProfile.size
     })
@@ -53,7 +48,7 @@ fun HomeScreen(
     LaunchedEffect(key1 = true) {
         scope.launch {
             try {
-                messageViewModel.getUsers()
+                homeViewModel.getUsers()
                 Log.i(
                     "HomeScreen", "Collecting live user from compose"
                 )
@@ -66,7 +61,7 @@ fun HomeScreen(
     LaunchedEffect(key1 = liveUsers) {
         scope.launch {
             try {
-                messageViewModel.getUserProfile()
+                homeViewModel.getUserProfile()
                 Log.i(
                     "HomeScreen", "Collecting live user profile from compose"
                 )
@@ -105,7 +100,6 @@ fun HomeScreen(
 
 enum class BLIBMOJI_BG_COLORS {
     BLUE, WHITE, RED, GRAY, CYAN, BLACK, DARKGRAY, GREEN, MAGENTA, YELLOW
-
 }
 
 

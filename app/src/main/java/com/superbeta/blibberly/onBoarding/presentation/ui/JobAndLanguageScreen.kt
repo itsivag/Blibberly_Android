@@ -33,8 +33,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.Text
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.ui.ColorDisabled
 import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.TextColorGrey
 import com.superbeta.blibberly.ui.components.PrimaryButton
@@ -114,7 +116,7 @@ fun JobAndLanguageScreen(
                     Text(
                         style = MaterialTheme.typography.titleLarge,
                         text = "Google",
-                        color = TextColorGrey,
+                        color = ColorDisabled,
                         textDecoration = TextDecoration.Underline
                     )
                 },
@@ -135,14 +137,19 @@ fun JobAndLanguageScreen(
                 )
             )
 
-            PrimaryButton(
-                buttonText = "Continue",
-                buttonContainerColor = ColorPrimary,
-                isButtonEnabled = studyOrWork.isNotEmpty() && workingAt.text.isNotEmpty()
-            ) {
-                navigateToPhoto()
-            }
         }
+
+        PrimaryButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            buttonText = "Continue",
+            buttonContainerColor = ColorPrimary,
+            isButtonEnabled = studyOrWork.isNotEmpty() && workingAt.text.isNotEmpty()
+        ) {
+            navigateToPhoto()
+        }
+
 //        TextFieldWithLabel(
 //            textFieldValue = studyOrWork,
 //            onTextFieldValueChange = { value -> studyOrWork = value },
@@ -168,10 +175,10 @@ fun StudyOrWorkDropDown(studyOrWork: String, editStudyOrWork: (String) -> Unit) 
             .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = studyOrWork.ifEmpty { options.first() },
+            text = studyOrWork.ifEmpty { "Dance" },
             modifier = Modifier.clickable { expanded = !expanded },
             textDecoration = TextDecoration.Underline,
-            color = TextColorGrey,
+            color = if (studyOrWork.isNotEmpty()) TextColorGrey else ColorDisabled,
             style = MaterialTheme.typography.titleLarge,
         )
 

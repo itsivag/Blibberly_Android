@@ -384,6 +384,7 @@ fun BlibmojiScreen(
                                 )
                             )
                         }.invokeOnCompletion {
+                            navigateToNotificationConsent()
 //                                        navigateToCurateProfile()
                         }
                     })

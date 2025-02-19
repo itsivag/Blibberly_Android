@@ -1,6 +1,7 @@
 package com.superbeta.blibberly.di
 
 import com.superbeta.blibberly.BuildConfig
+import com.superbeta.blibberly.home.presentation.viewModel.HomeViewModel
 import com.superbeta.blibberly.notification.NotificationUtil
 import com.superbeta.blibberly.notification.NotificationViewModel
 import com.superbeta.blibberly.user.data.local.UserLocalDao
@@ -59,6 +60,9 @@ val mainModule = module {
         UserViewModel(mUserRepository = get())
     }
 
+    viewModel {
+        HomeViewModel(messagesRepo = get())
+    }
 
     /*
     * Notification permission
