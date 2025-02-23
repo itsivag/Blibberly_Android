@@ -24,6 +24,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        manifestPlaceholders["auth0Domain"] = "dev-ydixucx70csticsi.us.auth0.com"
+        manifestPlaceholders["auth0Scheme"] = "com.superbeta.blibberly"
     }
 
     val localProperties = Properties()

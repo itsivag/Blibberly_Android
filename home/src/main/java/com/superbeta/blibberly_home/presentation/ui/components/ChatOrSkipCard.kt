@@ -14,8 +14,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.superbeta.blibberly_auth.theme.ColorDisabled
-import com.superbeta.blibberly_auth.theme.ColorPrimary
+import com.superbeta.blibberly_auth.ui.theme.ColorDisabled
+import com.superbeta.blibberly_auth.ui.theme.ColorPrimary
+//import com.superbeta.blibberly_auth.theme.ColorDisabled
+//import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_home.R
 
 @Composable

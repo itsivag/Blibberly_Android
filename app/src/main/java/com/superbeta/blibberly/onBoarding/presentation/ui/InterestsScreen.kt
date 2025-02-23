@@ -36,8 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.gson.Gson
 import com.superbeta.blibberly.R
-import com.superbeta.blibberly_auth.theme.ColorDisabled
-import com.superbeta.blibberly_auth.theme.ColorPrimary
+import com.superbeta.blibberly.ui.ColorDisabled
+import com.superbeta.blibberly.ui.ColorPrimary
+//import com.superbeta.blibberly_auth.theme.ColorDisabled
+//import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel

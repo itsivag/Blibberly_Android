@@ -19,9 +19,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.superbeta.blibberly.R
+import com.superbeta.blibberly.ui.ColorDisabled
+import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly_auth.theme.ColorDisabled
-import com.superbeta.blibberly_auth.theme.ColorPrimary
+//import com.superbeta.blibberly_auth.theme.ColorDisabled
+//import com.superbeta.blibberly_auth.theme.ColorPrimary
 
 @Composable
 fun BlibberlyBottomBar(

@@ -24,7 +24,7 @@ sealed class Screen(val route: String) {
 }
 
 sealed class Routes(val graph: String) {
-    data object Auth : Routes("auth")
+//    data object Auth : Routes("auth")
     data object OnBoarding : Routes("onboarding")
     data object Chat : Routes("chat")
 }

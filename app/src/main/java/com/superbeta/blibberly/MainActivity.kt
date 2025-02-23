@@ -1,5 +1,6 @@
 package com.superbeta.blibberly
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -24,6 +25,7 @@ import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.ui.BlibberlyTheme
 import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_auth.AuthActivity
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.utils.AuthState
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -40,6 +42,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        startActivity(Intent(this,AuthActivity::class.java))
 ////notification permission
 //        val requestPermissionLauncher =
 //            registerForActivityResult(
@@ -115,7 +119,7 @@ class MainActivity : ComponentActivity() {
 
                         val authState by authViewModel.authState.collectAsStateWithLifecycle()
                         var startNavRoute by remember {
-                            mutableStateOf(Routes.Auth.graph)
+                            mutableStateOf(Routes.OnBoarding.graph)
                         }
 
                         LaunchedEffect(authState) {
@@ -130,7 +134,7 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 else -> {
-                                    Routes.Auth.graph
+                                    Routes.OnBoarding.graph
                                 }
                             }
                         }

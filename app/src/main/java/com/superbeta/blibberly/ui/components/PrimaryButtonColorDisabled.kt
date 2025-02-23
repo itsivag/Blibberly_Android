@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.superbeta.blibberly_auth.theme.ColorDisabled
+import com.superbeta.blibberly.ui.ColorDisabled
+
+//import com.superbeta.blibberly_auth.theme.ColorDisabled
 
 @Composable
 fun PrimaryButtonColorDisabled(
