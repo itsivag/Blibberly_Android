@@ -10,7 +10,7 @@ import com.superbeta.blibberly.notification.NotificationConsentScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.AboutMeScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.BioScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.BlibmojiScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.InitialLoadingScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.CurateProfileScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.OnBoardingScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.QueueScreen
 import com.superbeta.blibberly.onBoarding.presentation.ui.InterestsScreen
@@ -73,8 +73,8 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
                 })
         }
 
-        composable(Screen.InitialLoading.route) {
-            InitialLoadingScreen(modifier, navigateToHome = {
+        composable(Screen.CurateProfiles.route) {
+            CurateProfileScreen(modifier, navigateToHome = {
                 navController.navigate(Screen.Home.route)
             })
         }
@@ -82,7 +82,7 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
         composable(Screen.Queue.route) {
             QueueScreen(
                 modifier,
-                navigateToInitialLoadingScreen = { navController.navigate(Screen.InitialLoading.route) })
+                navigateToInitialLoadingScreen = { navController.navigate(Screen.CurateProfiles.route) })
         }
 
         composable(Screen.NotificationConsent.route) {

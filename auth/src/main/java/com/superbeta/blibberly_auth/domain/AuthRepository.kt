@@ -20,7 +20,7 @@ interface AuthRepository {
 //    suspend fun logOut()
 //    suspend fun signUpWithEmail(email: String, password: String)
 //    suspend fun retrieveSession(): UserInfo?
-    suspend fun getAccessToken(): Flow<String?>
+    suspend fun getAccessToken(): String?
     suspend fun setAccessToken(token: String)
     suspend fun deleteAccessToken()
 

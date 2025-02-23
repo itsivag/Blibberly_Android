@@ -32,60 +32,23 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     )
     private val client = AuthenticationAPIClient(account)
     private val _accessToken = MutableStateFlow<String?>(null)
+    private val accessToken: StateFlow<String?> = _accessToken.asStateFlow()
 
 
     private val _userInfoState = MutableStateFlow<UserInfoState?>(null)
     val userInfoState: StateFlow<UserInfoState?> = _userInfoState.asStateFlow()
 
     init {
-        getAccessToken()
+        viewModelScope.launch(IO) {
+            getAccessToken()
+            accessToken.collectLatest { token ->
+                if (!token.isNullOrBlank()) {
+                    Log.d("AuthViewModel", "Access Token : ${accessToken.value}")
+                    getUserInfo(token)
+                }
+            }
+        }
     }
-//        getUserInfo()
-//        Log.i("AuthViewModel", "AUTH STATE :$authState")
-//    }
-//        viewModelScope.launch {
-//            authRepository.getAuthState().collect { state ->
-//                _authState.value = state
-//                Log.i("AuthViewModel", "Auth state updated: $state")
-//            }
-//        }
-//    }
-//    suspend fun getAuthState() {
-//        viewModelScope.launch {
-//            authRepository.getAuthState().collect { state ->
-//                _authState.value = state
-//            }
-//        }
-
-//    }
-
-//    suspend fun signInWithGoogle() {
-//        viewModelScope.launch {
-//            authRepository.signInWithGoogle()
-//        }
-//    }
-//
-//    suspend fun retrieveSession(): UserInfo? {
-//        return authRepository.retrieveSession()
-//    }
-//
-//    suspend fun logOut() {
-//        viewModelScope.launch {
-//            authRepository.logOut()
-//        }
-//    }
-//
-//    fun signInWithEmail(email: String, password: String) {
-//        viewModelScope.launch {
-//            authRepository.signInWithEmail(email, password)
-//        }
-//    }
-//
-//    fun signUpWithEmail(email: String, password: String) {
-//        viewModelScope.launch {
-//            authRepository.signUpWithEmail(email, password)
-//        }
-//    }
 
     fun loginWithBrowser(context: Context) {
         viewModelScope.launch(IO) {
@@ -117,31 +80,29 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     private fun getAccessToken() {
         viewModelScope.launch(IO) {
-            authRepository.getAccessToken().distinctUntilChanged().collect {
-                _accessToken.value = it
-                Log.i("AuthViewModel", "Access Token : ${_accessToken.value}")
-            }
+            _accessToken.value = authRepository.getAccessToken()
+//            Log.i("AuthViewModel", "Access Token : ${_accessToken.value}")
         }
     }
 
-    fun getUserInfo() {
+
+    private fun getUserInfo(token: String) {
         viewModelScope.launch(IO) {
             try {
-                _accessToken.value?.let {
-                    client.userInfo(it)
-                        .start(object : Callback<UserProfile, AuthenticationException> {
-                            override fun onFailure(error: AuthenticationException) {
-                                _userInfoState.value = UserInfoState.Failed(error)
-                                Log.e("AuthViewModel", "Failed to fetch user info$error")
-                            }
+                Log.d("AuthViewModel", "getUserInfo() called")
+                client.userInfo(token)
+                    .start(object : Callback<UserProfile, AuthenticationException> {
+                        override fun onFailure(error: AuthenticationException) {
+                            _userInfoState.value = UserInfoState.Failed(error)
+                            Log.e("AuthViewModel", "Failed to fetch user info$error")
+                        }
 
-                            override fun onSuccess(result: UserProfile) {
-                                _userInfoState.value = UserInfoState.Success(result)
-                                Log.e("AuthViewModel", "User info$result")
-                            }
+                        override fun onSuccess(result: UserProfile) {
+                            _userInfoState.value = UserInfoState.Success(result)
+                            Log.e("AuthViewModel", "User info: ${result.email}")
+                        }
 
-                        })
-                }
+                    })
             } catch (e: Exception) {
                 Log.e("AuthViewModel", e.toString())
             }

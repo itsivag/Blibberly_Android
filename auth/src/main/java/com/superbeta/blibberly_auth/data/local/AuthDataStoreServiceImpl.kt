@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.superbeta.blibberly_auth.utils.UserDataPreferenceKeys
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class AuthDataStoreServiceImpl(private val userPreferencesDataStore: DataStore<Preferences>) :
@@ -64,10 +65,8 @@ class AuthDataStoreServiceImpl(private val userPreferencesDataStore: DataStore<P
         }
     }
 
-    override suspend fun getAccessToken(): Flow<String?> {
-        return userPreferencesDataStore.data.map {
-            it[UserDataPreferenceKeys.ACCESS_TOKEN]
-        }
+    override suspend fun getAccessToken(): String? {
+        return userPreferencesDataStore.data.first()[UserDataPreferenceKeys.ACCESS_TOKEN]
     }
 
     override suspend fun deleteAccessToken() {

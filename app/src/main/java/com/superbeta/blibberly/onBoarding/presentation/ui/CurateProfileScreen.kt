@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.wear.compose.material.Text
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -32,19 +32,17 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorDisabled
 import com.superbeta.blibberly.ui.TextColorGrey
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly.utils.FontProvider
-import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_home.utils.FontProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
-fun InitialLoading(
+fun CurateProfileScreen(
     modifier: Modifier,
 //    navController: NavHostController,
-//    navigateToHome: () -> Unit,
-//    viewModel: UserViewModel = koinViewModel()
+    navigateToHome: () -> Unit,
+    viewModel: UserViewModel = koinViewModel()
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_loading))
     val progress by animateLottieCompositionAsState(
@@ -52,7 +50,7 @@ fun InitialLoading(
         iterations = LottieConstants.IterateForever
     )
     val scope = rememberCoroutineScope()
-//    val userState = viewModel.userState.collectAsStateWithLifecycle()
+    val userState = viewModel.userState.collectAsStateWithLifecycle()
     val loadingScreenHintList = listOf(
         "See something sus? Report it! \uD83D\uDEA8",
         "Stay safe, don’t share personal info too soon! 🔒",
@@ -77,20 +75,20 @@ fun InitialLoading(
         }
     }
 
-//    LaunchedEffect(key1 = true) {
-//        viewModel.getUser()
-//    }
+    LaunchedEffect(key1 = true) {
+        viewModel.getUser()
+    }
 
-//    LaunchedEffect(key1 = true) {
-//        scope.launch {
-//            viewModel.uploadUserToDB()
-//            TODO remove this
-//            delay(5000)
-//        }.invokeOnCompletion {
-//            Log.i("User", "Email -> ${userState.value?.email}")
-//            navigateToHome()
-//        }
-//    }
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            viewModel.uploadUserToDB()
+            //TODO remove this
+            delay(5000)
+        }.invokeOnCompletion {
+            Log.i("User", "Email -> ${userState.value?.email}")
+            navigateToHome()
+        }
+    }
 
     Box(
         modifier = modifier

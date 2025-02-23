@@ -1,23 +1,21 @@
 package com.superbeta.blibberly_auth.navigation
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.superbeta.blibberly_auth.presentation.ui.UserFlowScreen
 import com.superbeta.blibberly_auth.utils.Routes
 import com.superbeta.blibberly_auth.utils.Screen
 
-@Composable
-fun AuthNavHost(
+fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
     modifier: Modifier,
     startDestination: String = Screen.UserFlow.route
 ) {
-    NavHost(navController, Routes.Auth.graph) {
-        navigation(startDestination = startDestination, route = Routes.Auth.graph) {
+//    NavHost(navController, Routes.Auth.graph) {
+    navigation(startDestination = startDestination, route = Routes.Auth.graph) {
 
 //            composable(Screen.SignIn.route) {
 //                SignInScreen(modifier,
@@ -41,10 +39,10 @@ fun AuthNavHost(
 //                    navigateToOnBoarding = { navController.navigate(Screen.OnBoarding.route) })
 //            }
 //
-            composable(Screen.UserFlow.route) {
-                UserFlowScreen(modifier)
-            }
+        composable(Screen.UserFlow.route) {
+            UserFlowScreen(modifier)
         }
-
     }
+
+//    }
 }

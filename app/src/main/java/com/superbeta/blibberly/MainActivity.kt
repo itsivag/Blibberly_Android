@@ -1,8 +1,6 @@
 package com.superbeta.blibberly
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,10 +23,8 @@ import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.ui.BlibberlyTheme
 import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly_auth.AuthActivity
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.presentation.viewmodel.UserInfoState
-import com.superbeta.blibberly_auth.utils.AuthState
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.compose.KoinContext
 
@@ -120,17 +116,22 @@ class MainActivity : ComponentActivity() {
 
                         val authState by authViewModel.userInfoState.collectAsStateWithLifecycle()
                         var startNavRoute by remember {
-                            mutableStateOf(Routes.OnBoarding.graph)
+                            mutableStateOf(Screen.InitialLoading.route)
                         }
 
                         LaunchedEffect(authState) {
-                            when (authState) {
-                                is UserInfoState.Failed -> {}
-                                is UserInfoState.Success -> {
-                                    startNavRoute = Screen.Home.route
+                            startNavRoute = when (authState) {
+                                is UserInfoState.Failed -> {
+                                    Routes.Auth.graph
                                 }
 
-                                null -> {}
+                                is UserInfoState.Success -> {
+                                    Screen.Home.route
+                                }
+
+                                null -> {
+                                    Routes.Auth.graph
+                                }
                             }
                         }
 
@@ -176,7 +177,6 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 modifier = Modifier.padding(it),
                                 startDestination = startNavRoute,
-//                                startDestination = Routes.OnBoarding.graph,
                                 route = ""
                             )
                         }
@@ -185,12 +185,6 @@ class MainActivity : ComponentActivity() {
             }
 
         }
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-//        socket.disconnectSocket()
     }
 }
 

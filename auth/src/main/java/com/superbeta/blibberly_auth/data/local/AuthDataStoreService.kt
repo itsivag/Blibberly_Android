@@ -11,6 +11,6 @@ interface AuthDataStoreService {
 //    suspend fun deleteUserData()
 
     suspend fun setAccessToken(token: String)
-    suspend fun getAccessToken(): Flow<String?>
+    suspend fun getAccessToken(): String?
     suspend fun deleteAccessToken()
 }

@@ -7,18 +7,25 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.superbeta.blibberly.onBoarding.presentation.ui.CurateProfileScreen
+import com.superbeta.blibberly.onBoarding.presentation.ui.InitialLoading
 import com.superbeta.blibberly.profile.CurrUserProfileScreen
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_auth.navigation.authNavGraph
 
 @Composable
 fun BlibberlyNavHost(
     navController: NavHostController, modifier: Modifier, startDestination: String, route: String
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
-
-//        authNavGraph(navController, modifier)
+        authNavGraph(navController, modifier)
         onBoardingGraph(navController, modifier)
         chatGraph(navController, modifier)
+
+        composable(Screen.InitialLoading.route) {
+            InitialLoading(modifier = modifier)
+        }
+
         composable(
             route = Screen.UserProfile.route + "/{userEmail}/{userName}", arguments = listOf(
                 navArgument(name = "userEmail", builder = { type = NavType.StringType }),

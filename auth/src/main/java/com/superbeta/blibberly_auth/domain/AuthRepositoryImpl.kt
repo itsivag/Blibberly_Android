@@ -201,7 +201,7 @@ class AuthRepositoryImpl(
 //        authRemoteService.findIfUserRegistered(email)
 //
 //    override suspend fun forgotPassword() {}
-    override suspend fun getAccessToken(): Flow<String?> = authDataStoreService.getAccessToken()
+    override suspend fun getAccessToken(): String? = authDataStoreService.getAccessToken()
 
     override suspend fun setAccessToken(token: String) = authDataStoreService.setAccessToken(token)
 
