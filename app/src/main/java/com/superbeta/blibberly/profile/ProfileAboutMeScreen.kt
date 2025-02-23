@@ -168,7 +168,7 @@ fun ProfileAboutMeScreen(
         ) {
             scope.launch {
                 userViewModel.deleteLocalUserInfo()
-                authViewModel.logOut()
+//                authViewModel.logOut()
             }
         }
 
@@ -183,7 +183,7 @@ fun ProfileAboutMeScreen(
                 userData?.let {
                     userViewModel.deleteLocalUserInfo()
                     userViewModel.deleteAccount(it.email)
-                    authViewModel.logOut()
+//                    authViewModel.logOut()
                 }
             }
         }

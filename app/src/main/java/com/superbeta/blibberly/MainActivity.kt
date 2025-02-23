@@ -27,6 +27,7 @@ import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
 import com.superbeta.blibberly_auth.AuthActivity
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
+import com.superbeta.blibberly_auth.presentation.viewmodel.UserInfoState
 import com.superbeta.blibberly_auth.utils.AuthState
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.compose.KoinContext
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startActivity(Intent(this,AuthActivity::class.java))
+//        startActivity(Intent(this, AuthActivity::class.java))
 ////notification permission
 //        val requestPermissionLauncher =
 //            registerForActivityResult(
@@ -117,27 +118,38 @@ class MainActivity : ComponentActivity() {
 
                         }
 
-                        val authState by authViewModel.authState.collectAsStateWithLifecycle()
+                        val authState by authViewModel.userInfoState.collectAsStateWithLifecycle()
                         var startNavRoute by remember {
                             mutableStateOf(Routes.OnBoarding.graph)
                         }
 
                         LaunchedEffect(authState) {
-                            Log.i("AUTH STATE --->>", authState.toString())
-                            startNavRoute = when (authState) {
-                                AuthState.SIGNED_IN -> {
-                                    Screen.Home.route
+                            when (authState) {
+                                is UserInfoState.Failed -> {}
+                                is UserInfoState.Success -> {
+                                    startNavRoute = Screen.Home.route
                                 }
 
-                                AuthState.SIGNED_UP -> {
-                                    Routes.OnBoarding.graph
-                                }
-
-                                else -> {
-                                    Routes.OnBoarding.graph
-                                }
+                                null -> {}
                             }
                         }
+
+//                        LaunchedEffect(authState) {
+//                            Log.i("AUTH STATE --->>", authState.toString())
+//                            startNavRoute = when (authState) {
+//                                AuthState.SIGNED_IN -> {
+//                                    Screen.Home.route
+//                                }
+//
+//                                AuthState.SIGNED_UP -> {
+//                                    Routes.OnBoarding.graph
+//                                }
+//
+//                                else -> {
+//                                    Routes.OnBoarding.graph
+//                                }
+//                            }
+//                        }
 
                         Scaffold(
                             topBar = {

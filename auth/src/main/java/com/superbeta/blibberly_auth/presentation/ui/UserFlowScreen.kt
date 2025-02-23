@@ -1,5 +1,6 @@
 package com.superbeta.blibberly_auth.presentation.ui
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,10 +26,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
+import com.superbeta.blibberly_auth.presentation.viewmodel.UserInfoState
 import com.superbeta.blibberly_auth.theme.components.PrimaryButton
 import com.superbeta.blibberly_auth.ui.theme.TextColorGrey
 import com.superbeta.blibberly_auth.utils.FontProvider
@@ -45,6 +50,15 @@ fun UserFlowScreen(modifier: Modifier, viewModel: AuthViewModel = koinViewModel(
     val pagerState = rememberPagerState(pageCount = { userFlowImagesList.size })
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
+//    val userInfoState by viewModel.userInfoState.collectAsStateWithLifecycle()
+//
+//    LaunchedEffect(true) {
+//        viewModel.getUserInfo()
+//    }
+//    LaunchedEffect(userInfoState) {
+//        Log.i("UserFlowScreen", userInfoState.toString())
+//    }
 
     Box(contentAlignment = Alignment.BottomCenter) {
         HorizontalPager(

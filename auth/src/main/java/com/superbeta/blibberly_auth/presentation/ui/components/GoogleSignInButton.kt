@@ -30,7 +30,7 @@ fun GoogleSignInButton(
         isButtonEnabled = true,
         onClickMethod = {
             scope.launch {
-                authViewModel.signInWithGoogle()
+//                authViewModel.signInWithGoogle()
 //                AuthRepositoryImpl().signInWithGoogle(
 //                    credentialManager,
 //                    coroutineScope,

@@ -93,7 +93,8 @@ fun MessageScreen(
 
     LaunchedEffect(key1 = true) {
         scope.launch(IO) {
-            currUser = authViewModel.retrieveSession()?.email
+            //TODO get curr user email
+//            currUser = authViewModel.retrieveSession()?.email
 //            userPreferencesDataStore.data.collect { preferences ->
 //                currUser = preferences[stringPreferencesKey("user_email")]
 //            }
