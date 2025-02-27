@@ -1,16 +1,27 @@
 package com.superbeta.blibberly_auth
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.credentials.Credential
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
@@ -18,65 +29,73 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
+import com.superbeta.blibberly_auth.presentation.viewmodel.UserInfoState
 import com.superbeta.blibberly_auth.ui.theme.AuthTheme
+import com.superbeta.blibberly_auth.utils.Routes
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class AuthActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var credentialManager: CredentialManager
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val authViewModel = getViewModel<AuthViewModel>()
 
         auth = Firebase.auth
         credentialManager = CredentialManager.create(baseContext)
 
-        launchCredentialManager()
         enableEdgeToEdge()
         setContent {
             AuthTheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Column(
-//                        Modifier
-//                            .padding(innerPadding)
-//                            .fillMaxWidth()
-//                    ) {
-//                        Button(onClick = {
-//                            loginWithBrowser()
-//                        }) {
-//                            Text(text = "Sign In With Google")
-//                        }
-//                    }
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-//                    val authViewModel = getViewModel<AuthViewModel>()
-//                    val authState by authViewModel.userInfoState.collectAsStateWithLifecycle()
-//                    var startNavRoute by remember {
-//                        mutableStateOf(Routes.OnBoarding.graph)
-//                    }
-//                    LaunchedEffect(authState) {
-//                        when (authState) {
-//                            is UserInfoState.Failed -> {}
-//                            is UserInfoState.Success -> {
-//                                startActivity(Intent(this,AuthActivity::class.java))
-//                            }
-//                            null -> {}
-//                        }
-//                    }
+                    val authState by authViewModel.userInfoState.collectAsStateWithLifecycle()
+                    var startNavRoute by remember {
+                        mutableStateOf(Routes.OnBoarding.graph)
+                    }
+
+                    val navController = rememberNavController()
+                    LaunchedEffect(authState) {
+                        when (authState) {
+                            UserInfoState.Failed -> {
+                                Log.i(
+                                    "AuthActivity",
+                                    "Failed to Sign In"
+                                )
+                            }
+
+                            is UserInfoState.Success -> {
+                                Log.i(
+                                    "AuthActivity",
+                                    "Current User : ${(authState as? UserInfoState.Success)?.user?.email ?: "Unable to fetch"}"
+                                )
+
+                                navController.navigate("myapp://profile/123")
+                            }
+
+                            null -> {}
+                        }
+                    }
+
 //                    AuthNavHost(
-//                        navController = rememberNavController(),
-//                        modifier = Modifier.padding(innerPadding)
+//                        navController = navController,
+//                        modifier = Modifier.padding(innerPadding),
+//                        signInWithGoogle = { launchCredentialManager() }
 //                    )
                 }
-//            }
+            }
         }
     }
 
     override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        var currentUser = auth.currentUser
-        Log.i(this.localClassName, "Current User : $currentUser")
-//        updateUI(currentUser);
+//        val currentUser = auth.currentUser
+//        authViewModel.getUser()
+//        Log.i(this.localClassName, "Current User : ${currentUser?.email}")
     }
 
     private fun launchCredentialManager() {
@@ -113,7 +132,6 @@ class AuthActivity : ComponentActivity() {
             }
         }
     }
-
 
     private fun handleSignIn(credential: Credential) {
         // Check if credential is of type Google ID

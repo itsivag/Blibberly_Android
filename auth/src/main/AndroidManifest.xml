@@ -5,11 +5,11 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application>
-        <activity
-            android:name=".AuthActivity"
-            android:exported="true"
-            android:label="@string/title_activity_auth"
-            android:theme="@style/Theme.Blibberly">
+<!--        <activity-->
+<!--            android:name=".AuthActivity"-->
+<!--            android:exported="true"-->
+<!--            android:label="@string/title_activity_auth"-->
+<!--            android:theme="@style/Theme.Blibberly">-->
 
             <!--            <intent-filter android:autoVerify="true">-->
             <!--                <action android:name="android.intent.action.VIEW" />-->
@@ -31,7 +31,7 @@
             <!--                    android:host="www.blibberly.com"-->
             <!--                    android:scheme="https" />-->
             <!--            </intent-filter>-->
-        </activity>
+<!--        </activity>-->
 
 
     </application>

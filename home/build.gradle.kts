@@ -120,4 +120,7 @@ dependencies {
 
     //coil
     implementation(libs.coil.kt)
+    //navigation
+    implementation(libs.navigation.compose)
+
 }

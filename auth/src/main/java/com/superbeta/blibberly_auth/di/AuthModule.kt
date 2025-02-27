@@ -8,6 +8,7 @@ import com.superbeta.blibberly_auth.data.remote.AuthRemoteService
 import com.superbeta.blibberly_auth.data.remote.AuthRemoteServiceImpl
 import com.superbeta.blibberly_auth.domain.AuthRepository
 import com.superbeta.blibberly_auth.domain.AuthRepositoryImpl
+import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
@@ -34,11 +35,11 @@ val authModule = module {
         }
     }
 
-    single <AuthRemoteService>{
+    single<AuthRemoteService> {
         AuthRemoteServiceImpl(supabase = get())
     }
 
-    single <AuthDataStoreService>{
+    single<AuthDataStoreService> {
         AuthDataStoreServiceImpl(userPreferencesDataStore = androidContext().userPreferencesDataStore)
     }
 
@@ -47,11 +48,11 @@ val authModule = module {
             context = androidContext(),
             credentialManager = get(),
             authRemoteService = get<AuthRemoteService>(),
-            authDataStoreService = get()
+//            authDataStoreService = get()
         )
     }
 
-//    viewModel {
-//        AuthViewModel(authRepository = get<AuthRepository>())
-//    }
+    viewModel {
+        AuthViewModel(authRepository = get<AuthRepository>())
+    }
 }

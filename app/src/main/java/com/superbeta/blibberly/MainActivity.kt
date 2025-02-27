@@ -1,7 +1,7 @@
 package com.superbeta.blibberly
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,34 +9,50 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.credentials.CredentialManager
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.superbeta.blibberly.navigation.BlibberlyNavHost
 import com.superbeta.blibberly.root.BlibberlyTopAppBar
 import com.superbeta.blibberly.ui.BlibberlyTheme
+import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly_auth.AuthActivity
+import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
+import com.superbeta.blibberly_auth.presentation.viewmodel.UserInfoState
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.compose.KoinContext
 
 
 class MainActivity : ComponentActivity() {
 
-    private val bottomNavScreens = listOf(
-        Screen.CurrUserProfile,
-        Screen.Home,
-        Screen.ChatList,
-    )
+    //    private val bottomNavScreens = listOf(
+//        Screen.CurrUserProfile,
+//        Screen.Home,
+//        Screen.ChatList,
+//    )
+    private lateinit var auth: FirebaseAuth
+    private lateinit var credentialManager: CredentialManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startActivity(Intent(this, AuthActivity::class.java))
+        val authViewModel = getViewModel<AuthViewModel>()
+
+        auth = Firebase.auth
+        credentialManager = CredentialManager.create(baseContext)
+
+//        startActivity(Intent(this, AuthActivity::class.java))
 ////notification permission
 //        val requestPermissionLauncher =
 //            registerForActivityResult(
@@ -72,8 +88,6 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-
-//                        val authViewModel = getViewModel<AuthViewModel>()
 
                         val scope = rememberCoroutineScope()
                         val navController = rememberNavController()
@@ -147,6 +161,33 @@ class MainActivity : ComponentActivity() {
 //                                }
 //                            }
 //                        }
+
+
+                        val authState by authViewModel.userInfoState.collectAsStateWithLifecycle()
+                        LaunchedEffect(authState) {
+                            startNavRoute = when (authState) {
+                                UserInfoState.Failed -> {
+                                    Log.i(
+                                        "AuthActivity",
+                                        "Failed to Sign In"
+                                    )
+                                    Routes.Auth.graph
+                                }
+
+                                is UserInfoState.Success -> {
+                                    Log.i(
+                                        "AuthActivity",
+                                        "Current User : ${(authState as? UserInfoState.Success)?.user?.email ?: "Unable to fetch"}"
+                                    )
+
+                                    Routes.Home.graph
+                                }
+
+                                null -> {
+                                    Screen.InitialLoading.route
+                                }
+                            }
+                        }
 
                         Scaffold(
                             topBar = {
