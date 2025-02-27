@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id">59952933272-simncg710ia0gdjce8dprqnkfptnrfql.apps.googleusercontent.com</string>
+    <string name="title_activity_auth">AuthActivity</string>
+
+</resources>
