@@ -25,10 +25,9 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly_auth.components.PrimaryButton
-import com.superbeta.blibberly_auth.ui.theme.TextColorGrey
+import com.superbeta.blibberly_auth.theme.TextColorGrey
 import com.superbeta.blibberly_auth.utils.FontProvider
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserFlowScreen(modifier: Modifier) {
@@ -61,7 +60,7 @@ fun UserFlowScreen(modifier: Modifier) {
                 contentScale = ContentScale.Crop,
                 model = userFlowImagesList[page],
                 contentDescription = "User Flow",
-                modifier = Modifier.fillMaxSize()
+//                modifier = Modifier.fillMaxSize()
             ) {
                 val state = painter.state
                 if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
@@ -72,53 +71,53 @@ fun UserFlowScreen(modifier: Modifier) {
             }
         }
 
-        if (pagerState.currentPage != userFlowImagesList.size - 1) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TextButton(onClick = {
-//                TODO    viewModel.loginWithBrowser(context)
-                }) {
-                    Text(
-                        text = "Sign In",
-                        fontFamily = FontProvider.dmSansFontFamily,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 22.sp,
-                        color = Color.White
-                    )
-                }
-                PrimaryButton(
-                    hapticsEnabled = true,
-                    modifier = Modifier,
-                    buttonText = "Continue",
-                    isButtonEnabled = true,
-                    buttonContainerColor = Color.White,
-                    textColor = TextColorGrey
-                ) {
-                    scope.launch {
-                        pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
-                    }
-                }
-            }
-        } else if (pagerState.currentPage == userFlowImagesList.size - 1) {
-            PrimaryButton(
-                hapticsEnabled = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                buttonText = "Sign In",
-                isButtonEnabled = true,
-                buttonContainerColor = Color.White,
-                textColor = TextColorGrey
-            ) {
-//TODO                viewModel.loginWithBrowser(context)
-//                scope.launch {
-//                    pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
+//        if (pagerState.currentPage != userFlowImagesList.size - 1) {
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(16.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween
+//            ) {
+//                TextButton(onClick = {
+////                TODO    viewModel.loginWithBrowser(context)
+//                }) {
+//                    Text(
+//                        text = "Sign In",
+//                        fontFamily = FontProvider.dmSansFontFamily,
+//                        fontWeight = FontWeight.SemiBold,
+//                        fontSize = 22.sp,
+//                        color = Color.White
+//                    )
 //                }
-            }
-        }
+//                PrimaryButton(
+//                    hapticsEnabled = true,
+//                    modifier = Modifier,
+//                    buttonText = "Continue",
+//                    isButtonEnabled = true,
+//                    buttonContainerColor = Color.White,
+//                    textColor = TextColorGrey
+//                ) {
+//                    scope.launch {
+//                        pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
+//                    }
+//                }
+//            }
+//        } else if (pagerState.currentPage == userFlowImagesList.size - 1) {
+//            PrimaryButton(
+//                hapticsEnabled = true,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(16.dp),
+//                buttonText = "Sign In",
+//                isButtonEnabled = true,
+//                buttonContainerColor = Color.White,
+//                textColor = TextColorGrey
+//            ) {
+////TODO                viewModel.loginWithBrowser(context)
+////                scope.launch {
+////                    pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
+////                }
+//            }
+//        }
     }
 }

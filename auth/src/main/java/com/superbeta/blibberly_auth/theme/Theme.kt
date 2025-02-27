@@ -15,6 +15,12 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.superbeta.blibberly_auth.theme.ColorPrimary
+import com.superbeta.blibberly_auth.theme.ColorSecondary
+import com.superbeta.blibberly_auth.theme.ColorTertiary
+import com.superbeta.blibberly_auth.theme.Pink80
+import com.superbeta.blibberly_auth.theme.Purple80
+import com.superbeta.blibberly_auth.theme.PurpleGrey80
 
 
 private val DarkColorScheme = darkColorScheme(

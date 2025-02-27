@@ -18,7 +18,7 @@ sealed class Screen(val route: String) {
     data object UserProfile : Screen("user_profile")
     data object NoUsers : Screen("no_users")
 
-    data object UserFlow : Screen("user_flow")
+//    data object UserFlow : Screen("user_flow")
 }
 
 sealed class Routes(val graph: String) {

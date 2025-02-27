@@ -37,7 +37,7 @@ import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
-import com.superbeta.blibberly_auth.ui.theme.ColorDisabled
+import com.superbeta.blibberly_auth.theme.ColorDisabled
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

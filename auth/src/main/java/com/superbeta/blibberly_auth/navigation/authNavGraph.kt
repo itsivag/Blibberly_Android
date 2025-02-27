@@ -15,6 +15,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.superbeta.blibberly_auth.presentation.ui.SignInScreen
 import com.superbeta.blibberly_auth.presentation.ui.UserFlowScreen
 import com.superbeta.blibberly_auth.presentation.viewmodel.AuthViewModel
 import com.superbeta.blibberly_auth.utils.Routes
@@ -31,34 +32,9 @@ fun NavGraphBuilder.authNavGraph(
         composable(Screen.SignIn.route) {
             SignInScreen(modifier)
         }
-        composable(Screen.UserFlow.route) {
-            UserFlowScreen(modifier)
-        }
+//        composable(Screen.UserFlow.route) {
+//            UserFlowScreen(modifier)
+//        }
     }
 
-}
-
-@Composable
-fun SignInScreen(
-    modifier: Modifier,
-    viewModel: AuthViewModel = koinViewModel(),
-//    signInWithGoogle: () -> Unit
-) {
-    val context = LocalContext.current
-
-    // Get the Activity reference
-    val activity = remember(context) {
-        context as? Activity ?: (context as? ContextWrapper)?.baseContext as? Activity
-    }
-    Column(modifier = modifier.fillMaxSize()) {
-        Button(onClick = {
-            if (activity != null) {
-                viewModel.signInWithGoogle(activity)
-            } else {
-                Log.e("SignInScreen", "Cannot get Activity reference")
-            }
-        }) {
-            Text(text = "Sign In With Google")
-        }
-    }
 }

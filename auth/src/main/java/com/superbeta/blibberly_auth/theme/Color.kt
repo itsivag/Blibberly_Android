@@ -1,4 +1,4 @@
-package com.superbeta.blibberly_auth.ui.theme
+package com.superbeta.blibberly_auth.theme
 
 import androidx.compose.ui.graphics.Color
 

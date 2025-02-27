@@ -33,4 +33,7 @@ object FontProvider {
 
     private val dmSans = GoogleFont("DM Sans")
     val dmSansFontFamily = FontFamily(Font(googleFont = dmSans, fontProvider = provider))
+
+    private val roboto = GoogleFont("Roboto")
+    val robotoFontFamily = FontFamily(Font(googleFont = roboto, fontProvider = provider))
 }
