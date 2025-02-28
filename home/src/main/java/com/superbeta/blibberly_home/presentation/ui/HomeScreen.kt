@@ -21,6 +21,7 @@ import com.superbeta.blibberly_home.presentation.ui.components.BlibberlyHorizont
 import com.superbeta.blibberly_home.presentation.ui.components.HomeScreenShimmerEffect
 import com.superbeta.blibberly_home.presentation.viewModel.HomeViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

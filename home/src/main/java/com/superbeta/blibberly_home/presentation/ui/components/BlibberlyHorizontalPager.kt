@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.util.lerp
+import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_home.presentation.ui.components.profile.AboutCard
 import com.superbeta.blibberly_home.presentation.ui.components.profile.BlibMojiCard
@@ -52,13 +53,14 @@ fun BlibberlyHorizontalPager(
                 }) {
             LazyColumn(
                 modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.background)
+                    .background(color = ColorPrimary.copy(alpha = 0.15f))
                     .fillMaxWidth(),
             ) {
                 item {
                     BlibMojiCard(userDataModel = currUser,
                         navigateToChat = { navigateToChat(currUser.email, currUser.name) })
                 }
+                item { BioCard(user = currUser) }
                 item { AboutCard(user = currUser) }
 //                item { LookingForCard() }
                 item { ProfessionalCard() }
@@ -84,6 +86,8 @@ fun BlibberlyHorizontalPager(
         }
     }
 }
+
+
 
 
 

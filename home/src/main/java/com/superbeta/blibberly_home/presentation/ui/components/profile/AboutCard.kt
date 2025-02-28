@@ -1,6 +1,5 @@
 package com.superbeta.blibberly_home.presentation.ui.components.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
