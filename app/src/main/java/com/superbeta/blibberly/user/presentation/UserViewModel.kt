@@ -25,7 +25,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     fun getUser() {
         viewModelScope.launch(IO) {
             try {
-                _userState.value = mUserRepository.getUser("sivacbrf2@gmail.com")
+                _userState.value = getUserEmail()?.let { mUserRepository.getUser(it) }
                 Log.i("UserViewModel", "User Data" + userState.value.toString())
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error getting User Data : " + e.printStackTrace())

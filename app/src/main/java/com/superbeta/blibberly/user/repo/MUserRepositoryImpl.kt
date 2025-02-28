@@ -68,8 +68,8 @@ class MUserRepositoryImpl(
         return localUserData
     }
 
-    override suspend fun getUserEmail(): String {
-        return "sivacbrf2@gmail.com"
+    override suspend fun getUserEmail(): String? {
+        return userRemoteService.getUserEmail()
     }
 
     override suspend fun getUserFCMToken(): String {

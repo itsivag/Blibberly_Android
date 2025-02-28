@@ -1,6 +1,8 @@
 package com.superbeta.blibberly.user.data.remote
 
 import android.util.Log
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.data.model.UserDataModel
 import io.github.jan.supabase.SupabaseClient
@@ -141,6 +143,10 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override suspend fun getUserEmail(): String? {
+        return Firebase.auth.currentUser?.email
     }
 
 //    override suspend fun retrieveSession(): UserInfo? {

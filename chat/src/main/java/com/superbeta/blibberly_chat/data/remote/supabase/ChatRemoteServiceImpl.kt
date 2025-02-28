@@ -1,6 +1,9 @@
 package com.superbeta.blibberly_chat.data.remote.supabase
 
 import android.util.Log
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import io.github.jan.supabase.SupabaseClient
@@ -13,8 +16,8 @@ class ChatRemoteServiceImpl(private val supabase: SupabaseClient) : ChatRemoteSe
     private val supabaseMessageDb = supabase.from("Messages")
 
 
-    override suspend fun retrieveSession(): UserInfo {
-        return supabase.auth.retrieveUserForCurrentSession()
+    override suspend fun retrieveSession(): FirebaseUser? {
+        return Firebase.auth.currentUser
     }
 
     override suspend fun getUsersProfile(

@@ -90,7 +90,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //FCM
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation(libs.firebase.messaging)
+    implementation(libs.firebase.auth)
+
 
     //compose
     val composeBom = platform("androidx.compose:compose-bom:2024.05.00")

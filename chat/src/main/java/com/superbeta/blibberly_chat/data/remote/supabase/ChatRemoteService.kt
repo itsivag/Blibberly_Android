@@ -1,11 +1,12 @@
 package com.superbeta.blibberly_chat.data.remote.supabase
 
+import com.google.firebase.auth.FirebaseUser
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import io.github.jan.supabase.gotrue.user.UserInfo
 
 interface ChatRemoteService {
-    suspend fun retrieveSession(): UserInfo?
+    suspend fun retrieveSession(): FirebaseUser?
     suspend fun getUsersProfile(
         liveUsers: List<String>,
         appendProfiles: (UserDataModel) -> Unit

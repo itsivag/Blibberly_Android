@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.firebase.crashlytics)
     id("com.google.devtools.ksp")
+    kotlin("plugin.serialization") version "1.9.0"
+
 }
 
 android {

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface MUserRepository {
     suspend fun getUser(email: String): UserDataModel
-    suspend fun getUserEmail(): String
+    suspend fun getUserEmail(): String?
     suspend fun getUserFCMToken(): String
     suspend fun setUserToLocalDb(userDataModel: UserDataModel?)
     suspend fun setUserToRemote(userDataModel: UserDataModel)
