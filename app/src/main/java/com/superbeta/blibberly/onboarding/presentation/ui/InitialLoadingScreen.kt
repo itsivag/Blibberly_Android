@@ -34,6 +34,7 @@ import com.superbeta.blibberly.ui.TextColorGrey
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.FontProvider
 import com.superbeta.blibberly.utils.Screen
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -69,10 +70,10 @@ fun InitialLoading(
     }
 
     LaunchedEffect(true) {
-        scope.launch {
+        scope.launch(IO) {
             while (true) {
                 hintText = loadingScreenHintList.random()
-                delay(3000)
+                delay(5000)
             }
         }
     }
