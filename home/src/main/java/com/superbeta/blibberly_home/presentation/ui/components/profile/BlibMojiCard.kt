@@ -4,10 +4,9 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,27 +14,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import com.superbeta.blibberly_home.utils.FontProvider
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_home.R
 import com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS
+import com.superbeta.blibberly_home.utils.FontProvider
 
 @Composable
 fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
@@ -60,7 +61,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
 
     Box(
         modifier = Modifier
-            .height(screenHeight / 2f)
+            .height(screenHeight / 2.5f)
 //            .padding(bottom = 12.dp)
             .background(color = Color.Transparent, shape = RoundedCornerShape(16.dp))
     ) {
@@ -72,11 +73,12 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                         stiffness = Spring.StiffnessLow, dampingRatio = Spring.DampingRatioLowBouncy
                     )
                 )
-                .height(screenHeight / 2)
+                .height(screenHeight / 2.5f)
                 .background(color = it, shape = RoundedCornerShape(16.dp))
         }?.let {
             Box(
-                modifier = it, contentAlignment = Alignment.BottomCenter
+                modifier = it,
+                contentAlignment = Alignment.BottomCenter
             ) {
                 Box(
                     modifier = Modifier
@@ -115,46 +117,55 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                     }
                 }
 
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.linearGradient(
+                                listOf(
+                                    Color.Black,
+                                    Color.Transparent,
+                                ),
+                                start = Offset(0f, Float.POSITIVE_INFINITY),
+                                end = Offset(0f, 0.25f)
+                            ), shape = RoundedCornerShape(16.dp)
+                        )
+                )
+
             }
         }
 
-        Column(
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
+                .fillMaxWidth()
+                .padding(12.dp)
+                .align(Alignment.BottomCenter),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row {
-                //name
-                Text(
-                    modifier = Modifier
-                        .padding(8.dp),
-                    text = userDataModel.name,
-                    fontFamily = FontProvider.bebasFontFamily,
-                    fontSize = 28.sp,
-                    color = overLayTextColor,
+            Text(
+                text = userDataModel.name,
+                fontFamily = FontProvider.bebasFontFamily,
+                fontSize = 28.sp,
+                color = overLayTextColor,
+            )
 
-                    )
-                Spacer(modifier = Modifier.weight(1f))
-                //profile options
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = "Profile Menu",
-                        tint = overLayTextColor,
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Row(modifier = Modifier.padding(horizontal = 8.dp)) {
-                //age and gender
-                Text(
-                    text = userDataModel.age.toString(), fontSize = 28.sp, color = overLayTextColor
-                )
-                Text(text = userDataModel.gender, color = overLayTextColor)
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.more_vert),
+                contentDescription = "Profile Menu",
+                tint = overLayTextColor,
+            )
+        }
+//            Spacer(modifier = Modifier.weight(1f))
+//            Row(modifier = Modifier.padding(horizontal = 8.dp)) {
+//                age and gender
+//                Text(
+//                    text = userDataModel.age.toString(), fontSize = 28.sp, color = overLayTextColor
+//                )
+//                Text(text = userDataModel.gender, color = overLayTextColor)
+//
+//                Spacer(modifier = Modifier.weight(1f))
 
-                Spacer(modifier = Modifier.weight(1f))
-
-                //chat button
+        //chat button
 //                IconButton(
 //                    onClick = {
 //                        navigateToChat()
@@ -165,11 +176,10 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
 //                        contentDescription = "Chat",
 //                    )
 //                }
-                //city
-                Text(text = "Chennai,TN", color = overLayTextColor, fontSize = 22.sp)
+        //city
+//                Text(text = "Chennai,TN", color = overLayTextColor, fontSize = 22.sp)
 
-            }
-        }
+//            }
 
     }
 }
