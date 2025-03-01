@@ -1,6 +1,8 @@
 package com.superbeta.blibberly_home.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,16 +13,17 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_home.presentation.ui.components.profile.AboutCard
 import com.superbeta.blibberly_home.presentation.ui.components.profile.BlibMojiCard
 import com.superbeta.blibberly_home.presentation.ui.components.profile.InterestsCard
-import com.superbeta.blibberly_home.presentation.ui.components.profile.LanguageCard
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -55,6 +58,8 @@ fun BlibberlyHorizontalPager(
                 modifier = Modifier
                     .background(color = ColorPrimary.copy(alpha = 0.15f))
                     .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                contentPadding = PaddingValues(12.dp)
             ) {
                 item {
                     BlibMojiCard(userDataModel = currUser,
@@ -62,10 +67,10 @@ fun BlibberlyHorizontalPager(
                 }
                 item { BioCard(user = currUser) }
                 item { AboutCard(user = currUser) }
-//                item { LookingForCard() }
-                item { ProfessionalCard() }
-                item { LanguageCard(user = currUser) }
                 item { InterestsCard(interests = currUser.interests) }
+                item { ProfessionalCard(user = currUser) }
+                item { IceBreakerCard(user = currUser) }
+                item { KarmaPointsCard(user = currUser) }
                 item {
                     ChatOrSkipCard(navigateToChat = {
                         navigateToChat(
@@ -86,6 +91,7 @@ fun BlibberlyHorizontalPager(
         }
     }
 }
+
 
 
 

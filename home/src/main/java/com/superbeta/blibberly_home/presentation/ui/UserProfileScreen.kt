@@ -27,7 +27,6 @@ import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.superbeta.blibberly_home.presentation.ui.components.profile.AboutCard
 import com.superbeta.blibberly_home.presentation.ui.components.profile.BlibMojiCard
 import com.superbeta.blibberly_home.presentation.ui.components.profile.InterestsCard
-import com.superbeta.blibberly_home.presentation.ui.components.profile.LanguageCard
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,7 +73,6 @@ fun UserProfileScreen(
                     )
                 }
                 item { AboutCard(user = it) }
-                item { LanguageCard(user = it) }
                 item { InterestsCard(interests = it.interests) }
             }
         }

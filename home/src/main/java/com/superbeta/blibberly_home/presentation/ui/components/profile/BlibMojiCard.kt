@@ -61,7 +61,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
     Box(
         modifier = Modifier
             .height(screenHeight / 2f)
-            .padding(12.dp)
+//            .padding(bottom = 12.dp)
             .background(color = Color.Transparent, shape = RoundedCornerShape(16.dp))
     ) {
         avatarBGColorsMap[userDataModel.photoMetaData.bgColor]?.let {

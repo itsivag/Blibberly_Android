@@ -26,6 +26,7 @@ import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.FontProvider
 import com.superbeta.blibberly_home.R
+import com.superbeta.blibberly_home.model.BioDataModel
 
 @Composable
 fun BioCard(user: UserDataModel) {
@@ -46,29 +47,14 @@ fun BioCard(user: UserDataModel) {
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .scrollable(scrollState, orientation = Orientation.Horizontal)
-            .padding(12.dp),
+//            .scrollable(scrollState, orientation = Orientation.Horizontal)
+//            .padding(16.dp),
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = "Bio",
-                fontSize = 16.sp,
-                color = Color.DarkGray,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(start = 8.dp, top = 8.dp)
-                    .weight(1f)
-            )
-            Text(
-                text = "ℹ\uFE0F",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(end = 8.dp, top = 8.dp)
-            )
-        }
+        BlibberlyCardTitle(title = "Bio", emoji = "ℹ\uFE0F")
 
         Row(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(bottom = 8.dp, start = 12.dp, end = 12.dp, top = 8.dp)
                 .scrollable(scrollState, orientation = Orientation.Horizontal)
                 .fillMaxWidth()
         ) {
@@ -78,6 +64,7 @@ fun BioCard(user: UserDataModel) {
         }
     }
 }
+
 
 @Composable
 fun BioCardChip(value: String, type: Int) {
@@ -112,21 +99,16 @@ fun BioCardChip(value: String, type: Int) {
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = iconType),
-            contentDescription = "Gender"
+            contentDescription = "Gender",
+            modifier = Modifier.padding(start = 4.dp)
         )
 
         Text(
             text = value,
             fontFamily = FontProvider.dmSansFontFamily,
             fontSize = 16.sp,
-            modifier = Modifier.padding(start = 4.dp),
+            modifier = Modifier.padding(horizontal = 4.dp),
             fontWeight = FontWeight.SemiBold
         )
     }
 }
-
-data class BioDataModel(
-    val gender: String,
-    val age: Int,
-    val location: String
-)
