@@ -1,10 +1,10 @@
-package com.blibberly.profile_ops.domain
+package com.superbeta.profile_ops.domain
 
 import android.util.Log
 import com.superbeta.profile_ops.data.local.ProfileOpsDao
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
-import com.blibberly.profile_ops.data.model.UserDataModel
-import com.blibberly.profile_ops.data.remote.ProfileOpsRemoteService
+import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.profile_ops.data.remote.ProfileOpsRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

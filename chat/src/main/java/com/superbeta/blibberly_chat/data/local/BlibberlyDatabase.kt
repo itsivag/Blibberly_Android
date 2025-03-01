@@ -9,7 +9,7 @@ import com.superbeta.blibberly_chat.data.model.MessageConverters
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.profile_ops.data.local.ProfileOpsDao
 
-@Database(entities = [MessageDataModel::class, ProfileOpsDataModel::class], version = 7)
+@Database(entities = [MessageDataModel::class, ProfileOpsDataModel::class], version = 8)
 @TypeConverters(MessageConverters::class, ProfileOpsConverters::class)
 abstract class BlibberlyDatabase : RoomDatabase() {
     abstract fun MessagesDao(): MessagesDao

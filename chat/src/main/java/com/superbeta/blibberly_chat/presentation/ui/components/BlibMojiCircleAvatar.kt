@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import com.superbeta.blibberly_auth.user.data.model.PhotoMetaData
+import com.superbeta.blibberly_auth.model.PhotoMetaData
 
 @Composable
 fun BlibMojiCircleAvatar(photoMetaData: PhotoMetaData) {

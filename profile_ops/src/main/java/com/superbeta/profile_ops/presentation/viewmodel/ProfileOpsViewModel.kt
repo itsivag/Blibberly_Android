@@ -1,11 +1,11 @@
-package com.blibberly.profile_ops.presentation.viewmodel
+package com.superbeta.profile_ops.presentation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
-import com.blibberly.profile_ops.data.model.UserDataModel
-import com.blibberly.profile_ops.domain.ProfileOpsRepo
+import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.profile_ops.domain.ProfileOpsRepo
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

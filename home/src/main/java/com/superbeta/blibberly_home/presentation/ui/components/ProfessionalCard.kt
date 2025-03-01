@@ -17,7 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.FontProvider
 import com.superbeta.blibberly_home.R
 

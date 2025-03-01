@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.theme.TextColorGrey
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.FontProvider
 
 @Composable

@@ -1,12 +1,11 @@
-package com.blibberly.profile_ops.data.remote
+package com.superbeta.profile_ops.data.remote
 
 import android.util.Log
 import com.blibberly.profile_ops.data.model.ProfileOp
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
-import com.blibberly.profile_ops.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
-import kotlinx.coroutines.flow.StateFlow
 
 class ProfileOpsRemoteServiceImpl(supabase: SupabaseClient) : ProfileOpsRemoteService {
     private val supabaseProfileOpsDb = supabase.from("ProfileOps")

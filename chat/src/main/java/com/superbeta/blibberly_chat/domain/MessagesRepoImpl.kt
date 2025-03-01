@@ -1,7 +1,6 @@
 package com.superbeta.blibberly_chat.domain
 
 import android.util.Log
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.local.MessagesDao
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import com.superbeta.blibberly_chat.data.remote.socket.SocketHandler

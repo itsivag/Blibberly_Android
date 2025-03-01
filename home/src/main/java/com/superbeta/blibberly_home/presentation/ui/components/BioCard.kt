@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.superbeta.blibberly_auth.theme.ColorPrimary
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.FontProvider
 import com.superbeta.blibberly_home.R
 import com.superbeta.blibberly_home.model.BioDataModel

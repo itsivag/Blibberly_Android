@@ -1,6 +1,5 @@
 package com.superbeta.blibberly_home.presentation.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,7 +9,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.superbeta.blibberly_home.presentation.ui.components.profile.AboutCard

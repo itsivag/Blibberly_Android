@@ -1,10 +1,10 @@
 package com.superbeta.blibberly_chat.di
 
-import com.blibberly.profile_ops.data.remote.ProfileOpsRemoteService
-import com.blibberly.profile_ops.data.remote.ProfileOpsRemoteServiceImpl
-import com.blibberly.profile_ops.domain.ProfileOpsRepo
-import com.blibberly.profile_ops.domain.ProfileOpsRepoImpl
-import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
+import com.superbeta.profile_ops.data.remote.ProfileOpsRemoteService
+import com.superbeta.profile_ops.data.remote.ProfileOpsRemoteServiceImpl
+import com.superbeta.profile_ops.domain.ProfileOpsRepo
+import com.superbeta.profile_ops.domain.ProfileOpsRepoImpl
+import com.superbeta.profile_ops.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_chat.BuildConfig
 import com.superbeta.blibberly_chat.data.local.BlibberlyRoomInstanceProvider
 import com.superbeta.profile_ops.data.local.ProfileOpsDao

@@ -1,7 +1,6 @@
 package com.superbeta.blibberly_auth.data.remote
 
-import android.util.Log
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.AuthState
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.gotrue.SessionSource

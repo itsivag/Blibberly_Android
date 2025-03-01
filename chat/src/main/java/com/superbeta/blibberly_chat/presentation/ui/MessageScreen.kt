@@ -35,15 +35,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.preferences.core.stringPreferencesKey
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.presentation.ui.components.MessageTextField
 import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubble
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
-import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.profile_ops.presentation.viewmodel.ProfileOpsViewModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_chat.presentation.ui.components.BlibMojiCircleAvatar
 import com.superbeta.blibberly_chat.presentation.ui.components.ProfileOpsMessageComponent
 import kotlinx.coroutines.Dispatchers.IO

@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.superbeta.blibberly_home.R
 
 @Composable
 fun ChatOrSkipCard(navigateToChat: () -> Unit, skipProfile: () -> Unit) {
+    val haptics = LocalHapticFeedback.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -25,6 +29,7 @@ fun ChatOrSkipCard(navigateToChat: () -> Unit, skipProfile: () -> Unit) {
         Image(
             modifier = Modifier.clickable {
                 skipProfile()
+                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
             },
             imageVector = ImageVector.vectorResource(id = R.drawable.thumbs_down),
             contentDescription = "Skip",
@@ -34,6 +39,7 @@ fun ChatOrSkipCard(navigateToChat: () -> Unit, skipProfile: () -> Unit) {
         Image(
             modifier = Modifier.clickable {
                 navigateToChat()
+                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
             },
             imageVector = ImageVector.vectorResource(id = R.drawable.thumbs_up),
             contentDescription = "Chat",

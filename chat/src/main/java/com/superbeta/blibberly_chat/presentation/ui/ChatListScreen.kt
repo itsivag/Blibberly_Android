@@ -20,16 +20,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
-import com.superbeta.blibberly_auth.user.data.model.PhotoMetaData
+import com.superbeta.profile_ops.presentation.viewmodel.ProfileOpsViewModel
+import com.superbeta.blibberly_auth.model.Grind
+import com.superbeta.blibberly_auth.model.PhotoMetaData
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
+import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.presentation.ui.components.ChatListItem
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
-import com.superbeta.blibberly_chat.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,35 +94,6 @@ fun ChatListScreen(
 
 
     LazyColumn(modifier = modifier) {
-
-//        item {
-//            Button(onClick = {
-//                messageViewModel.disconnectUserFromSocket()
-//            }, content = { Text(text = "Disconnect") })
-//        }
-//        item {
-//            TopAppBar(title = { Text(text = "Live Chats") })
-//        }
-//        items(userProfiles.size) { i ->
-//            val email = userProfiles[i].email
-//            val userName = userProfiles[i].name
-//
-//            ChatListItem(
-//                userProfile = userProfiles[i],
-//                navigateToMessage = {
-//                    navigateToMessage(email, userName)
-//                })
-//        }
-//        item {
-//            TopAppBar(title = { Text(text = "Matched Chats") })
-//        }
-//        items(matchedProfiles.size) { i ->
-//            ChatListItem(
-//                userProfile = userProfiles[i],
-//                navigateToMessage = {
-//                    navigateToMessage(userProfiles[i].email, userProfiles[i].name)
-//                })
-//        }
         item {
             TopAppBar(navigationIcon = {
                 IconButton(onClick = {
@@ -144,10 +116,10 @@ fun ChatListScreen(
             val tUserDataModel = UserDataModel(
                 email = t.email,
                 name = t.name,
-                age = t.age,
+                dob = t.dob,
                 gender = t.gender,
                 height = t.height,
-                weight = t.weight,
+//                weight = t.weight,
                 aboutMe = t.aboutMe,
                 interests = t.interests,
                 photoMetaData = PhotoMetaData(
@@ -155,6 +127,11 @@ fun ChatListScreen(
                     bgEmoji = t.photoMetaData.bgEmoji,
                     bgColor = t.photoMetaData.bgColor
                 ),
+                location = "",
+                grind = Grind("", ""),
+                languages = "",
+                icebreaker = "",
+                karmaPoint = 0.0,
                 fcmToken = t.fcmToken
             )
 
@@ -183,10 +160,10 @@ fun ChatListScreen(
             val tUserDataModel = UserDataModel(
                 email = t.email,
                 name = t.name,
-                age = t.age,
+                dob = t.dob,
                 gender = t.gender,
                 height = t.height,
-                weight = t.weight,
+//                weight = t.weight,
                 aboutMe = t.aboutMe,
                 interests = t.interests,
                 photoMetaData = PhotoMetaData(
@@ -194,6 +171,11 @@ fun ChatListScreen(
                     bgEmoji = t.photoMetaData.bgEmoji,
                     bgColor = t.photoMetaData.bgColor
                 ),
+                location = "",
+                grind = Grind("", ""),
+                languages = "",
+                icebreaker = "",
+                karmaPoint = 0.0,
                 fcmToken = t.fcmToken
             )
 

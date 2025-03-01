@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.superbeta.blibberly.user.data.model.PhotoMetaData
-import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.PhotoMetaData
+import com.superbeta.blibberly_auth.model.UserDataModel
 
 @Dao
 interface UserLocalDao {
@@ -18,8 +18,8 @@ interface UserLocalDao {
     @Query("UPDATE userInfo set name = :newName")
     suspend fun updateName(newName: String)
 
-    @Query("UPDATE userInfo set age = :newAge")
-    suspend fun updateAge(newAge: Int)
+    @Query("UPDATE userInfo set dob = :newDob")
+    suspend fun updateAge(newDob: String)
 
     @Query("UPDATE userInfo set height = :newHeight")
     suspend fun updateHeight(newHeight: Double)

@@ -1,9 +1,8 @@
 package com.superbeta.blibberly.user.repo
 
-import com.superbeta.blibberly.user.data.model.PhotoMetaData
-import com.superbeta.blibberly.user.data.model.UserDataModel
-import io.github.jan.supabase.gotrue.user.UserInfo
-import kotlinx.coroutines.flow.StateFlow
+import com.superbeta.blibberly_auth.model.PhotoMetaData
+import com.superbeta.blibberly_auth.model.UserDataModel
+
 
 interface MUserRepository {
     suspend fun getUser(email: String): UserDataModel
@@ -12,9 +11,8 @@ interface MUserRepository {
     suspend fun setUserToLocalDb(userDataModel: UserDataModel?)
     suspend fun setUserToRemote(userDataModel: UserDataModel)
     suspend fun updateName(newName: String)
-    suspend fun updateAge(newAge: Int)
+    suspend fun updateDob(newDob: String)
     suspend fun updateHeight(newHeight: Double)
-//    suspend fun updateWeight(newWeight: Double)
     suspend fun updateAboutMe(newAboutMe: String)
     suspend fun updateInterests(newInterests: List<String>)
     suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData)

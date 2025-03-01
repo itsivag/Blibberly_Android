@@ -1,6 +1,5 @@
 package com.superbeta.blibberly_chat.domain
 
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import kotlinx.coroutines.flow.StateFlow
 

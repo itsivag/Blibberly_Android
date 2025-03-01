@@ -56,9 +56,9 @@ import com.superbeta.blibberly.BuildConfig
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
-import com.superbeta.blibberly.user.data.model.PhotoMetaData
-import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly_auth.model.PhotoMetaData
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_home.utils.FontProvider
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -71,7 +71,6 @@ import org.koin.androidx.compose.koinViewModel
 
 enum class BLIBMOJI_BG_COLORS {
     BLUE, WHITE, RED, GRAY, CYAN, BLACK, DARKGRAY, GREEN, MAGENTA, YELLOW
-
 }
 
 val avatarBGColorsMap = mapOf(

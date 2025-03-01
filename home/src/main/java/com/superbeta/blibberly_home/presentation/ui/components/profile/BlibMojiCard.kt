@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_home.R
 import com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS
 import com.superbeta.blibberly_home.utils.FontProvider
@@ -62,7 +62,6 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
     Box(
         modifier = Modifier
             .height(screenHeight / 2.5f)
-//            .padding(bottom = 12.dp)
             .background(color = Color.Transparent, shape = RoundedCornerShape(16.dp))
     ) {
         avatarBGColorsMap[userDataModel.photoMetaData.bgColor]?.let {
@@ -122,9 +121,10 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                         .fillMaxSize()
                         .background(
                             brush = Brush.linearGradient(
-                                listOf(
-                                    Color.Black,
-                                    Color.Transparent,
+                                colorStops =
+                                arrayOf(
+                                    0.1f to Color.Black.copy(alpha = 0.5f),
+                                    0.25f to Color.Transparent,
                                 ),
                                 start = Offset(0f, Float.POSITIVE_INFINITY),
                                 end = Offset(0f, 0.25f)
@@ -155,31 +155,5 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                 tint = overLayTextColor,
             )
         }
-//            Spacer(modifier = Modifier.weight(1f))
-//            Row(modifier = Modifier.padding(horizontal = 8.dp)) {
-//                age and gender
-//                Text(
-//                    text = userDataModel.age.toString(), fontSize = 28.sp, color = overLayTextColor
-//                )
-//                Text(text = userDataModel.gender, color = overLayTextColor)
-//
-//                Spacer(modifier = Modifier.weight(1f))
-
-        //chat button
-//                IconButton(
-//                    onClick = {
-//                        navigateToChat()
-//                    }, colors = IconButtonDefaults.iconButtonColors(containerColor = Color.White)
-//                ) {
-//                    Icon(
-//                        imageVector = ImageVector.vectorResource(id = R.drawable.chat),
-//                        contentDescription = "Chat",
-//                    )
-//                }
-        //city
-//                Text(text = "Chennai,TN", color = overLayTextColor, fontSize = 22.sp)
-
-//            }
-
     }
 }

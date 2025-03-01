@@ -31,12 +31,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorPrimary
-//import com.superbeta.blibberly_auth.theme.ColorDisabled
-//import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
-import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_auth.theme.ColorDisabled
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

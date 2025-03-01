@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.blibberly.profile_ops.data.model.ProfileOp
-import com.blibberly.profile_ops.presentation.viewmodel.ProfileOpsViewModel
+import com.superbeta.profile_ops.presentation.viewmodel.ProfileOpsViewModel
 import com.superbeta.blibberly_auth.theme.ColorSecondary
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import kotlinx.coroutines.Dispatchers.IO

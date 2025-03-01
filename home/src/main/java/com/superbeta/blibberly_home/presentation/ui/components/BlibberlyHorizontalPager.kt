@@ -15,12 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.superbeta.blibberly_auth.theme.ColorPrimary
-import com.superbeta.blibberly_auth.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS
 import com.superbeta.blibberly_home.presentation.ui.components.profile.AboutCard
 import com.superbeta.blibberly_home.presentation.ui.components.profile.BlibMojiCard
 import com.superbeta.blibberly_home.presentation.ui.components.profile.InterestsCard
@@ -35,6 +36,19 @@ fun BlibberlyHorizontalPager(
     liveUsers: List<UserDataModel>,
     navigateToNoUsers: () -> Unit
 ) {
+    val avatarBGColorsMap = mapOf(
+        BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
+        BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
+        BLIBMOJI_BG_COLORS.RED.toString() to Color.Red,
+        BLIBMOJI_BG_COLORS.GRAY.toString() to Color.Gray,
+        BLIBMOJI_BG_COLORS.CYAN.toString() to Color.Cyan,
+        BLIBMOJI_BG_COLORS.BLACK.toString() to Color.Black,
+        BLIBMOJI_BG_COLORS.DARKGRAY.toString() to Color.DarkGray,
+        BLIBMOJI_BG_COLORS.GREEN.toString() to Color.Green,
+        BLIBMOJI_BG_COLORS.MAGENTA.toString() to Color.Magenta,
+        BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
+    )
+
     val scope = rememberCoroutineScope()
     HorizontalPager(
         userScrollEnabled = false,
@@ -54,38 +68,43 @@ fun BlibberlyHorizontalPager(
                         start = 0.5f, stop = 1f, fraction = 1f - pageOffset.coerceIn(0f, 1f)
                     )
                 }) {
-            LazyColumn(
-                modifier = Modifier
-                    .background(color = ColorPrimary.copy(alpha = 0.15f))
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-                contentPadding = PaddingValues(12.dp)
-            ) {
-                item {
-                    BlibMojiCard(userDataModel = currUser,
-                        navigateToChat = { navigateToChat(currUser.email, currUser.name) })
-                }
-                item { BioCard(user = currUser) }
-                item { AboutCard(user = currUser) }
-                item { InterestsCard(interests = currUser.interests) }
-                item { ProfessionalCard(user = currUser) }
-                item { IceBreakerCard(user = currUser) }
-                item { KarmaPointsCard(user = currUser) }
-                item {
-                    ChatOrSkipCard(navigateToChat = {
-                        navigateToChat(
-                            currUser.email,
-                            currUser.name
+            avatarBGColorsMap[currUser.photoMetaData.bgColor]?.let {
+
+                LazyColumn(
+                    modifier = Modifier
+                        .background(
+                            it.copy(alpha = 0.1f),
                         )
-                    }, skipProfile = {
-                        scope.launch {
-                            if (pagerState.currentPage + 1 >= pagerState.pageCount) {
-                                navigateToNoUsers()
-                            } else {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                    contentPadding = PaddingValues(12.dp)
+                ) {
+                    item {
+                        BlibMojiCard(userDataModel = currUser,
+                            navigateToChat = { navigateToChat(currUser.email, currUser.name) })
+                    }
+                    item { BioCard(user = currUser) }
+                    item { AboutCard(user = currUser) }
+                    item { InterestsCard(interests = currUser.interests) }
+                    item { ProfessionalCard(user = currUser) }
+                    item { IceBreakerCard(user = currUser) }
+                    item { KarmaPointsCard(user = currUser) }
+                    item {
+                        ChatOrSkipCard(navigateToChat = {
+                            navigateToChat(
+                                currUser.email,
+                                currUser.name
+                            )
+                        }, skipProfile = {
+                            scope.launch {
+                                if (pagerState.currentPage + 1 >= pagerState.pageCount) {
+                                    navigateToNoUsers()
+                                } else {
+                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
         }

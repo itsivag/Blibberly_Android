@@ -3,11 +3,9 @@ package com.superbeta.blibberly.user.data.remote
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.superbeta.blibberly.user.data.model.PhotoMetaData
-import com.superbeta.blibberly.user.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.PhotoMetaData
+import com.superbeta.blibberly_auth.model.UserDataModel
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.gotrue.auth
-import io.github.jan.supabase.gotrue.user.UserInfo
 import io.github.jan.supabase.postgrest.from
 
 class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteService {
@@ -51,15 +49,15 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
         }
     }
 
-    override suspend fun updateAge(age: Int, email: String) {
+    override suspend fun updateDob(dob: String, email: String) {
         try {
             usersTable
-                .update({ set("age", age) }) {
+                .update({ set("age", dob) }) {
                     filter {
                         UserDataModel::email eq email
                     }
                 }
-            Log.i("Database Update Successful", age.toString())
+            Log.i("Database Update Successful", dob)
         } catch (e: Exception) {
             Log.e("Database Update Error", e.toString())
         }

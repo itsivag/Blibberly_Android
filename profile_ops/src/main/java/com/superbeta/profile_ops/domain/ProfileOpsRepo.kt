@@ -1,8 +1,7 @@
-package com.blibberly.profile_ops.domain
+package com.superbeta.profile_ops.domain
 
-import com.blibberly.profile_ops.data.model.ProfileOp
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
-import com.blibberly.profile_ops.data.model.UserDataModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import kotlinx.coroutines.flow.StateFlow
 
 interface ProfileOpsRepo {

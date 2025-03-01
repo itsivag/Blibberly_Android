@@ -3,7 +3,6 @@ package com.superbeta.blibberly.profile
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,10 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-//import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly.ui.components.TextFieldWithTrailingIcon
-import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly_auth.model.UserDataModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -56,7 +54,7 @@ fun ProfileBioScreen(
                 name = TextFieldValue(userData.name)
             }
             if (userData != null) {
-                age = TextFieldValue(userData.age.toString())
+                age = TextFieldValue(userData.dob.toString())
             }
             if (userData != null) {
                 height = TextFieldValue(userData.height.toString())

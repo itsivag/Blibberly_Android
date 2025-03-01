@@ -35,7 +35,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorDisabled
@@ -44,12 +43,11 @@ import com.superbeta.blibberly.ui.ColorPrimary
 //import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.ui.components.TextFieldWithLabel
-import com.superbeta.blibberly.user.data.model.PhotoMetaData
-import com.superbeta.blibberly.user.data.model.UserDataModel
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly.utils.Screen
+import com.superbeta.blibberly_auth.model.Grind
+import com.superbeta.blibberly_auth.model.PhotoMetaData
+import com.superbeta.blibberly_auth.model.UserDataModel
 //import com.superbeta.blibberly_supabase.utils.supabase
-import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -116,7 +114,7 @@ fun BioScreen(
         scope.launch {
             if (userData != null) {
                 name = TextFieldValue(userData.name)
-                age = TextFieldValue(userData.age.toString())
+                age = TextFieldValue(userData.dob.toString())
                 height = TextFieldValue(userData.height.toString())
 //                weight = TextFieldValue(userData.weight.toString())
                 aboutMe = userData.aboutMe
@@ -345,13 +343,18 @@ fun BioScreen(
                                 UserDataModel(
                                     email = email,
                                     name = name.text,
-                                    age = age.text.toInt(),
+                                    dob = age.text.toInt(),
                                     height = height.text.toDoubleOrNull() ?: 0.0,
 //                                    weight = weight.text.toDouble(),
                                     aboutMe = aboutMe,
                                     interests = interests,
                                     gender = gender,
                                     photoMetaData = PhotoMetaData("", "", ""),
+                                    location = "",
+                                    grind = Grind("", ""),
+                                    languages = "",
+                                    icebreaker = "",
+                                    karmaPoint = 0.0,
                                     fcmToken = userFCMToken
                                 ).let {
                                     userViewModel.setUser(

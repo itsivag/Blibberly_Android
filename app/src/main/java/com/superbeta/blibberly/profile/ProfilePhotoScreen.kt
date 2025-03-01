@@ -58,14 +58,13 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.BLIBMOJI_BG_COLORS
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
-import com.superbeta.blibberly.user.data.model.PhotoMetaData
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly_auth.model.PhotoMetaData
 import com.superbeta.blibberly_home.utils.FontProvider
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.storage.Storage
-//import com.superbeta.blibberly_supabase.utils.supabase
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
