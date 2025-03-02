@@ -7,14 +7,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.superbeta.blibberly.notification.NotificationConsentScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.AboutMeScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.BioScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.BlibmojiScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.CurateProfileScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.InterestsScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.JobAndLanguageScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.OnBoardingScreen
-import com.superbeta.blibberly.onBoarding.presentation.ui.QueueScreen
+import com.superbeta.blibberly.onboarding.AboutMeScreen
+import com.superbeta.blibberly.onboarding.BioScreen
+import com.superbeta.blibberly.onboarding.BlibmojiScreen
+import com.superbeta.blibberly.onboarding.CurateProfileScreen
+import com.superbeta.blibberly.onboarding.InterestsScreen
+import com.superbeta.blibberly.onboarding.JobAndLanguageScreen
+import com.superbeta.blibberly.onboarding.OnBoardingScreen
+import com.superbeta.blibberly.onboarding.QueueScreen
 import com.superbeta.blibberly.utils.Routes
 import com.superbeta.blibberly.utils.Screen
 

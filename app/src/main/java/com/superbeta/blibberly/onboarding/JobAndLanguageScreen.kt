@@ -1,15 +1,11 @@
-package com.superbeta.blibberly.onBoarding.presentation.ui
+package com.superbeta.blibberly.onboarding
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -92,9 +88,12 @@ fun JobAndLanguageScreen(
                 style = MaterialTheme.typography.titleLarge,
 //                modifier = Modifier.padding(16.dp)
             )
-            StudyOrWorkDropDown(
+            FillInTheBlanksDropDown(
+                listOf(
+                    "Work", "Own", "Study", "Freelance", "Intern", "Hustle", "Create"
+                ),
                 studyOrWork,
-                editStudyOrWork = { value: String -> studyOrWork = value })
+                onValueChange = { value: String -> studyOrWork = value })
             Text(
                 text = "at",
                 color = TextColorGrey,
@@ -162,44 +161,3 @@ fun JobAndLanguageScreen(
     }
 }
 
-@Composable
-fun StudyOrWorkDropDown(studyOrWork: String, editStudyOrWork: (String) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-
-    val options = listOf(
-        "Work", "Own", "Study", "Freelance", "Intern", "Hustle", "Create"
-    )
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-    ) {
-        Text(
-            text = studyOrWork.ifEmpty { "Dance" },
-            modifier = Modifier.clickable { expanded = !expanded },
-            textDecoration = TextDecoration.Underline,
-            color = if (studyOrWork.isNotEmpty()) TextColorGrey else ColorDisabled,
-            style = MaterialTheme.typography.titleLarge,
-        )
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            repeat(options.size) {
-                DropdownMenuItem(
-//                    colors = MenuItemColors(),
-                    text = { Text(options[it], color = TextColorGrey) },
-                    onClick = {
-                        editStudyOrWork(options[it])
-//                        selectedText = options[it]
-                        expanded = false
-                    }
-                )
-            }
-//            DropdownMenuItem(
-//                text = { Text("Option 2") },
-//                onClick = { /* Do something... */ }
-//            )
-        }
-    }
-}

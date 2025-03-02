@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.onboarding.presentation.ui.theme
+package com.superbeta.blibberly.onboarding.theme
 
 import androidx.compose.ui.graphics.Color
 

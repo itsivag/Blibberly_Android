@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.onBoarding.presentation.ui
+package com.superbeta.blibberly.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

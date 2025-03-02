@@ -1,4 +1,4 @@
-package com.superbeta.blibberly.onBoarding.presentation.ui
+package com.superbeta.blibberly.onboarding
 
 import android.util.Log
 import androidx.compose.foundation.background

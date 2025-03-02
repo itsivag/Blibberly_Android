@@ -1,9 +1,8 @@
-package com.superbeta.blibberly.onBoarding.presentation.ui
+package com.superbeta.blibberly.onboarding
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
