@@ -28,10 +28,13 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     fun getUser() {
         viewModelScope.launch(IO) {
             val user = authRepository.getUserData()
-            _userInfoState.value = if (user != null)
-                UserInfoState.Success(user)
-            else
+            if (user != null) {
+                val isUserRegistered = user.email?.let { authRepository.findIfUserRegistered(it) }
+                _userInfoState.value =
+                    if (isUserRegistered == true) UserInfoState.Success(user) else UserInfoState.NotRegistered
+            } else {
                 UserInfoState.Failed
+            }
         }
     }
 }
@@ -39,4 +42,5 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 sealed class UserInfoState {
     data class Success(val user: FirebaseUser) : UserInfoState()
     data object Failed : UserInfoState()
+    data object NotRegistered : UserInfoState()
 }

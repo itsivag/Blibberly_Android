@@ -13,7 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.credentials.CredentialManager
@@ -33,14 +32,7 @@ import com.superbeta.blibberly_auth.presentation.viewmodel.UserInfoState
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.compose.KoinContext
 
-
 class MainActivity : ComponentActivity() {
-
-    //    private val bottomNavScreens = listOf(
-//        Screen.CurrUserProfile,
-//        Screen.Home,
-//        Screen.ChatList,
-//    )
     private lateinit var auth: FirebaseAuth
     private lateinit var credentialManager: CredentialManager
 
@@ -51,32 +43,6 @@ class MainActivity : ComponentActivity() {
 
         auth = Firebase.auth
         credentialManager = CredentialManager.create(baseContext)
-
-//        startActivity(Intent(this, AuthActivity::class.java))
-////notification permission
-//        val requestPermissionLauncher =
-//            registerForActivityResult(
-//                ActivityResultContracts.RequestPermission()
-//            ) { isGranted: Boolean ->
-//                if (isGranted) {
-//                    Toast.makeText(this, "Notifications permission granted", Toast.LENGTH_SHORT)
-//                        .show()
-//                } else {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                        val settingsIntent: Intent =
-//                            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-//                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-//                        startActivity(settingsIntent)
-//                    }
-//                }
-//            }
-
-//        NotificationUtil(
-//            activity = this,
-//            requestPermissionLauncher = requestPermissionLauncher
-//        ).askNotificationPermission()
-
 
         var isTopBarVisible by mutableStateOf(false)
         var isBottomNavBarVisible by mutableStateOf(false)
@@ -89,7 +55,6 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colorScheme.background
                     ) {
 
-                        val scope = rememberCoroutineScope()
                         val navController = rememberNavController()
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         var selectedScreen by remember {
@@ -124,51 +89,16 @@ class MainActivity : ComponentActivity() {
 
                         }
 
-//                        val authState by authViewModel.userInfoState.collectAsStateWithLifecycle()
                         var startNavRoute by remember {
                             mutableStateOf(Screen.InitialLoading.route)
                         }
-
-//                        LaunchedEffect(authState) {
-//                            startNavRoute = when (authState) {
-//                                is UserInfoState.Failed -> {
-//                                    Routes.Auth.graph
-//                                }
-//
-//                                is UserInfoState.Success -> {
-//                                    Screen.Home.route
-//                                }
-//
-//                                null -> {
-//                                    Routes.Auth.graph
-//                                }
-//                            }
-//                        }
-
-//                        LaunchedEffect(authState) {
-//                            Log.i("AUTH STATE --->>", authState.toString())
-//                            startNavRoute = when (authState) {
-//                                AuthState.SIGNED_IN -> {
-//                                    Screen.Home.route
-//                                }
-//
-//                                AuthState.SIGNED_UP -> {
-//                                    Routes.OnBoarding.graph
-//                                }
-//
-//                                else -> {
-//                                    Routes.OnBoarding.graph
-//                                }
-//                            }
-//                        }
-
-
                         val authState by authViewModel.userInfoState.collectAsStateWithLifecycle()
+
                         LaunchedEffect(authState) {
                             startNavRoute = when (authState) {
                                 UserInfoState.Failed -> {
                                     Log.i(
-                                        "AuthActivity",
+                                        "MainActivity",
                                         "Failed to Sign In"
                                     )
                                     Routes.Auth.graph
@@ -176,16 +106,21 @@ class MainActivity : ComponentActivity() {
 
                                 is UserInfoState.Success -> {
                                     Log.i(
-                                        "AuthActivity",
+                                        "MainActivity",
                                         "Current User : ${(authState as? UserInfoState.Success)?.user?.email ?: "Unable to fetch"}"
                                     )
 
                                     Routes.Home.graph
                                 }
 
+                                UserInfoState.NotRegistered -> {
+                                    Routes.OnBoarding.graph
+                                }
+
                                 null -> {
                                     Screen.InitialLoading.route
                                 }
+
                             }
                         }
 

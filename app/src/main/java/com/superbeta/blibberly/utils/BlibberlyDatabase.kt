@@ -12,3 +12,18 @@ import com.superbeta.blibberly_auth.model.UserDataModelConverters
 abstract class BlibberlyDatabase : RoomDatabase() {
     abstract fun userLocalDao(): UserLocalDao
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
