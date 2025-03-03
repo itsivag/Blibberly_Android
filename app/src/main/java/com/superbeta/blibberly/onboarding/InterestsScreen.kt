@@ -135,17 +135,17 @@ fun InterestsScreen(
 
 //        }
 //        item {
-        Text(
-            text = "Your interests could spark great connections! Your skills might even unlock chats with similar folks!",
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier
-                .padding(16.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.secondary,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(16.dp)
-        )
+//        Text(
+//            text = "Your interests could spark great connections! Your skills might even unlock chats with similar folks!",
+//            style = MaterialTheme.typography.bodyMedium,
+//            modifier = Modifier
+//                .padding(16.dp)
+//                .background(
+//                    color = MaterialTheme.colorScheme.secondary,
+//                    shape = RoundedCornerShape(12.dp)
+//                )
+//                .padding(16.dp)
+//        )
 //        }
 
 //        item {
@@ -186,11 +186,12 @@ fun InterestsScreen(
                         )
                         .padding(vertical = 12.dp, horizontal = 16.dp)
                         .clickable {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             if (selectedInterests.contains(currInterest)) {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                 selectedInterests.remove(currInterest)
                             } else {
                                 if (selectedInterests.size < 3) {
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                     selectedInterests.add(currInterest)
                                 }
                             }

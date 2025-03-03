@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ import com.superbeta.blibberly.ui.PrimaryLinearGradient
 import com.superbeta.blibberly.ui.TextColorGrey
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly_home.utils.FontProvider
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,6 +58,11 @@ fun QueueScreen(modifier: Modifier, navigateToInitialLoadingScreen: () -> Unit) 
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    LaunchedEffect(true) {
+        delay(3000)
+        navigateToInitialLoadingScreen()
+    }
 
     Column(
         modifier = modifier

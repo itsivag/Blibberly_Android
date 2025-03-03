@@ -2,7 +2,6 @@ package com.superbeta.blibberly.onboarding
 
 import android.util.Log
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -14,13 +13,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -52,6 +50,8 @@ import com.superbeta.blibberly_auth.model.PhotoMetaData
 import com.superbeta.blibberly_auth.model.UserDataModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import java.util.Calendar
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,26 +62,13 @@ fun BioScreen(
     viewModel: OnBoardingViewModel = koinViewModel()
 ) {
 
-    var isButtonEnabled by remember {
-        mutableStateOf(true)
-    }
-
     var name by remember {
         mutableStateOf(TextFieldValue())
     }
 
-//    var height by remember {
-//        mutableStateOf(TextFieldValue())
-//    }
-
-
     var aboutMe by remember {
         mutableStateOf("")
     }
-
-//    var photoUri by remember {
-//        mutableStateOf("")
-//    }
 
     var interests by remember {
         mutableStateOf("")
@@ -98,23 +85,33 @@ fun BioScreen(
     var userFCMToken by remember {
         mutableStateOf("")
     }
-
-//    var workingAt by remember {
-//        mutableStateOf(TextFieldValue())
-//    }
-//
-//    var studyOrWork by remember {
-//        mutableStateOf("")
-//    }
-
     val languages = remember {
         mutableStateListOf<String>()
     }
 
-    val datePickerState = rememberDatePickerState()
-    val selectedDate = datePickerState.selectedDateMillis?.let {
-        convertMillisToDate(it)
-    } ?: ""
+    val calendar = Calendar.getInstance(Locale.getDefault())
+    calendar.add(Calendar.YEAR, -18)
+    val minSelectableDate = calendar.timeInMillis
+
+    val datePickerState = rememberDatePickerState(
+        yearRange = IntRange(
+            1900,
+            Calendar.getInstance().get(Calendar.YEAR),
+        ),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis <= minSelectableDate
+            }
+        }
+    )
+
+    val dob by remember {
+        derivedStateOf {
+            datePickerState.selectedDateMillis?.let {
+                convertMillisToDate(it)
+            } ?: ""
+        }
+    }
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -131,7 +128,6 @@ fun BioScreen(
             if (userData != null) {
                 name = TextFieldValue(userData.name)
                 datePickerState.selectedDateMillis = convertDateToMillis(userData.dob)
-//                height = TextFieldValue(userData.height.toString())
                 location = TextFieldValue(userData.location)
                 aboutMe = userData.aboutMe
                 interests = Gson().toJson(userData.interests)
@@ -149,8 +145,11 @@ fun BioScreen(
         }
     }
 
-
-
+    val isButtonEnabled by remember {
+        derivedStateOf {
+            name.text.isNotEmpty() && name.text.length >= 4 && dob.isNotEmpty() && gender.isNotEmpty() && location.text.isNotEmpty() && location.text.length > 3 && languages.isNotEmpty()
+        }
+    }
 
     LazyColumn(modifier = modifier.imePadding()) {
         item {
@@ -185,7 +184,7 @@ fun BioScreen(
         }
 
         item {
-            DatePickerDocked(selectedDate, datePickerState)
+            DatePickerDocked(dob, datePickerState)
         }
 
         item {
@@ -231,50 +230,6 @@ fun BioScreen(
                 }
             }
         }
-//        item {
-//            Column(modifier = Modifier.padding(top = 16.dp)) {
-//                Text(
-//                    text = "Height",
-//                    style = MaterialTheme.typography.bodyMedium,
-//                    modifier = Modifier.padding(horizontal = 16.dp)
-//                )
-//
-//                OutlinedTextField(
-//                    isError = height.text.isNotEmpty() && (height.text.toDouble() < 0),
-//                    supportingText = {
-//                        if (height.text.isNotEmpty() && (height.text.toDouble() < 0)) Text(
-//                            text = "Enter a logical height", color = Color.Red
-//                        ) else Text(text = "")
-//                    },
-//                    maxLines = 1,
-//                    value = height,
-//                    modifier = Modifier
-//                        .padding(16.dp)
-//                        .fillMaxWidth(),
-//                    onValueChange = { value -> height = value },
-//                    shape = RoundedCornerShape(14.dp),
-//                    placeholder = {
-//                        Text(
-//                            text = "175",
-//                            color = ColorDisabled,
-//                        )
-//                    },
-//                    colors = OutlinedTextFieldDefaults.colors(
-//                        focusedBorderColor = ColorPrimary,
-//                        unfocusedBorderColor = ColorDisabled,
-//                    ),
-//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                    trailingIcon = {
-//                        Text(
-//                            text = "cm",
-//                            color = ColorDisabled,
-//                            style = MaterialTheme.typography.labelLarge
-//                        )
-//                    },
-//
-//                    )
-//            }
-//        }
 
         item {
             TextFieldWithLabel(
@@ -283,7 +238,7 @@ fun BioScreen(
                 "Location",
                 "Chennai, Tamil Nadu",
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                isError = location.text.isEmpty(),
+                isError = location.text.isNotEmpty() && location.text.length < 3,
                 errorText = "location must be valid"
             )
         }
@@ -306,8 +261,7 @@ fun BioScreen(
                                 UserDataModel(
                                     email = email,
                                     name = name.text,
-                                    dob = selectedDate,
-//                                    height = height.text.toDoubleOrNull() ?: 0.0,
+                                    dob = dob,
                                     aboutMe = aboutMe,
                                     interests = interests,
                                     gender = gender,
@@ -335,3 +289,4 @@ fun BioScreen(
     }
 
 }
+

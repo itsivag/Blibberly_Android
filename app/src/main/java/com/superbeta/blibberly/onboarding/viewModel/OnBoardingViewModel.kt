@@ -41,7 +41,9 @@ class OnBoardingViewModel(private val mUserRepository: MUserRepository) : ViewMo
 
     suspend fun setUser(userDataModel: UserDataModel) {
         viewModelScope.launch(IO) {
+            //TODO delegate to repo have a single func
             mUserRepository.setUserToLocalDb(userDataModel)
+            mUserRepository.setUserToRemote(userDataModel)
             getUser()
         }
     }

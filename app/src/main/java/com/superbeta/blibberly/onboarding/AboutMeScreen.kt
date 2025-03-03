@@ -1,6 +1,5 @@
 package com.superbeta.blibberly.onboarding
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,13 +45,16 @@ fun AboutMeScreen(
     modifier: Modifier, navController: NavHostController,
     viewModel: UserViewModel = koinViewModel()
 ) {
-    var isButtonEnabled by remember {
-        mutableStateOf(false)
-    }
-
     var aboutMe by remember {
         mutableStateOf(TextFieldValue())
     }
+
+    val isButtonEnabled by remember {
+        derivedStateOf {
+            aboutMe.text.isNotEmpty() && aboutMe.text.length >= 20
+        }
+    }
+
 
     val scope = rememberCoroutineScope()
 
@@ -71,11 +74,11 @@ fun AboutMeScreen(
         }
     }
 
-    LaunchedEffect(key1 = aboutMe) {
-        scope.launch {
-            isButtonEnabled = aboutMe.text.isNotEmpty() && aboutMe.text.length >= 50
-        }
-    }
+//    LaunchedEffect(key1 = aboutMe) {
+//        scope.launch {
+//            isButtonEnabled = aboutMe.text.isNotEmpty() && aboutMe.text.length >= 20
+//        }
+//    }
 
     Column(modifier = modifier) {
 
@@ -92,17 +95,17 @@ fun AboutMeScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Text(
-            text = "Add an 'About Me' to let others get to know you better. Your story matters on Blibberly!",
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier
-                .padding(16.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.secondary,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(16.dp)
-        )
+//        Text(
+//            text = "Add an 'About Me' to let others get to know you better. Your story matters on Blibberly!",
+//            style = MaterialTheme.typography.bodyMedium,
+//            modifier = Modifier
+//                .padding(16.dp)
+//                .background(
+//                    color = MaterialTheme.colorScheme.secondary,
+//                    shape = RoundedCornerShape(12.dp)
+//                )
+//                .padding(16.dp)
+//        )
 
         Text(
             text = "\nIntroduce yourself! \uD83C\uDF1F",
@@ -111,10 +114,10 @@ fun AboutMeScreen(
         )
 
         OutlinedTextField(
-            isError = aboutMe.text.isNotEmpty() && (aboutMe.text.length < 100),
+            isError = aboutMe.text.isNotEmpty() && aboutMe.text.length < 20,
             supportingText = {
-                if (aboutMe.text.isNotEmpty() && (aboutMe.text.length < 100))
-                    Text(text = "about me must be at least 50 chars", color = Color.Red) else Text(
+                if (aboutMe.text.isNotEmpty() && (aboutMe.text.length < 20))
+                    Text(text = "About me must be at least 20 chars", color = Color.Red) else Text(
                     ""
                 )
             },
