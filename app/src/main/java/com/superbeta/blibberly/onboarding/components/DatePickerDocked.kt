@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.onboarding.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,12 +44,8 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDocked() {
+fun DatePickerDocked(selectedDate: String, datePickerState: DatePickerState) {
     var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
-    val selectedDate = datePickerState.selectedDateMillis?.let {
-        convertMillisToDate(it)
-    } ?: ""
 
     Text(
         text = "Date of birth",
@@ -179,4 +177,15 @@ fun DatePickerModal(
 fun convertMillisToDate(millis: Long): String {
     val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
     return formatter.format(Date(millis))
+}
+
+fun convertDateToMillis(date: String): Long? {
+    val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    try {
+        val d = sdf.parse(date)
+        return d?.time
+    } catch (e: Exception) {
+        Log.e("DatePickerDocked", e.toString())
+        return null
+    }
 }

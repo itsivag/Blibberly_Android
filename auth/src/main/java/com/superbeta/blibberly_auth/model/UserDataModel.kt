@@ -20,7 +20,7 @@ import kotlinx.serialization.Serializable
 data class UserDataModel(
     @PrimaryKey @SerialName("email") @ColumnInfo("email") val email: String,
     @SerialName("name") @ColumnInfo("name") val name: String,
-    @SerialName("dob") @ColumnInfo("dob") val dob: Int,
+    @SerialName("dob") @ColumnInfo("dob") val dob: String,
     @SerialName("gender") @ColumnInfo("gender") val gender: String,
     @SerialName("height") @ColumnInfo("height") val height: Double,
 //    @SerialName("weight") @ColumnInfo("weight") val weight: Double,

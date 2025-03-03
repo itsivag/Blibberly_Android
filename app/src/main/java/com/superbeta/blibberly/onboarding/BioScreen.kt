@@ -2,41 +2,54 @@ package com.superbeta.blibberly.onboarding
 
 import android.util.Log
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.gson.Gson
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.onboarding.components.DatePickerDocked
+import com.superbeta.blibberly.onboarding.components.convertDateToMillis
+import com.superbeta.blibberly.onboarding.components.convertMillisToDate
 import com.superbeta.blibberly.ui.ColorDisabled
 import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
@@ -45,6 +58,7 @@ import com.superbeta.blibberly.user.presentation.UserViewModel
 import com.superbeta.blibberly_auth.model.Grind
 import com.superbeta.blibberly_auth.model.PhotoMetaData
 import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_auth.utils.FontProvider
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -66,17 +80,14 @@ fun BioScreen(
         mutableStateOf(TextFieldValue())
     }
 
-    var age by remember {
-        mutableStateOf(TextFieldValue())
-    }
+//    var dob by remember {
+//        mutableStateOf(TextFieldValue())
+//    }
 
     var height by remember {
         mutableStateOf(TextFieldValue())
     }
 
-//    var weight by remember {
-//        mutableStateOf(TextFieldValue())
-//    }
 
     var aboutMe by remember {
         mutableStateOf("")
@@ -114,6 +125,11 @@ fun BioScreen(
         mutableStateOf("")
     }
 
+    val datePickerState = rememberDatePickerState()
+    val selectedDate = datePickerState.selectedDateMillis?.let {
+        convertMillisToDate(it)
+    } ?: ""
+
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val userData = userViewModel.userState.collectAsStateWithLifecycle().value
@@ -128,9 +144,10 @@ fun BioScreen(
         scope.launch {
             if (userData != null) {
                 name = TextFieldValue(userData.name)
-                age = TextFieldValue(userData.dob.toString())
+                datePickerState.selectedDateMillis = convertDateToMillis(userData.dob)
+//                dob = TextFieldValue(userData.dob.toString())
                 height = TextFieldValue(userData.height.toString())
-//                weight = TextFieldValue(userData.weight.toString())
+                location = TextFieldValue(userData.location)
                 aboutMe = userData.aboutMe
                 interests = Gson().toJson(userData.interests)
                 gender = userData.gender
@@ -144,16 +161,27 @@ fun BioScreen(
         }
     }
 
-    var isButtonEnabled by remember(name.text, age.text, height.text, gender) {
+    var isButtonEnabled by remember(
+        name.text,
+//        dob.text,
+        height.text, gender
+    ) {
         mutableStateOf(
-            name.text.isNotEmpty() && age.text.isNotEmpty() && height.text.isNotEmpty() && gender.isNotEmpty()
+            name.text.isNotEmpty() &&
+//                    dob.text.isNotEmpty() &&
+                    height.text.isNotEmpty() && gender.isNotEmpty()
         )
     }
 
-    LaunchedEffect(name.text, age.text, height.text, gender) {
+    LaunchedEffect(
+        name.text,
+//        dob.text,
+        height.text, gender
+    ) {
         isButtonEnabled =
-            (name.text.isNotEmpty() && age.text.isNotEmpty() && height.text.isNotEmpty() && gender.isNotEmpty())
-//                weight.text.isNotEmpty())
+            (name.text.isNotEmpty()
+//                    && dob.text.isNotEmpty()
+                    && height.text.isNotEmpty() && gender.isNotEmpty())
     }
 
     LazyColumn(modifier = modifier.imePadding()) {
@@ -203,20 +231,8 @@ fun BioScreen(
         }
 
         item {
-            DatePickerDocked()
+            DatePickerDocked(selectedDate, datePickerState)
         }
-
-//        item {
-//            TextFieldWithLabel(
-//                textFieldValue = age,
-//                onTextFieldValueChange = { value -> age = value },
-//                "Age",
-//                "22",
-//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                isError = age.text.isNotEmpty() && (age.text.toInt() < 18 || age.text.toInt() > 110),
-//                errorText = "you should be at least 18 years old"
-//            )
-//        }
 
         item {
             Text(
@@ -313,9 +329,13 @@ fun BioScreen(
                 "Location",
                 "Chennai, Tamil Nadu",
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                isError = location.text.isNotEmpty(),
+                isError = location.text.isEmpty(),
                 errorText = "location must be valid"
             )
+        }
+
+        item {
+            SelectableDropDown()
         }
 
         item {
@@ -331,13 +351,13 @@ fun BioScreen(
                                 UserDataModel(
                                     email = email,
                                     name = name.text,
-                                    dob = age.text.toInt(),
+                                    dob = selectedDate,
                                     height = height.text.toDoubleOrNull() ?: 0.0,
                                     aboutMe = aboutMe,
                                     interests = interests,
                                     gender = gender,
                                     photoMetaData = PhotoMetaData("", "", ""),
-                                    location = "",
+                                    location = location.text,
                                     grind = Grind("", ""),
                                     languages = "",
                                     icebreaker = "",
@@ -359,4 +379,143 @@ fun BioScreen(
         }
     }
 
+}
+
+@Composable
+fun SelectableDropDown() {
+//    val fruits: List<String> = listOf("Apple", "Banana", "Strawberry")
+    val languages = listOf(
+        "Assamese",
+        "Bengali",
+        "Bodo",
+        "Dogri",
+        "Gujarati",
+        "Hindi",
+        "Kannada",
+        "Kashmiri",
+        "Konkani",
+        "Maithili",
+        "Malayalam",
+        "Manipuri",
+        "Marathi",
+        "Nepali",
+        "Odia",
+        "Punjabi",
+        "Sanskrit",
+        "Santali",
+        "Sindhi",
+        "Tamil",
+        "Telugu",
+        "Urdu"
+    )
+    val selectedValue = remember {
+        mutableStateListOf<String>()
+    }
+    var isEnabled by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    DynamicSelectTextField(
+        selectedValue = selectedValue.lastOrNull() ?: "",
+        options = languages,
+        label = "Language",
+        isEnabled = isEnabled,
+        onValueChangedEvent = {
+            if (!selectedValue.contains(it))
+                selectedValue.add(it)
+        }
+    )
+
+
+    LazyRow(modifier = Modifier.padding(horizontal = 12.dp)) {
+        items(selectedValue.size) {
+            Row(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .border(
+                        width = 1.dp,
+                        color = ColorPrimary,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = selectedValue[it],
+                    fontFamily = FontProvider.dmSansFontFamily,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                )
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.close),
+                    contentDescription = "close",
+                    modifier = Modifier.clickable { selectedValue.remove(selectedValue[it]) }
+                )
+            }
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DynamicSelectTextField(
+    selectedValue: String,
+    options: List<String>,
+    label: String,
+    isEnabled: Boolean,
+    onValueChangedEvent: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Text(
+        text = "I can speak",
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+    )
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            enabled = isEnabled,
+            readOnly = true,
+            value = selectedValue,
+            onValueChange = {},
+//            label = { Text(text = label) },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            modifier = Modifier
+                .menuAnchor(MenuAnchorType.PrimaryEditable, true)
+                .padding(16.dp)
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            placeholder = {
+                Text(
+                    text = "Languages",
+                    color = ColorDisabled,
+                )
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = ColorPrimary,
+                unfocusedBorderColor = ColorDisabled,
+            ),
+        )
+
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            options.forEach { option: String ->
+                DropdownMenuItem(
+                    text = { Text(text = option) },
+                    onClick = {
+                        expanded = false
+                        onValueChangedEvent(option)
+                    }
+                )
+            }
+        }
+    }
 }

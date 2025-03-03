@@ -15,9 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.superbeta.blibberly.ui.ColorDisabled
 import com.superbeta.blibberly.ui.ColorPrimary
 
-//import com.superbeta.blibberly_auth.theme.ColorDisabled
-//import com.superbeta.blibberly_auth.theme.ColorPrimary
-
 
 @Composable
 fun TextFieldWithLabel(
