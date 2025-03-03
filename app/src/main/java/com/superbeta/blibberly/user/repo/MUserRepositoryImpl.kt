@@ -94,12 +94,12 @@ class MUserRepositoryImpl(
         }
     }
 
-    override suspend fun updateHeight(newHeight: Double) {
-        CoroutineScope(IO).launch {
-            _userState.value?.let { userRemoteService.updateHeight(newHeight, it.email) }
-            db.updateHeight(newHeight)
-        }
-    }
+//    override suspend fun updateHeight(newHeight: Double) {
+//        CoroutineScope(IO).launch {
+//            _userState.value?.let { userRemoteService.updateHeight(newHeight, it.email) }
+//            db.updateHeight(newHeight)
+//        }
+//    }
 
 //    override suspend fun updateWeight(newWeight: Double) {
 //        CoroutineScope(IO).launch {

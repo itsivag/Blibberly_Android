@@ -12,7 +12,7 @@ interface MUserRepository {
     suspend fun setUserToRemote(userDataModel: UserDataModel)
     suspend fun updateName(newName: String)
     suspend fun updateDob(newDob: String)
-    suspend fun updateHeight(newHeight: Double)
+//    suspend fun updateHeight(newHeight: Double)
     suspend fun updateAboutMe(newAboutMe: String)
     suspend fun updateInterests(newInterests: List<String>)
     suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData)

@@ -56,9 +56,9 @@ fun ProfileBioScreen(
             if (userData != null) {
                 age = TextFieldValue(userData.dob.toString())
             }
-            if (userData != null) {
-                height = TextFieldValue(userData.height.toString())
-            }
+//            if (userData != null) {
+//                height = TextFieldValue(userData.height.toString())
+//            }
 //            if (userData != null) {
 //                weight = TextFieldValue(userData.weight.toString())
 //            }

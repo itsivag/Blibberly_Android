@@ -6,6 +6,7 @@ import com.superbeta.blibberly.BuildConfig
 //import com.superbeta.blibberly_home.presentation.viewModel.HomeViewModel
 import com.superbeta.blibberly.notification.NotificationUtil
 import com.superbeta.blibberly.notification.NotificationViewModel
+import com.superbeta.blibberly.onboarding.viewModel.OnBoardingViewModel
 import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.remote.UserRemoteService
 import com.superbeta.blibberly.user.data.remote.UserRemoteServiceImpl
@@ -73,6 +74,10 @@ val mainModule = module {
 
     viewModel {
         HomeViewModel(homeRepo = get())
+    }
+
+    viewModel {
+        OnBoardingViewModel(get())
     }
 
 
