@@ -40,7 +40,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CurateProfileScreen(
     modifier: Modifier,
-//    navController: NavHostController,
     navigateToHome: () -> Unit,
     viewModel: UserViewModel = koinViewModel()
 ) {
@@ -75,19 +74,16 @@ fun CurateProfileScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
-        viewModel.getUser()
-    }
+//    LaunchedEffect(key1 = true) {
+//        viewModel.getUser()
+//    }
 
-    LaunchedEffect(key1 = true) {
-        scope.launch {
-            viewModel.uploadUserToDB()
+    LaunchedEffect(key1 = userState) {
             //TODO remove this
-            delay(5000)
-        }.invokeOnCompletion {
-            Log.i("User", "Email -> ${userState.value?.email}")
-            navigateToHome()
-        }
+//            delay(5000)
+            Log.i("CurateProfileScreen", "Email -> ${userState.value}")
+            viewModel.uploadUserToDB()
+//            navigateToHome()
     }
 
     Box(

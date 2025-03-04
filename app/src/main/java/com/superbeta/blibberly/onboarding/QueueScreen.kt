@@ -50,7 +50,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun QueueScreen(modifier: Modifier, navigateToInitialLoadingScreen: () -> Unit) {
+fun QueueScreen(modifier: Modifier, navigateToCurateProfile: () -> Unit) {
     var openAlertDialog by remember { mutableStateOf(false) }
     if (openAlertDialog) {
         WhyQueueInfoDialog(onDismissRequest = { openAlertDialog = false })
@@ -61,7 +61,7 @@ fun QueueScreen(modifier: Modifier, navigateToInitialLoadingScreen: () -> Unit) 
 
     LaunchedEffect(true) {
         delay(3000)
-        navigateToInitialLoadingScreen()
+        navigateToCurateProfile()
     }
 
     Column(

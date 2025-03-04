@@ -41,7 +41,7 @@ class MUserRepositoryImpl(
 
         try {
 //            if (localUserData.email.isEmpty()) {
-            setUserToLocalDb(remoteUserData)
+//            setUserToLocalDb(remoteUserData)
 //            }
 
 //            if (remoteUserData != null) {
@@ -67,31 +67,28 @@ class MUserRepositoryImpl(
         return notificationRepo.getFCMToken()
     }
 
+    override suspend fun setUser(userDataModel: UserDataModel) {
+        setUserToLocalDb(userDataModel)
+//        setUserToRemote(userDataModel)
+    }
+
 
     override suspend fun setUserToLocalDb(userDataModel: UserDataModel?) {
-        CoroutineScope(IO).launch {
-            userDataModel?.let { db.setUser(it) }
-        }
+        userDataModel?.let { db.setUser(it) }
     }
 
     override suspend fun setUserToRemote(userDataModel: UserDataModel) {
-        CoroutineScope(IO).launch {
-            userRemoteService.setUser(userDataModel)
-        }
+        userRemoteService.setUser(userDataModel)
     }
 
     override suspend fun updateName(newName: String) {
-        CoroutineScope(IO).launch {
-            db.updateName(newName)
-            _userState.value?.let { userRemoteService.updateUserName(newName, it.email) }
-        }
+        db.updateName(newName)
+        _userState.value?.let { userRemoteService.updateUserName(newName, it.email) }
     }
 
     override suspend fun updateDob(newDob: String) {
-        CoroutineScope(IO).launch {
-            _userState.value?.let { userRemoteService.updateDob(newDob, it.email) }
-            db.updateAge(newDob)
-        }
+        _userState.value?.let { userRemoteService.updateDob(newDob, it.email) }
+        db.updateAge(newDob)
     }
 
 //    override suspend fun updateHeight(newHeight: Double) {

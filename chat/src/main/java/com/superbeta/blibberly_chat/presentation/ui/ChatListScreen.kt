@@ -128,7 +128,7 @@ fun ChatListScreen(
                     bgColor = t.photoMetaData.bgColor
                 ),
                 location = "",
-                grind = Grind("", ""),
+                grind = "",
                 languages = t.languages,
                 icebreaker = "",
                 karmaPoint = 0.0,
@@ -171,10 +171,10 @@ fun ChatListScreen(
                     bgEmoji = t.photoMetaData.bgEmoji,
                     bgColor = t.photoMetaData.bgColor
                 ),
-                location = "",
-                grind = Grind("", ""),
+                location = t.location,
+                grind = t.grind,
                 languages = t.languages,
-                icebreaker = "",
+                icebreaker = t.icebreaker,
                 karmaPoint = 0.0,
                 fcmToken = t.fcmToken
             )

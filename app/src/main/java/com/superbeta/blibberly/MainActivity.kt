@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                             mutableStateOf(Screen.InitialLoading.route)
                         }
                         val authState by authViewModel.userInfoState.collectAsStateWithLifecycle()
-
+                        Log.i("MainActivity", authState.toString())
                         LaunchedEffect(authState) {
                             startNavRoute = when (authState) {
                                 UserInfoState.Failed -> {
@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 null -> {
-                                    Screen.InitialLoading.route
+                                    Routes.Auth.graph
                                 }
 
                             }

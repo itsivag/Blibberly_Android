@@ -132,9 +132,12 @@ fun BioScreen(
                 aboutMe = userData.aboutMe
                 interests = Gson().toJson(userData.interests)
                 gender = userData.gender
-                userData.languages.forEach {
+
+                //populating languages
+                Gson().fromJson(userData.languages, Array<String>::class.java).forEach {
                     languages.add(it)
                 }
+
             }
         }
     }
@@ -247,7 +250,6 @@ fun BioScreen(
             LanguagesDropDown(languages)
         }
 
-
         item {
             PrimaryButton(modifier = Modifier
                 .fillMaxWidth()
@@ -267,8 +269,8 @@ fun BioScreen(
                                     gender = gender,
                                     photoMetaData = PhotoMetaData("", "", ""),
                                     location = location.text,
-                                    grind = Grind("", ""),
-                                    languages = languages,
+                                    grind = "",
+                                    languages = Gson().toJson(languages),
                                     icebreaker = "",
                                     karmaPoint = 0.0,
                                     fcmToken = userFCMToken

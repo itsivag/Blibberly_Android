@@ -95,7 +95,7 @@ fun BlibmojiScreen(
 //    navController: NavHostController,
     viewModel: UserViewModel = koinViewModel(), navigateBack: () -> Unit,
 //    navigateToCurateProfile: () -> Unit
-    navigateToNotificationConsent: () -> Unit
+    navigateToNotificationConsentOrCurateProfile: () -> Unit
 ) {
     val supabase = createSupabaseClient(
         supabaseUrl = BuildConfig.SUPABASE_DEBUG_URL, supabaseKey = BuildConfig.SUPABASE_DEBUG_KEY
@@ -376,7 +376,7 @@ fun BlibmojiScreen(
                                 )
                             )
                         }.invokeOnCompletion {
-                            navigateToNotificationConsent()
+                            navigateToNotificationConsentOrCurateProfile()
 //                                        navigateToCurateProfile()
                         }
                     })

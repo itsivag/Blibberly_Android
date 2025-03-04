@@ -9,6 +9,7 @@ import com.superbeta.blibberly_auth.model.UserDataModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() {
@@ -75,14 +76,12 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
 
     suspend fun uploadUserToDB() {
         viewModelScope.launch(IO) {
-            getUser()
-            val u: UserDataModel? = userState.value
-            if (u != null) {
-                //TODO make changes to supa upload
-                mUserRepository.setUserToRemote(u)
-            } else {
-                Log.e("Database Upload Error", "User Data is null")
-
+//            getUser()
+            _userState.collectLatest {
+                if (it != null) {
+                    Log.i("UserViewModel", "Uploading to remote db.... $it")
+                    mUserRepository.setUserToRemote(it)
+                }
             }
         }
     }

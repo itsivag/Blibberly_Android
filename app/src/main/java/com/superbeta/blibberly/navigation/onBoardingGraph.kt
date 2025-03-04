@@ -65,12 +65,18 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
             BlibmojiScreen(
                 modifier,
                 navigateBack = { navController.popBackStack() },
-                navigateToNotificationConsent = {
+                navigateToNotificationConsentOrCurateProfile = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                         navController.navigate(Screen.NotificationConsent.route)
                     else
-                        navController.navigate(Screen.Queue.route)
+                        navController.navigate(Screen.CurateProfiles.route)
                 })
+        }
+
+        composable(Screen.Queue.route) {
+            QueueScreen(
+                modifier,
+                navigateToCurateProfile = { navController.navigate(Screen.CurateProfiles.route) })
         }
 
         composable(Screen.CurateProfiles.route) {
@@ -79,11 +85,6 @@ fun NavGraphBuilder.onBoardingGraph(navController: NavHostController, modifier: 
             })
         }
 
-        composable(Screen.Queue.route) {
-            QueueScreen(
-                modifier,
-                navigateToInitialLoadingScreen = { navController.navigate(Screen.CurateProfiles.route) })
-        }
 
         composable(Screen.NotificationConsent.route) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

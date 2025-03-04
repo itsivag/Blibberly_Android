@@ -40,7 +40,6 @@ import com.superbeta.blibberly.ui.ColorDisabled
 import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly_auth.model.UserDataModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -91,32 +90,26 @@ fun InterestsScreen(
     isButtonEnabled = selectedInterests.size == 3
 
     val scope = rememberCoroutineScope()
-    val userData: UserDataModel? = viewModel.userState.collectAsStateWithLifecycle().value
+    val userData = viewModel.userState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = Unit) {
-        scope.launch {
-            viewModel.getUser()
-        }
-    }
+//    LaunchedEffect(key1 = Unit) {
+//        scope.launch {
+//            viewModel.getUser()
+//        }
+//    }
 
     LaunchedEffect(key1 = userData) {
-        scope.launch {
-            if (userData != null) {
-                try {
-
-                    val interestsList: Array<String>? =
-                        Gson().fromJson(userData.interests, Array<String>::class.java)
-                    if (interestsList != null) {
-                        for (i in interestsList) {
-                            if (i.isNotEmpty()) {
-                                selectedInterests.add(i)
-                            }
-                        }
+        try {
+            val interestsList = Gson().fromJson(userData.value?.interests ?: "", Array<String>::class.java)
+            if (interestsList != null) {
+                for (i in interestsList) {
+                    if (i.isNotEmpty()) {
+                        selectedInterests.add(i)
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

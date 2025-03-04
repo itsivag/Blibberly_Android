@@ -22,14 +22,12 @@ data class UserDataModel(
     @SerialName("name") @ColumnInfo("name") val name: String,
     @SerialName("dob") @ColumnInfo("dob") val dob: String,
     @SerialName("gender") @ColumnInfo("gender") val gender: String,
-//    @SerialName("height") @ColumnInfo("height") val height: Double,
-//    @SerialName("weight") @ColumnInfo("weight") val weight: Double,
     @SerialName("aboutMe") @ColumnInfo("aboutMe") val aboutMe: String,
     @SerialName("interests") @ColumnInfo("interests") val interests: String,
     @SerialName("photoMetaData") @ColumnInfo("photoUri") val photoMetaData: PhotoMetaData,
     @SerialName("location") @ColumnInfo("location") val location: String,
-    @SerialName("grind") @ColumnInfo("grind") val grind: Grind,
-    @SerialName("languages") @ColumnInfo("languages") val languages: List<String>,
+    @SerialName("grind") @ColumnInfo("grind") val grind: String,
+    @SerialName("languages") @ColumnInfo("languages") val languages: String,
     @SerialName("icebreaker") @ColumnInfo("icebreaker") val icebreaker: String,
     @SerialName("karma_point") @ColumnInfo("karma_point") val karmaPoint: Double,
     @SerialName("fcmToken") @ColumnInfo("fcmToken") val fcmToken: String
@@ -39,8 +37,8 @@ data class UserDataModel(
 @Stable
 @Immutable
 data class Grind(
-    val type: String,
-    val name: String
+    @SerialName("type") val type: String,
+    @SerialName("name") val name: String
 )
 
 @Serializable

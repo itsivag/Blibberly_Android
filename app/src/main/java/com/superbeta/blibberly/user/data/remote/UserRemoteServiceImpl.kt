@@ -125,10 +125,8 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
                 usersTable.select { filter { UserDataModel::email eq email } }
                     .decodeSingle<UserDataModel>()
             Log.i("UserData From Database", userData.toString())
-
             return userData
         } catch (e: Exception) {
-            e.printStackTrace()
             Log.e("Error getting UserData From Database", e.toString())
             return null
         }
@@ -137,7 +135,6 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
     override suspend fun deleteAccount(email: String) {
         try {
             usersTable.delete { filter { UserDataModel::email eq email } }
-//            usersTable.select { filter { UserDataModel::email eq email } }
         } catch (e: Exception) {
             e.printStackTrace()
         }
