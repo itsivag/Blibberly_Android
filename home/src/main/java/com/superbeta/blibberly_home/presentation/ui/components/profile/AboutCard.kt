@@ -11,12 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_auth.utils.FontProvider
 import com.superbeta.blibberly_home.presentation.ui.components.BlibberlyCardTitle
 
 @Composable
-fun AboutCard(user: UserDataModel) {
+fun AboutCard(user: com.superbeta.blibberly_models.UserDataModel) {
 
     Card(
         colors = CardColors(

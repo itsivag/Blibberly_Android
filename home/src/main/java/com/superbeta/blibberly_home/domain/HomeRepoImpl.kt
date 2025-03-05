@@ -1,7 +1,7 @@
 package com.superbeta.blibberly_home.domain
 
 import android.util.Log
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_chat.data.remote.socket.SocketHandler
 import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,13 +15,13 @@ class HomeRepoImpl(
 
 //    private val _messageState = MutableStateFlow<List<MessageDataModel>>(arrayListOf())
     private val _liveUserProfilesState =
-        MutableStateFlow<List<UserDataModel>>(emptyList())
+        MutableStateFlow<List<com.superbeta.blibberly_models.UserDataModel>>(emptyList())
 
     override fun getUsers(): StateFlow<List<String>> {
         return socketHandler.getUsers()
     }
 
-    override suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<UserDataModel>> {
+    override suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<com.superbeta.blibberly_models.UserDataModel>> {
         Log.i("live user raw list", liveUsers.toString())
         try {
 //            for (email in liveUsers) {
@@ -32,7 +32,7 @@ class HomeRepoImpl(
 //                }.decodeSingle<UserDataModel>()
 //                _liveUserProfilesState.value += userProfile
 //            }
-            val appendProfiles: (UserDataModel) -> Unit =
+            val appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit =
                 { newProfiles ->
                     _liveUserProfilesState.value += newProfiles
                 }
@@ -45,7 +45,7 @@ class HomeRepoImpl(
         return _liveUserProfilesState.asStateFlow()
     }
 
-    override fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
+    override fun getSpecificUserProfileWithEmail(email: String): com.superbeta.blibberly_models.UserDataModel? {
         return _liveUserProfilesState.value.firstOrNull { profile -> profile.email == email }
     }
 

@@ -21,9 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.superbeta.profile_ops.presentation.viewmodel.ProfileOpsViewModel
-import com.superbeta.blibberly_auth.model.Grind
-import com.superbeta.blibberly_auth.model.PhotoMetaData
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.PhotoMetaData
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_auth.utils.userPreferencesDataStore
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.presentation.ui.components.ChatListItem
@@ -113,7 +112,7 @@ fun ChatListScreen(
             val email = matchedUserProfiles[i].email
             val userName = matchedUserProfiles[i].name
             val t = matchedUserProfiles[i]
-            val tUserDataModel = UserDataModel(
+            val tUserDataModel = com.superbeta.blibberly_models.UserDataModel(
                 email = t.email,
                 name = t.name,
                 dob = t.dob,
@@ -122,7 +121,7 @@ fun ChatListScreen(
 //                weight = t.weight,
                 aboutMe = t.aboutMe,
                 interests = t.interests,
-                photoMetaData = PhotoMetaData(
+                photoMetaData = com.superbeta.blibberly_models.PhotoMetaData(
                     blibmojiUrl = t.photoMetaData.blibmojiUrl,
                     bgEmoji = t.photoMetaData.bgEmoji,
                     bgColor = t.photoMetaData.bgColor
@@ -157,7 +156,7 @@ fun ChatListScreen(
             val email = likedUserProfiles[i].email
             val userName = likedUserProfiles[i].name
             val t = likedUserProfiles[i]
-            val tUserDataModel = UserDataModel(
+            val tUserDataModel = com.superbeta.blibberly_models.UserDataModel(
                 email = t.email,
                 name = t.name,
                 dob = t.dob,
@@ -166,7 +165,7 @@ fun ChatListScreen(
 //                weight = t.weight,
                 aboutMe = t.aboutMe,
                 interests = t.interests,
-                photoMetaData = PhotoMetaData(
+                photoMetaData = com.superbeta.blibberly_models.PhotoMetaData(
                     blibmojiUrl = t.photoMetaData.blibmojiUrl,
                     bgEmoji = t.photoMetaData.bgEmoji,
                     bgColor = t.photoMetaData.bgColor

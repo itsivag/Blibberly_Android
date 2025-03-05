@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.theme.TextColorGrey
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_auth.utils.FontProvider
 
 @Composable
-fun IceBreakerCard(user: UserDataModel) {
+fun IceBreakerCard(user: com.superbeta.blibberly_models.UserDataModel) {
     Card(
         colors = CardColors(
             containerColor = Color.White,

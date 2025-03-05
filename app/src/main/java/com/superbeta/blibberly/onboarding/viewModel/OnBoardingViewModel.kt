@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly.user.repo.MUserRepository
-import com.superbeta.blibberly_auth.model.PhotoMetaData
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.PhotoMetaData
+import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 
 class OnBoardingViewModel(private val mUserRepository: MUserRepository) : ViewModel() {
 
-    private val _userState = MutableStateFlow<UserDataModel?>(null)
-    val userState: StateFlow<UserDataModel?> = _userState
+    private val _userState = MutableStateFlow<com.superbeta.blibberly_models.UserDataModel?>(null)
+    val userState: StateFlow<com.superbeta.blibberly_models.UserDataModel?> = _userState
 
     init {
         getUser()
@@ -39,7 +39,7 @@ class OnBoardingViewModel(private val mUserRepository: MUserRepository) : ViewMo
         return mUserRepository.getUserFCMToken()
     }
 
-    suspend fun setUser(userDataModel: UserDataModel) {
+    suspend fun setUser(userDataModel: com.superbeta.blibberly_models.UserDataModel) {
         viewModelScope.launch(IO) {
             mUserRepository.setUser(userDataModel)
 //            getUser()
@@ -64,7 +64,7 @@ class OnBoardingViewModel(private val mUserRepository: MUserRepository) : ViewMo
         }
     }
 
-    fun updatePhotoMetaData(photoMetaData: PhotoMetaData) {
+    fun updatePhotoMetaData(photoMetaData: com.superbeta.blibberly_models.PhotoMetaData) {
         viewModelScope.launch(IO) {
             mUserRepository.updatePhotoMetaData(photoMetaData)
         }

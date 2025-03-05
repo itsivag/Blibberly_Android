@@ -57,8 +57,8 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly_auth.model.PhotoMetaData
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.PhotoMetaData
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_home.utils.FontProvider
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -159,7 +159,7 @@ fun BlibmojiScreen(
     LaunchedEffect(key1 = true) {
         scope.launch {
             viewModel.getUser()
-            val userData: UserDataModel? = viewModel.userState.value
+            val userData: com.superbeta.blibberly_models.UserDataModel? = viewModel.userState.value
             if (userData != null && userData.photoMetaData.blibmojiUrl.isNotEmpty() && userData.photoMetaData.bgEmoji.isNotEmpty() && userData.photoMetaData.bgColor.isNotEmpty()) {
                 selectedBlibmoji = userData.photoMetaData.blibmojiUrl
                 selectedBGEmoji = userData.photoMetaData.bgEmoji
@@ -369,7 +369,7 @@ fun BlibmojiScreen(
 //                        showBottomSheet = false
                         scope.launch {
                             viewModel.updatePhotoMetaData(
-                                PhotoMetaData(
+                                com.superbeta.blibberly_models.PhotoMetaData(
                                     blibmojiUrl = selectedBlibmoji,
                                     bgEmoji = selectedBGEmoji,
                                     bgColor = selectedBGColor

@@ -21,7 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.utils.FontProvider
 import com.superbeta.blibberly_home.R
@@ -29,7 +29,7 @@ import com.superbeta.blibberly_utils.ageFromDate
 import com.superbeta.blibberly_utils.capitalized
 
 @Composable
-fun BioCard(user: UserDataModel) {
+fun BioCard(user: com.superbeta.blibberly_models.UserDataModel) {
 //    val sampleBio = BioDataModel(
 //        gender = "male",
 //        age = 21,

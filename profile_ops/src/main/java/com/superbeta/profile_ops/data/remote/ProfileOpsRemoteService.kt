@@ -2,8 +2,7 @@ package com.superbeta.profile_ops.data.remote
 
 import com.blibberly.profile_ops.data.model.ProfileOp
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
-import com.superbeta.blibberly_auth.model.UserDataModel
-import kotlinx.coroutines.flow.StateFlow
+import com.superbeta.blibberly_models.UserDataModel
 
 
 interface ProfileOpsRemoteService {
@@ -21,7 +20,7 @@ interface ProfileOpsRemoteService {
 
     suspend fun getMatchedUserProfiles(
         matchedUserEmails: List<ProfileOp>,
-        appendProfiles: (UserDataModel) -> Unit
+        appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit
     )
 
 

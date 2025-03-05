@@ -59,7 +59,7 @@ import com.superbeta.blibberly.ui.BLIBMOJI_BG_COLORS
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly_auth.model.PhotoMetaData
+import com.superbeta.blibberly_models.PhotoMetaData
 import com.superbeta.blibberly_home.utils.FontProvider
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -367,7 +367,7 @@ fun ProfilePhotoScreen(
                         onClickMethod = {
                             scope.launch {
                                 viewModel.updatePhotoMetaData(
-                                    PhotoMetaData(
+                                    com.superbeta.blibberly_models.PhotoMetaData(
                                         blibmojiUrl = selectedBlibmoji,
                                         bgEmoji = selectedBGEmoji,
                                         bgColor = selectedBGColor

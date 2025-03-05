@@ -104,6 +104,8 @@ dependencies {
 
     //material
     implementation(libs.androidx.material3)
+    implementation(project(":models"))
+    implementation(project(":models"))
 
     //test
     testImplementation(libs.junit)

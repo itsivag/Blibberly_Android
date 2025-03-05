@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.profile_ops.domain.ProfileOpsRepo
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,15 +21,15 @@ class ProfileOpsViewModel(
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
     val profileOpsState: StateFlow<ProfileOpsDataModel?> = _profileOpsState.asStateFlow()
 
-    private val _likedUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
-    val likedUserProfileState: StateFlow<List<UserDataModel>> =
+    private val _likedUserProfileState = MutableStateFlow<List<com.superbeta.blibberly_models.UserDataModel>>(emptyList())
+    val likedUserProfileState: StateFlow<List<com.superbeta.blibberly_models.UserDataModel>> =
         _likedUserProfileState.map { it.distinctBy { user -> user.email } }.stateIn(
             viewModelScope,
             SharingStarted.Lazily, emptyList()
         )
 
-    private val _matchedUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
-    val matchedUserProfileState: StateFlow<List<UserDataModel>> =
+    private val _matchedUserProfileState = MutableStateFlow<List<com.superbeta.blibberly_models.UserDataModel>>(emptyList())
+    val matchedUserProfileState: StateFlow<List<com.superbeta.blibberly_models.UserDataModel>> =
         _matchedUserProfileState.map { it.distinctBy { user -> user.email } }.stateIn(
             viewModelScope,
             SharingStarted.Lazily, emptyList()

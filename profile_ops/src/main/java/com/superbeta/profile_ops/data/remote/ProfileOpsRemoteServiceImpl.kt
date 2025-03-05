@@ -3,7 +3,7 @@ package com.superbeta.profile_ops.data.remote
 import android.util.Log
 import com.blibberly.profile_ops.data.model.ProfileOp
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 
@@ -23,7 +23,7 @@ class ProfileOpsRemoteServiceImpl(supabase: SupabaseClient) : ProfileOpsRemoteSe
 
     override suspend fun getLikedUserProfiles(
         likedUserEmails: List<ProfileOp>,
-        appendProfiles: (UserDataModel) -> Unit
+        appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit
     ) {
 
         Log.i("ProfileOpsRemoteServiceImpl", "liked users list: $likedUserEmails")
@@ -33,9 +33,9 @@ class ProfileOpsRemoteServiceImpl(supabase: SupabaseClient) : ProfileOpsRemoteSe
                 Log.i("ProfileOpsRemoteServiceImpl", "User :  $user")
                 val userProfile = supabaseUsersDb.select {
                     filter {
-                        UserDataModel::email eq user.userEmail
+                        com.superbeta.blibberly_models.UserDataModel::email eq user.userEmail
                     }
-                }.decodeSingle<UserDataModel>()
+                }.decodeSingle<com.superbeta.blibberly_models.UserDataModel>()
 //            _liveUserProfilesState.value += userProfile
                 appendProfiles(userProfile)
             }
@@ -48,7 +48,7 @@ class ProfileOpsRemoteServiceImpl(supabase: SupabaseClient) : ProfileOpsRemoteSe
 
     override suspend fun getMatchedUserProfiles(
         matchedUserEmails: List<ProfileOp>,
-        appendProfiles: (UserDataModel) -> Unit
+        appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit
     ) {
         Log.i("ProfileOpsRemoteServiceImpl", "matched users list: $matchedUserEmails")
 
@@ -57,9 +57,9 @@ class ProfileOpsRemoteServiceImpl(supabase: SupabaseClient) : ProfileOpsRemoteSe
                 Log.i("ProfileOpsRemoteServiceImpl", "User :  $user")
                 val userProfile = supabaseUsersDb.select {
                     filter {
-                        UserDataModel::email eq user.userEmail
+                        com.superbeta.blibberly_models.UserDataModel::email eq user.userEmail
                     }
-                }.decodeSingle<UserDataModel>()
+                }.decodeSingle<com.superbeta.blibberly_models.UserDataModel>()
                 appendProfiles(userProfile)
             }
         } catch (e: Exception) {

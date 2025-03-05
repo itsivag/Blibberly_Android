@@ -42,7 +42,7 @@ import com.superbeta.blibberly_chat.presentation.ui.components.ReceiverChatBubbl
 import com.superbeta.blibberly_chat.presentation.ui.components.SenderChatBubble
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.superbeta.profile_ops.presentation.viewmodel.ProfileOpsViewModel
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_chat.presentation.ui.components.BlibMojiCircleAvatar
 import com.superbeta.blibberly_chat.presentation.ui.components.ProfileOpsMessageComponent
 import kotlinx.coroutines.Dispatchers.IO
@@ -74,7 +74,7 @@ fun MessageScreen(
         mutableStateOf<String?>(null)
     }
     var currUserProfile by remember {
-        mutableStateOf<UserDataModel?>(null)
+        mutableStateOf<com.superbeta.blibberly_models.UserDataModel?>(null)
     }
 
     LaunchedEffect(key1 = true) {

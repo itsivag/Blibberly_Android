@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly.user.repo.MUserRepository
-import com.superbeta.blibberly_auth.model.PhotoMetaData
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.PhotoMetaData
+import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +34,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
         }
     }
 
-    suspend fun getUserEmail(): String? {
+    private suspend fun getUserEmail(): String? {
         return mUserRepository.getUserEmail()
     }
 

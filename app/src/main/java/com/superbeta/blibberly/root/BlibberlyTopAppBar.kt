@@ -1,5 +1,6 @@
 package com.superbeta.blibberly.root
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -35,7 +36,6 @@ fun BlibberlyTopAppBar(
     navigateToChatListScreen: () -> Unit,
     viewModel: UserViewModel = koinViewModel()
 ) {
-    val userState by viewModel.userState.collectAsStateWithLifecycle()
     val avatarBGColorsMap = mapOf(
         BLIBMOJI_BG_COLORS.BLUE.toString() to Color.Blue,
         BLIBMOJI_BG_COLORS.WHITE.toString() to Color.White,
@@ -48,6 +48,8 @@ fun BlibberlyTopAppBar(
         BLIBMOJI_BG_COLORS.MAGENTA.toString() to Color.Magenta,
         BLIBMOJI_BG_COLORS.YELLOW.toString() to Color.Yellow
     )
+
+    val userState by viewModel.userState.collectAsStateWithLifecycle()
 
     CenterAlignedTopAppBar(
         title = { Text(text = "Blibberly") },
@@ -63,6 +65,11 @@ fun BlibberlyTopAppBar(
                                 ?: Color.White, shape = CircleShape
                         ),
                 ) {
+
+                    Log.i(
+                        "BlibberlyTopAppBar",
+                        "blibmojiUrl : ${userState?.photoMetaData?.blibmojiUrl}"
+                    )
                     SubcomposeAsyncImage(
                         modifier = Modifier.clip(CircleShape),
                         model = userState?.photoMetaData?.blibmojiUrl,

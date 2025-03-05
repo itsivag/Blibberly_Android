@@ -1,4 +1,4 @@
-package com.superbeta.blibberly_auth.model
+package com.superbeta.blibberly_models
 
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable

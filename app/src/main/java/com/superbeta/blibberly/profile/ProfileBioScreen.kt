@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.superbeta.blibberly.ui.components.TextFieldWithTrailingIcon
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -48,7 +48,7 @@ fun ProfileBioScreen(
     LaunchedEffect(key1 = Unit) {
         scope.launch {
             viewModel.getUser()
-            val userData: UserDataModel? =
+            val userData: com.superbeta.blibberly_models.UserDataModel? =
                 viewModel.userState.value
             if (userData != null) {
                 name = TextFieldValue(userData.name)

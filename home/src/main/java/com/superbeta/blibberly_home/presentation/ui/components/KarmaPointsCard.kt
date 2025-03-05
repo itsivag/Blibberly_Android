@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_home.R
 
 data class KarmaPointModel(val name: String, val emoji: Int)
@@ -37,7 +37,7 @@ sealed class KarmaEmojiTypes(val type: String) {
 }
 
 @Composable
-fun KarmaPointsCard(user: UserDataModel) {
+fun KarmaPointsCard(user: com.superbeta.blibberly_models.UserDataModel) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
 

@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS
 import com.superbeta.blibberly_home.presentation.ui.components.profile.AboutCard
 import com.superbeta.blibberly_home.presentation.ui.components.profile.BlibMojiCard
@@ -33,7 +32,7 @@ fun BlibberlyHorizontalPager(
     pagerState: PagerState,
     modifier: Modifier,
     navigateToChat: (String, String) -> Unit,
-    liveUsers: List<UserDataModel>,
+    liveUsers: List<com.superbeta.blibberly_models.UserDataModel>,
     navigateToNoUsers: () -> Unit
 ) {
     val avatarBGColorsMap = mapOf(
@@ -69,7 +68,6 @@ fun BlibberlyHorizontalPager(
                     )
                 }) {
             avatarBGColorsMap[currUser.photoMetaData.bgColor]?.let {
-
                 LazyColumn(
                     modifier = Modifier
                         .background(

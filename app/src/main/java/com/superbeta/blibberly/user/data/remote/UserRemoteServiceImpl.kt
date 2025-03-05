@@ -3,8 +3,8 @@ package com.superbeta.blibberly.user.data.remote
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.superbeta.blibberly_auth.model.PhotoMetaData
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.PhotoMetaData
+import com.superbeta.blibberly_models.UserDataModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 
@@ -12,7 +12,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
     private val usersTable = supabase.from("Users")
     private val deletedUsersTable = supabase.from("DeletedUsers")
 
-    override suspend fun setUser(userDataModel: UserDataModel) {
+    override suspend fun setUser(userDataModel: com.superbeta.blibberly_models.UserDataModel) {
         try {
             usersTable.insert(userDataModel)
             Log.i("Database Upload Successful", userDataModel.toString())
@@ -21,12 +21,12 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
         }
     }
 
-    override suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData, email: String) {
+    override suspend fun updatePhotoMetaData(photoMetaData: com.superbeta.blibberly_models.PhotoMetaData, email: String) {
         try {
             usersTable
                 .update({ set("photoMetaData", photoMetaData) }) {
                     filter {
-                        UserDataModel::email eq email
+                        com.superbeta.blibberly_models.UserDataModel::email eq email
                     }
                 }
             Log.i("Database Update Successful", photoMetaData.toString())
@@ -40,7 +40,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
             usersTable
                 .update({ set("name", name) }) {
                     filter {
-                        UserDataModel::email eq email
+                        com.superbeta.blibberly_models.UserDataModel::email eq email
                     }
                 }
             Log.i("Database Update Successful", name)
@@ -54,7 +54,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
             usersTable
                 .update({ set("age", dob) }) {
                     filter {
-                        UserDataModel::email eq email
+                        com.superbeta.blibberly_models.UserDataModel::email eq email
                     }
                 }
             Log.i("Database Update Successful", dob)
@@ -68,7 +68,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
             usersTable
                 .update({ set("interests", interests) }) {
                     filter {
-                        UserDataModel::email eq email
+                        com.superbeta.blibberly_models.UserDataModel::email eq email
                     }
                 }
             Log.i("Database Update Successful", interests.toString())
@@ -82,7 +82,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
             usersTable
                 .update({ set("weight", weight) }) {
                     filter {
-                        UserDataModel::email eq email
+                        com.superbeta.blibberly_models.UserDataModel::email eq email
                     }
                 }
             Log.i("Database Update Successful", weight.toString())
@@ -96,7 +96,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
             usersTable
                 .update({ set("aboutMe", aboutMe) }) {
                     filter {
-                        UserDataModel::email eq email
+                        com.superbeta.blibberly_models.UserDataModel::email eq email
                     }
                 }
             Log.i("Database Update Successful", aboutMe)
@@ -110,7 +110,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
             usersTable
                 .update({ set("height", height) }) {
                     filter {
-                        UserDataModel::email eq email
+                        com.superbeta.blibberly_models.UserDataModel::email eq email
                     }
                 }
             Log.i("Database Update Successful", height.toString())
@@ -119,11 +119,11 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
         }
     }
 
-    override suspend fun getUser(email: String): UserDataModel? {
+    override suspend fun getUser(email: String): com.superbeta.blibberly_models.UserDataModel? {
         try {
             val userData =
-                usersTable.select { filter { UserDataModel::email eq email } }
-                    .decodeSingle<UserDataModel>()
+                usersTable.select { filter { com.superbeta.blibberly_models.UserDataModel::email eq email } }
+                    .decodeSingle<com.superbeta.blibberly_models.UserDataModel>()
             Log.i("UserData From Database", userData.toString())
             return userData
         } catch (e: Exception) {
@@ -134,7 +134,7 @@ class UserRemoteServiceImpl(private val supabase: SupabaseClient) : UserRemoteSe
 
     override suspend fun deleteAccount(email: String) {
         try {
-            usersTable.delete { filter { UserDataModel::email eq email } }
+            usersTable.delete { filter { com.superbeta.blibberly_models.UserDataModel::email eq email } }
         } catch (e: Exception) {
             e.printStackTrace()
         }

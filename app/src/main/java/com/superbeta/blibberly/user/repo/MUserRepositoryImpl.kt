@@ -3,8 +3,8 @@ package com.superbeta.blibberly.user.repo
 import android.util.Log
 import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.remote.UserRemoteService
-import com.superbeta.blibberly_auth.model.PhotoMetaData
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.PhotoMetaData
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_chat.notification.NotificationRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -18,7 +18,7 @@ class MUserRepositoryImpl(
     private val userRemoteService: UserRemoteService,
 ) : MUserRepository {
 
-    private val _userState = MutableStateFlow<UserDataModel?>(null)
+    private val _userState = MutableStateFlow<com.superbeta.blibberly_models.UserDataModel?>(null)
 
     init {
         CoroutineScope(IO).launch {
@@ -34,7 +34,7 @@ class MUserRepositoryImpl(
     }
 
 
-    override suspend fun getUser(email: String): UserDataModel {
+    override suspend fun getUser(email: String): com.superbeta.blibberly_models.UserDataModel {
         val remoteUserData = userRemoteService.getUser(email)
         val localUserData = db.getUser()
         Log.i("MUserRepositoryImpl", "Remote Data" + remoteUserData.toString())
@@ -67,17 +67,17 @@ class MUserRepositoryImpl(
         return notificationRepo.getFCMToken()
     }
 
-    override suspend fun setUser(userDataModel: UserDataModel) {
+    override suspend fun setUser(userDataModel: com.superbeta.blibberly_models.UserDataModel) {
         setUserToLocalDb(userDataModel)
 //        setUserToRemote(userDataModel)
     }
 
 
-    override suspend fun setUserToLocalDb(userDataModel: UserDataModel?) {
+    override suspend fun setUserToLocalDb(userDataModel: com.superbeta.blibberly_models.UserDataModel?) {
         userDataModel?.let { db.setUser(it) }
     }
 
-    override suspend fun setUserToRemote(userDataModel: UserDataModel) {
+    override suspend fun setUserToRemote(userDataModel: com.superbeta.blibberly_models.UserDataModel) {
         userRemoteService.setUser(userDataModel)
     }
 
@@ -119,7 +119,7 @@ class MUserRepositoryImpl(
         }
     }
 
-    override suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData) {
+    override suspend fun updatePhotoMetaData(photoMetaData: com.superbeta.blibberly_models.PhotoMetaData) {
         CoroutineScope(IO).launch {
             db.updatePhotoMetaData(photoMetaData)
             _userState.value?.let {

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly_home.domain.HomeRepo
 import com.superbeta.blibberly_home.presentation.HomeScreenState
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,8 +23,8 @@ class HomeViewModel(private val homeRepo: HomeRepo) : ViewModel() {
     private val _usersState = MutableStateFlow<List<String>>(emptyList())
     val usersState: StateFlow<List<String>> = _usersState.asStateFlow()
 
-    private val _userProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
-    val userProfileState: StateFlow<List<UserDataModel>> =
+    private val _userProfileState = MutableStateFlow<List<com.superbeta.blibberly_models.UserDataModel>>(emptyList())
+    val userProfileState: StateFlow<List<com.superbeta.blibberly_models.UserDataModel>> =
         _userProfileState.map { it.distinctBy { user -> user.email } }.stateIn(
             viewModelScope,
             SharingStarted.Lazily, emptyList()

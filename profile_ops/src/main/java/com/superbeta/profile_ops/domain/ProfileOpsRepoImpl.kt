@@ -3,7 +3,7 @@ package com.superbeta.profile_ops.domain
 import android.util.Log
 import com.superbeta.profile_ops.data.local.ProfileOpsDao
 import com.blibberly.profile_ops.data.model.ProfileOpsDataModel
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.profile_ops.data.remote.ProfileOpsRemoteService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,8 +14,8 @@ class ProfileOpsRepoImpl(
     private val profileOpsRemoteService: ProfileOpsRemoteService,
 ) : ProfileOpsRepo {
     private val _profileOpsState = MutableStateFlow<ProfileOpsDataModel?>(null)
-    private val _likeUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
-    private val _matchedUserProfileState = MutableStateFlow<List<UserDataModel>>(emptyList())
+    private val _likeUserProfileState = MutableStateFlow<List<com.superbeta.blibberly_models.UserDataModel>>(emptyList())
+    private val _matchedUserProfileState = MutableStateFlow<List<com.superbeta.blibberly_models.UserDataModel>>(emptyList())
 
 
     override suspend fun getProfileOps(userEmail: String): StateFlow<ProfileOpsDataModel?> {
@@ -44,10 +44,10 @@ class ProfileOpsRepoImpl(
         }
     }
 
-    override suspend fun getLikedProfiles(): StateFlow<List<UserDataModel>> {
+    override suspend fun getLikedProfiles(): StateFlow<List<com.superbeta.blibberly_models.UserDataModel>> {
 
         try {
-            val appendProfiles: (UserDataModel) -> Unit = { newProfiles ->
+            val appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit = { newProfiles ->
                 _likeUserProfileState.value += newProfiles
             }
             _profileOpsState.value?.let {
@@ -64,10 +64,10 @@ class ProfileOpsRepoImpl(
         return _likeUserProfileState.asStateFlow()
     }
 
-    override suspend fun getMatchedProfiles(): StateFlow<List<UserDataModel>> {
+    override suspend fun getMatchedProfiles(): StateFlow<List<com.superbeta.blibberly_models.UserDataModel>> {
         try {
 
-            val appendProfiles: (UserDataModel) -> Unit = { newProfiles ->
+            val appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit = { newProfiles ->
                 _matchedUserProfileState.value += newProfiles
             }
             _profileOpsState.value?.let {

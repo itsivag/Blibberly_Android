@@ -10,10 +10,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import com.superbeta.blibberly_auth.model.PhotoMetaData
+import com.superbeta.blibberly_models.PhotoMetaData
 
 @Composable
-fun BlibMojiCircleAvatar(photoMetaData: PhotoMetaData) {
+fun BlibMojiCircleAvatar(photoMetaData: com.superbeta.blibberly_models.PhotoMetaData) {
     SubcomposeAsyncImage(
         modifier = Modifier
             .size(48.dp)

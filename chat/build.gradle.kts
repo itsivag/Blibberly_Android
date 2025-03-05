@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(project(":auth"))
     implementation(project(":profile_ops"))
+    implementation(project(":models"))
     //    implementation(project(":blibberly_supabase"))
     //profile likes, dislikes, reports and matches
     testImplementation(libs.junit)

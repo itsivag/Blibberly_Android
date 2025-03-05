@@ -45,9 +45,8 @@ import com.superbeta.blibberly.ui.ColorDisabled
 import com.superbeta.blibberly.ui.ColorPrimary
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.ui.components.TextFieldWithLabel
-import com.superbeta.blibberly_auth.model.Grind
-import com.superbeta.blibberly_auth.model.PhotoMetaData
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.PhotoMetaData
+import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.Calendar
@@ -260,14 +259,18 @@ fun BioScreen(
                     scope.launch {
                         try {
                             viewModel.getUserEmail()?.let { email ->
-                                UserDataModel(
+                                com.superbeta.blibberly_models.UserDataModel(
                                     email = email,
                                     name = name.text,
                                     dob = dob,
                                     aboutMe = aboutMe,
                                     interests = interests,
                                     gender = gender,
-                                    photoMetaData = PhotoMetaData("", "", ""),
+                                    photoMetaData = com.superbeta.blibberly_models.PhotoMetaData(
+                                        "",
+                                        "",
+                                        ""
+                                    ),
                                     location = location.text,
                                     grind = "",
                                     languages = Gson().toJson(languages),

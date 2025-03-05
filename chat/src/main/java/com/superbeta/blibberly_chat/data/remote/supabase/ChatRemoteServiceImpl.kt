@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
@@ -19,7 +19,7 @@ class ChatRemoteServiceImpl(private val supabase: SupabaseClient) : ChatRemoteSe
     }
 
     override suspend fun getUsersProfile(
-        liveUsers: List<String>, appendProfiles: (UserDataModel) -> Unit
+        liveUsers: List<String>, appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit
     ) {
         Log.i("ChatRemoteServiceImpl", "Live user list: $liveUsers")
 
@@ -28,9 +28,9 @@ class ChatRemoteServiceImpl(private val supabase: SupabaseClient) : ChatRemoteSe
                 Log.i("ChatRemoteServiceImpl", "User :  $user")
                 val userProfile = supabaseUsersDb.select {
                     filter {
-                        UserDataModel::email eq user
+                        com.superbeta.blibberly_models.UserDataModel::email eq user
                     }
-                }.decodeSingle<UserDataModel>()
+                }.decodeSingle<com.superbeta.blibberly_models.UserDataModel>()
 //            _liveUserProfilesState.value += userProfile
                 appendProfiles(userProfile)
             }

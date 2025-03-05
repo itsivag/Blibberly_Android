@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_chat.R
 import com.superbeta.blibberly_chat.presentation.viewModels.MessageViewModel
 import com.superbeta.blibberly_home.presentation.ui.components.profile.AboutCard
@@ -38,7 +38,7 @@ fun UserProfileScreen(
 ) {
 
     var currUser by remember {
-        mutableStateOf<UserDataModel?>(null)
+        mutableStateOf<com.superbeta.blibberly_models.UserDataModel?>(null)
     }
     LaunchedEffect(key1 = true) {
         //TODO create a separate profile view model and repo

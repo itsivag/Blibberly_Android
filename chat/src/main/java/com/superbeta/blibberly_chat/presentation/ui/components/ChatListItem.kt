@@ -14,13 +14,13 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.UserDataModel
 
 @Composable
 fun ChatListItem(
 //    socketUserDataModelItem: SocketUserDataModelItem,
     navigateToMessage: () -> Unit,
-    userProfile: UserDataModel,
+    userProfile: com.superbeta.blibberly_models.UserDataModel,
 ) {
     Row(
         modifier = Modifier

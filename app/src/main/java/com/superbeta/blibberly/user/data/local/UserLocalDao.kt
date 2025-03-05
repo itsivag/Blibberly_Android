@@ -4,16 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.superbeta.blibberly_auth.model.PhotoMetaData
-import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_models.PhotoMetaData
+import com.superbeta.blibberly_models.UserDataModel
 
 @Dao
 interface UserLocalDao {
     @Query("SELECT * FROM userInfo")
-    suspend fun getUser(): UserDataModel
+    suspend fun getUser(): com.superbeta.blibberly_models.UserDataModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun setUser(userDataModel: UserDataModel)
+    suspend fun setUser(userDataModel: com.superbeta.blibberly_models.UserDataModel)
 
     @Query("UPDATE userInfo set name = :newName")
     suspend fun updateName(newName: String)
@@ -34,7 +34,7 @@ interface UserLocalDao {
     suspend fun updateInterests(newInterests: List<String>)
 
     @Query("UPDATE userInfo set photoUri = :photoMetaData")
-    suspend fun updatePhotoMetaData(photoMetaData: PhotoMetaData)
+    suspend fun updatePhotoMetaData(photoMetaData: com.superbeta.blibberly_models.PhotoMetaData)
 
     @Query("DELETE from userInfo")
     suspend fun deleteUserInfo()
