@@ -17,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.gson.Gson
 import com.superbeta.blibberly_auth.model.UserDataModel
 import com.superbeta.blibberly_auth.utils.FontProvider
 import com.superbeta.blibberly_home.R
@@ -24,7 +25,7 @@ import com.superbeta.blibberly_home.R
 @Composable
 fun ProfessionalCard(user: UserDataModel) {
 
-    val languagesList = listOf("Tamil", "English", "Hindi")
+    val languagesList = Gson().fromJson(user.languages, Array<String>::class.java) ?: emptyArray()
 
     Card(
         colors = CardColors(

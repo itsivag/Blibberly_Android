@@ -115,7 +115,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation(libs.googleid)
     implementation(libs.firebase.analytics)
-//    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation(libs.firebase.auth)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)

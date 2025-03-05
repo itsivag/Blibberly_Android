@@ -42,6 +42,7 @@ media3CommonKtx = "1.4.1"
 koin-bom = "4.0.0"
 crashlytics = "3.0.2"
 lifecycleViewmodelAndroid = "2.8.7"
+jetbrainsKotlinJvm = "2.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -113,5 +114,6 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "devtools-ksp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 

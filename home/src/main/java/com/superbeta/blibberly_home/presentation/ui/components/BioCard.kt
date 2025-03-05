@@ -21,19 +21,20 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.model.UserDataModel
+import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.utils.FontProvider
 import com.superbeta.blibberly_home.R
-import com.superbeta.blibberly_home.model.BioDataModel
+import com.superbeta.blibberly_utils.ageFromDate
+import com.superbeta.blibberly_utils.capitalized
 
 @Composable
 fun BioCard(user: UserDataModel) {
-    val sampleBio = BioDataModel(
-        gender = "male",
-        age = 21,
-        location = "Chennai, India"
-    )
+//    val sampleBio = BioDataModel(
+//        gender = "male",
+//        age = 21,
+//        location = "Chennai, India"
+//    )
 
     val scrollState = rememberScrollState()
 
@@ -57,9 +58,9 @@ fun BioCard(user: UserDataModel) {
                 .scrollable(scrollState, orientation = Orientation.Horizontal)
                 .fillMaxWidth()
         ) {
-            BioCardChip(sampleBio.gender, 1)
-            BioCardChip(sampleBio.age.toString(), 2)
-            BioCardChip(sampleBio.location, 3)
+            BioCardChip(user.gender.capitalized(), 1)
+            BioCardChip(ageFromDate(user.dob).toString(), 2)
+            BioCardChip(user.location.capitalized(), 3)
         }
     }
 }

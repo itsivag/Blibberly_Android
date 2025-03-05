@@ -30,7 +30,6 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     modifier: Modifier,
     navigateToChat: (String, String) -> Unit,
-//    messageViewModel: MessageViewModel = koinViewModel(),
     homeViewModel: HomeViewModel = koinViewModel(),
     navigateToNoUsers: () -> Unit
 ) {
