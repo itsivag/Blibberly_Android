@@ -284,7 +284,7 @@ fun ReportProfileBottomSheet(
                                 fontFamily = FontProvider.dmSansFontFamily,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Medium,
-                                color = C
+                                color = Color.Gray
                             )
                         ) {
                             append(reportCategory.second)

@@ -1,3 +1,4 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.includedRange
 import java.util.Properties
 
@@ -39,11 +40,17 @@ android {
 
     buildTypes {
         release {
+            isDebuggable = false
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
+
             signingConfig = signingConfigs.getByName("debug")
             buildConfigField(
                 "String",

@@ -92,9 +92,7 @@ val avatarBGColorsMap = mapOf(
 @Composable
 fun BlibmojiScreen(
     modifier: Modifier,
-//    navController: NavHostController,
     viewModel: UserViewModel = koinViewModel(), navigateBack: () -> Unit,
-//    navigateToCurateProfile: () -> Unit
     navigateToNotificationConsentOrCurateProfile: () -> Unit
 ) {
     val supabase = createSupabaseClient(
@@ -158,8 +156,8 @@ fun BlibmojiScreen(
     }
     LaunchedEffect(key1 = true) {
         scope.launch {
-            viewModel.getUser()
-            val userData: com.superbeta.blibberly_models.UserDataModel? = viewModel.userState.value
+//            viewModel.getUser()
+            val userData: UserDataModel? = viewModel.userState.value
             if (userData != null && userData.photoMetaData.blibmojiUrl.isNotEmpty() && userData.photoMetaData.bgEmoji.isNotEmpty() && userData.photoMetaData.bgColor.isNotEmpty()) {
                 selectedBlibmoji = userData.photoMetaData.blibmojiUrl
                 selectedBGEmoji = userData.photoMetaData.bgEmoji

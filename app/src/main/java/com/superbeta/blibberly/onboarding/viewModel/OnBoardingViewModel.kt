@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 
 class OnBoardingViewModel(private val mUserRepository: MUserRepository) : ViewModel() {
 
-    private val _userState = MutableStateFlow<com.superbeta.blibberly_models.UserDataModel?>(null)
-    val userState: StateFlow<com.superbeta.blibberly_models.UserDataModel?> = _userState
+    private val _userState = MutableStateFlow<UserDataModel?>(null)
+    val userState: StateFlow<UserDataModel?> = _userState
 
     init {
         getUser()
@@ -24,9 +24,9 @@ class OnBoardingViewModel(private val mUserRepository: MUserRepository) : ViewMo
         viewModelScope.launch(IO) {
             try {
                 _userState.value = getUserEmail()?.let { mUserRepository.getUser(it) }
-                Log.i("UserViewModel", "User Data" + userState.value.toString())
+                Log.i("OnBoardingViewModel", "User Data" + userState.value.toString())
             } catch (e: Exception) {
-                Log.e("UserViewModel", "Error getting User Data : " + e.printStackTrace())
+                Log.e("OnBoardingViewModel", "Error getting User Data : " + e.printStackTrace())
             }
         }
     }
@@ -39,7 +39,7 @@ class OnBoardingViewModel(private val mUserRepository: MUserRepository) : ViewMo
         return mUserRepository.getUserFCMToken()
     }
 
-    suspend fun setUser(userDataModel: com.superbeta.blibberly_models.UserDataModel) {
+    suspend fun setUser(userDataModel: UserDataModel) {
         viewModelScope.launch(IO) {
             mUserRepository.setUser(userDataModel)
 //            getUser()
@@ -64,46 +64,9 @@ class OnBoardingViewModel(private val mUserRepository: MUserRepository) : ViewMo
         }
     }
 
-    fun updatePhotoMetaData(photoMetaData: com.superbeta.blibberly_models.PhotoMetaData) {
+    fun updatePhotoMetaData(photoMetaData: PhotoMetaData) {
         viewModelScope.launch(IO) {
             mUserRepository.updatePhotoMetaData(photoMetaData)
         }
     }
-
-//
-//    suspend fun uploadUserToDB() {
-//        viewModelScope.launch(IO) {
-//            getUser()
-//            val u: UserDataModel? = userState.value
-//            if (u != null) {
-//                //TODO make changes to supa upload
-//                mUserRepository.setUserToRemote(u)
-//            } else {
-//                Log.e("Database Upload Error", "User Data is null")
-//
-//            }
-//        }
-//    }
-
-//    suspend fun deleteLocalUserInfo() {
-//        viewModelScope.launch(IO) {
-//            mUserRepository.deleteLocalUserData()
-//        }
-//    }
-//
-//    suspend fun deleteAccount(email: String) {
-//        viewModelScope.launch(IO) {
-//            mUserRepository.deleteAccount(email)
-//        }
-//    }
-
-
-//    fun getBlibMojiUrlsFromStorage(): StateFlow<List<String>> {
-//        viewModelScope.launch {
-//            val bucket = supabase.storage.from("blibmoji")
-//            val files = bucket.list()
-//            _blibmojiUrls.value = files.map { bucket.publicUrl(it.name) }
-//        }
-//        return _blibmojiUrls.asStateFlow()
-//    }
 }

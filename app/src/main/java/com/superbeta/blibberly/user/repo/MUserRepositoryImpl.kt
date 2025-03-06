@@ -3,9 +3,8 @@ package com.superbeta.blibberly.user.repo
 import android.util.Log
 import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.remote.UserRemoteService
-import com.superbeta.blibberly_models.PhotoMetaData
-import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_chat.notification.NotificationRepo
+import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,30 +17,25 @@ class MUserRepositoryImpl(
     private val userRemoteService: UserRemoteService,
 ) : MUserRepository {
 
-    private val _userState = MutableStateFlow<com.superbeta.blibberly_models.UserDataModel?>(null)
+    private val _userState = MutableStateFlow<UserDataModel?>(null)
 
-    init {
-        CoroutineScope(IO).launch {
-            getUserEmail()
-            _userState.value = getUser("sivacbrf2@gmail.com")
-        }
-
-//            try {
-//                setUserToRemote(_userState.value!!)
-//            } catch (e: Exception) {
-//                Log.e("USER PROFILE SYNC ERROR", e.toString())
-//            }
-    }
+//    init {
+//        CoroutineScope(IO).launch {
+//            getUserEmail()
+//            _userState.value = getUser("sivacbrf2@gmail.com")
+//        }
+//    }
 
 
-    override suspend fun getUser(email: String): com.superbeta.blibberly_models.UserDataModel {
+    override suspend fun getUser(email: String): UserDataModel {
         val remoteUserData = userRemoteService.getUser(email)
         val localUserData = db.getUser()
         Log.i("MUserRepositoryImpl", "Remote Data" + remoteUserData.toString())
 
+        //TODO change this logic
         try {
 //            if (localUserData.email.isEmpty()) {
-//            setUserToLocalDb(remoteUserData)
+//                setUserToLocalDb(remoteUserData)
 //            }
 
 //            if (remoteUserData != null) {
@@ -50,13 +44,13 @@ class MUserRepositoryImpl(
 //                    setUserToRemote(localUserData)
 //                }
 //            }
-            Log.i("MUserRepositoryImpl", remoteUserData.toString())
-            Log.i("MUserRepositoryImpl", db.getUser().toString())
+            Log.i("MUserRepositoryImpl", "Remote Data : " + remoteUserData.toString())
+            Log.i("MUserRepositoryImpl", "Local Data : " + db.getUser().toString())
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MUserRepositoryImpl", "Error getting current user : $e")
         }
 
-        return localUserData
+        return remoteUserData!!
     }
 
     override suspend fun getUserEmail(): String? {
@@ -67,17 +61,17 @@ class MUserRepositoryImpl(
         return notificationRepo.getFCMToken()
     }
 
-    override suspend fun setUser(userDataModel: com.superbeta.blibberly_models.UserDataModel) {
+    override suspend fun setUser(userDataModel: UserDataModel) {
         setUserToLocalDb(userDataModel)
 //        setUserToRemote(userDataModel)
     }
 
 
-    override suspend fun setUserToLocalDb(userDataModel: com.superbeta.blibberly_models.UserDataModel?) {
+    override suspend fun setUserToLocalDb(userDataModel: UserDataModel?) {
         userDataModel?.let { db.setUser(it) }
     }
 
-    override suspend fun setUserToRemote(userDataModel: com.superbeta.blibberly_models.UserDataModel) {
+    override suspend fun setUserToRemote(userDataModel: UserDataModel) {
         userRemoteService.setUser(userDataModel)
     }
 

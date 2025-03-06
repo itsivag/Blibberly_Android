@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "59952933272-dn2p3qsll0o3qn4ejtl24ve8v79s6kme.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.superbeta.blibberly",
+            "certificate_hash": "6c5bc2f69c907896c1d109812ff5e7e776fc660d"
+          }
+        },
+        {
           "client_id": "59952933272-g2ne8gs7rropu51i5vb2tvf2qsuq6dcl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

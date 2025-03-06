@@ -17,9 +17,6 @@ import kotlinx.coroutines.launch
 
 
 class HomeViewModel(private val homeRepo: HomeRepo) : ViewModel() {
-//    private val _messageState = MutableStateFlow<List<MessageDataModel>>(emptyList())
-//    val messageState: StateFlow<List<MessageDataModel>> = _messageState.asStateFlow()
-
     private val _usersState = MutableStateFlow<List<String>>(emptyList())
     val usersState: StateFlow<List<String>> = _usersState.asStateFlow()
 

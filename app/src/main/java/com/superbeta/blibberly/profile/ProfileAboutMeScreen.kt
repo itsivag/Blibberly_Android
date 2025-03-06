@@ -63,11 +63,11 @@ fun ProfileAboutMeScreen(
 
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(key1 = true) {
-        scope.launch(IO) {
-            userViewModel.getUser()
-        }
-    }
+//    LaunchedEffect(key1 = true) {
+//        scope.launch(IO) {
+//            userViewModel.getUser()
+//        }
+//    }
 
     LaunchedEffect(key1 = userData) {
         scope.launch(IO) {

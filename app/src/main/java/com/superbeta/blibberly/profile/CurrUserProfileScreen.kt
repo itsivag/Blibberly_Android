@@ -17,14 +17,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CurrUserProfileScreen(
     modifier: Modifier,
-//    navController: NavHostController,
     viewModel: UserViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
-
-//    val userLocalDbService = UserLocalDbService(RoomInstanceProvider.getDb(context))
-//    val userViewModel : UserViewModel by activityViewModels()
-
     val userState by viewModel.userState.collectAsStateWithLifecycle()
 
     LazyColumn(modifier = modifier) {

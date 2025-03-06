@@ -58,13 +58,13 @@ fun AboutMeScreen(
 
     val scope = rememberCoroutineScope()
 
-    val userData: com.superbeta.blibberly_models.UserDataModel? = viewModel.userState.collectAsStateWithLifecycle().value
+    val userData: UserDataModel? = viewModel.userState.collectAsStateWithLifecycle().value
 
-    LaunchedEffect(key1 = Unit) {
-        scope.launch {
-            viewModel.getUser()
-        }
-    }
+//    LaunchedEffect(key1 = Unit) {
+//        scope.launch {
+//            viewModel.getUser()
+//        }
+//    }
 
     LaunchedEffect(key1 = userData) {
         scope.launch {

@@ -26,8 +26,15 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     fun getUser() {
         viewModelScope.launch(IO) {
             try {
-                _userState.value = getUserEmail()?.let { mUserRepository.getUser(it) }
-                Log.i("UserViewModel", "User Data" + userState.value.toString())
+                val email = getUserEmail()
+                if (email != null) {
+                    val u = mUserRepository.getUser(email)
+                    Log.i("UserViewModel", "User Data : $u")
+                    _userState.value = u
+                    _userState.collectLatest {
+                        Log.i("UserViewModel", "User Data : " + it.toString())
+                    }
+                }
             } catch (e: Exception) {
                 Log.e("UserViewModel", "Error getting User Data : " + e.printStackTrace())
             }
@@ -45,7 +52,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     suspend fun setUser(userDataModel: UserDataModel) {
         viewModelScope.launch(IO) {
             mUserRepository.setUserToLocalDb(userDataModel)
-            getUser()
+//            getUser()
         }
     }
 

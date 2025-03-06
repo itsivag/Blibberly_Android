@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +52,10 @@ fun BlibberlyTopAppBar(
 
     val userState by viewModel.userState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(userState) {
+        Log.i("BlibberlyTopAppBar", "UserState : " + userState.toString())
+    }
+
     CenterAlignedTopAppBar(
         title = { Text(text = "Blibberly") },
         navigationIcon = {
@@ -65,11 +70,6 @@ fun BlibberlyTopAppBar(
                                 ?: Color.White, shape = CircleShape
                         ),
                 ) {
-
-                    Log.i(
-                        "BlibberlyTopAppBar",
-                        "blibmojiUrl : ${userState?.photoMetaData?.blibmojiUrl}"
-                    )
                     SubcomposeAsyncImage(
                         modifier = Modifier.clip(CircleShape),
                         model = userState?.photoMetaData?.blibmojiUrl,

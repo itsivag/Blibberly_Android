@@ -47,8 +47,8 @@ fun ProfileBioScreen(
 
     LaunchedEffect(key1 = Unit) {
         scope.launch {
-            viewModel.getUser()
-            val userData: com.superbeta.blibberly_models.UserDataModel? =
+//            viewModel.getUser()
+            val userData: UserDataModel? =
                 viewModel.userState.value
             if (userData != null) {
                 name = TextFieldValue(userData.name)

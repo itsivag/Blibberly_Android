@@ -59,7 +59,6 @@ import com.superbeta.blibberly.ui.BLIBMOJI_BG_COLORS
 import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.user.presentation.UserViewModel
-import com.superbeta.blibberly_models.PhotoMetaData
 import com.superbeta.blibberly_home.utils.FontProvider
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
@@ -75,7 +74,6 @@ const val DEFAULT_BLIBMOJI_URL =
 
 @Composable
 fun ProfilePhotoScreen(
-//    navController: NavHostController,
     viewModel: UserViewModel = koinViewModel()
 ) {
 
@@ -84,7 +82,7 @@ fun ProfilePhotoScreen(
         supabaseKey = BuildConfig.SUPABASE_DEBUG_KEY
     ) {
         install(Postgrest)
-        install(Auth)
+//        install(Auth)
         install(Storage)
     }
 
@@ -115,15 +113,15 @@ fun ProfilePhotoScreen(
     }
 
     var selectedBGColor by rememberSaveable {
-        mutableStateOf(BLIBMOJI_BG_COLORS.BLUE.toString())
+        mutableStateOf("")
     }
 
     var selectedBGEmoji by rememberSaveable {
-        mutableStateOf(avatarBGEmojiList[0])
+        mutableStateOf("")
     }
 
     var selectedBlibmoji by rememberSaveable {
-        mutableStateOf(DEFAULT_BLIBMOJI_URL)
+        mutableStateOf("")
     }
 
     var isEditing by rememberSaveable {
@@ -152,12 +150,12 @@ fun ProfilePhotoScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
-        scope.launch(IO) {
-            viewModel.getUser()
-            Log.i("CURR USER BLIB", userData.toString())
-        }
-    }
+//    LaunchedEffect(key1 = true) {
+//        scope.launch(IO) {
+//            viewModel.getUser()
+//            Log.i("CURR USER BLIB", userData.toString())
+//        }
+//    }
 
     LaunchedEffect(key1 = userData) {
         scope.launch(IO) {
