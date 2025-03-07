@@ -137,7 +137,7 @@ dependencies {
     //supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:2.4.2"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.github.jan-tennert.supabase:compose-auth")
+//    implementation("io.github.jan-tennert.supabase:compose-auth")
 
     //datastore
     implementation(libs.androidx.datastore.preferences)

@@ -1,9 +1,10 @@
 package com.superbeta.blibberly_home.domain
 
 import android.util.Log
-import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_chat.data.remote.socket.SocketHandler
 import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
+import com.superbeta.blibberly_home.report.data.ReportRemoteService
+import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,39 +14,30 @@ class HomeRepoImpl(
     private val chatRemoteService: ChatRemoteService,
 ) : HomeRepo {
 
-//    private val _messageState = MutableStateFlow<List<MessageDataModel>>(arrayListOf())
     private val _liveUserProfilesState =
-        MutableStateFlow<List<com.superbeta.blibberly_models.UserDataModel>>(emptyList())
+        MutableStateFlow<List<UserDataModel>>(emptyList())
 
     override fun getUsers(): StateFlow<List<String>> {
         return socketHandler.getUsers()
     }
 
-    override suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<com.superbeta.blibberly_models.UserDataModel>> {
-        Log.i("live user raw list", liveUsers.toString())
+    override suspend fun getUsersProfile(liveUsers: List<String>): StateFlow<List<UserDataModel>> {
+        Log.i("HomeRepoImpl", "Live user raw list $liveUsers")
         try {
-//            for (email in liveUsers) {
-//                val userProfile = supabaseUsersDb.select {
-//                    filter {
-//                        UserDataModel::email eq email.username
-//                    }
-//                }.decodeSingle<UserDataModel>()
-//                _liveUserProfilesState.value += userProfile
-//            }
-            val appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit =
+            val appendProfiles: (UserDataModel) -> Unit =
                 { newProfiles ->
                     _liveUserProfilesState.value += newProfiles
                 }
             chatRemoteService.getUsersProfile(liveUsers, appendProfiles)
-            Log.i("live user", _liveUserProfilesState.value.toString())
+            Log.i("HomeRepoImpl", "Live user " + _liveUserProfilesState.value.toString())
         } catch (e: Exception) {
-            Log.e("Error getting live user profile", e.toString())
+            Log.e("HomeRepoImpl", "Error getting live user profile : $e")
         }
 
         return _liveUserProfilesState.asStateFlow()
     }
 
-    override fun getSpecificUserProfileWithEmail(email: String): com.superbeta.blibberly_models.UserDataModel? {
+    override fun getSpecificUserProfileWithEmail(email: String): UserDataModel? {
         return _liveUserProfilesState.value.firstOrNull { profile -> profile.email == email }
     }
 

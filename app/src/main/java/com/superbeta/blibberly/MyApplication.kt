@@ -2,9 +2,10 @@ package com.superbeta.blibberly
 
 import android.app.Application
 import com.superbeta.blibberly.di.mainModule
-import com.superbeta.blibberly_chat.di.profileOpsModule
 import com.superbeta.blibberly_auth.di.authModule
 import com.superbeta.blibberly_chat.di.chatModule
+import com.superbeta.blibberly_chat.di.profileOpsModule
+import com.superbeta.blibberly_home.report.di.reportModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -16,7 +17,7 @@ class MyApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@MyApplication)
-            modules(mainModule, authModule, chatModule, profileOpsModule)
+            modules(mainModule, authModule, chatModule, profileOpsModule, reportModule)
         }
     }
 }

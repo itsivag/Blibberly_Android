@@ -9,7 +9,7 @@ import com.superbeta.blibberly_chat.data.model.MessageDataModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 
-class ChatRemoteServiceImpl(private val supabase: SupabaseClient) : ChatRemoteService {
+class ChatRemoteServiceImpl(supabase: SupabaseClient) : ChatRemoteService {
     private val supabaseUsersDb = supabase.from("Users")
     private val supabaseMessageDb = supabase.from("Messages")
 

@@ -1,9 +1,6 @@
 package com.superbeta.blibberly.di
 
 import com.superbeta.blibberly.BuildConfig
-//import com.superbeta.blibberly_home.domain.HomeRepo
-//import com.superbeta.blibberly_home.domain.HomeRepoImpl
-//import com.superbeta.blibberly_home.presentation.viewModel.HomeViewModel
 import com.superbeta.blibberly.notification.NotificationUtil
 import com.superbeta.blibberly.notification.NotificationViewModel
 import com.superbeta.blibberly.onboarding.viewModel.OnBoardingViewModel
@@ -43,7 +40,7 @@ val mainModule = module {
             supabaseKey = BuildConfig.SUPABASE_DEBUG_KEY
         ) {
             install(Postgrest)
-            install(Auth)
+//            install(Auth)
             install(Storage)
         }
     }

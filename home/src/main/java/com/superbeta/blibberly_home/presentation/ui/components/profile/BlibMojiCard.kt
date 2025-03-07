@@ -214,7 +214,8 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                 sheetState = rememberModalBottomSheetState(),
                 changeBottomSheetVisibility = {
                     showReportProfileBottomSheet = it
-                })
+                }, reportedUser = userDataModel.email
+            )
     }
 }
 
