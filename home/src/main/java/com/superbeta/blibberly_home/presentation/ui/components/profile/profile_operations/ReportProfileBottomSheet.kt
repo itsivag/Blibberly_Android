@@ -1,13 +1,13 @@
 package com.superbeta.blibberly_home.presentation.ui.components.profile.profile_operations
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -26,13 +26,12 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.superbeta.blibberly_auth.components.PrimaryButton
+import com.superbeta.blibberly_auth.theme.ColorDisabled
 import com.superbeta.blibberly_auth.theme.TextColorGrey
-import com.superbeta.blibberly_home.presentation.ui.components.TextFieldWithLabel
 import com.superbeta.blibberly_home.report.viewModel.ReportViewModel
 import com.superbeta.blibberly_home.utils.FontProvider
 import kotlinx.coroutines.delay
@@ -56,11 +55,17 @@ fun ReportProfileBottomSheet(
         "Fake Profile/Bot" to "Suspicious or automated behavior.",
     )
     val scope = rememberCoroutineScope()
-    var selectedReportCategory by remember {
-        mutableStateOf(TextFieldValue())
+//    var otherReport by remember {
+//        mutableStateOf(TextFieldValue())
+//    }
+
+    var selectedReport by remember {
+        mutableStateOf("")
     }
 
     val haptics = LocalHapticFeedback.current
+    val scrollState = rememberScrollState()
+
 
     ModalBottomSheet(
         shape = RoundedCornerShape(topEnd = 12.dp, topStart = 12.dp),
@@ -71,11 +76,13 @@ fun ReportProfileBottomSheet(
     ) {
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(12.dp)
         ) {
             repeat(reportCategories.size) {
-                val reportCategory = reportCategories[it]
+                val currReportCategory = reportCategories[it]
+                val currReportConcatText =
+                    currReportCategory.first + " : " + currReportCategory.second
                 Text(
                     buildAnnotatedString {
                         withStyle(
@@ -86,7 +93,7 @@ fun ReportProfileBottomSheet(
                                 color = TextColorGrey
                             )
                         ) {
-                            append(reportCategory.first + " - ")
+                            append(currReportCategory.first + " - ")
                         }
                         withStyle(
                             style = SpanStyle(
@@ -96,51 +103,60 @@ fun ReportProfileBottomSheet(
                                 color = Color.Gray
                             )
                         ) {
-                            append(reportCategory.second)
+                            append(currReportCategory.second)
                         }
                     },
                     modifier = Modifier
+                        .clickable {
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                            if (selectedReport == currReportConcatText) {
+                                selectedReport = ""
+                            } else {
+                                selectedReport = currReportConcatText
+                            }
+
+                        }
                         .fillMaxWidth()
                         .padding(8.dp)
                         .background(color = Color.White, shape = RoundedCornerShape(12.dp))
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedReport == currReportConcatText) Color.Red else Color.Transparent,
+                            shape = RoundedCornerShape(12.dp)
+                        )
                         .padding(8.dp)
-                        .clickable {
-                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                            selectedReportCategory =
-                                TextFieldValue(reportCategory.first + " : " + reportCategory.second)
-                        }
                 )
             }
-            Column(
-                Modifier
-                    .padding(8.dp)
-                    .background(color = Color.White, shape = RoundedCornerShape(12.dp))
-            ) {
-                TextFieldWithLabel(
-                    textFieldValue = selectedReportCategory,
-                    onTextFieldValueChange = { selectedReportCategory = it },
-                    labelText = "Other",
-                    placeHolderText = "Type any issue that doesn’t fit the above...",
-                    keyboardOptions = KeyboardOptions.Default,
-                )
-            }
+            //TODO add other report
+//            Column(
+//                Modifier
+//                    .padding(8.dp)
+//                    .background(color = Color.White, shape = RoundedCornerShape(12.dp))
+//            ) {
+//                TextFieldWithLabel(
+//                    textFieldValue = otherReport,
+//                    onTextFieldValueChange = { otherReport = it },
+//                    labelText = "Other",
+//                    placeHolderText = "Type any issue that doesn’t fit the above...",
+//                    keyboardOptions = KeyboardOptions.Default,
+//                )
+//            }
         }
 
         PrimaryButton(
+            isButtonEnabled = selectedReport.isNotEmpty(),
             buttonText = "Report And Block",
             buttonContainerColor = Color.White,
-            textColor = Color.Red,
+            textColor = if (selectedReport.isNotEmpty()) Color.Red else ColorDisabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
             scope.launch {
-                if (selectedReportCategory.text.isNotEmpty()) {
-                    viewModel.registerProfileReport(
-                        report = selectedReportCategory.text,
-                        reportedUser = reportedUser
-                    )
-                }
+                viewModel.registerProfileReport(
+                    report = selectedReport,
+                    reportedUser = reportedUser
+                )
                 //TODO remove this and add animation
                 delay(1000)
                 sheetState.hide()

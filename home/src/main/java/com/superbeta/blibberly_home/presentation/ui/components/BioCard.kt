@@ -21,11 +21,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_auth.theme.ColorPrimary
 import com.superbeta.blibberly_auth.utils.FontProvider
 import com.superbeta.blibberly_home.R
-import com.superbeta.blibberly_utils.ageFromDate
+import com.superbeta.blibberly_utils.ageFromDateCalculator
 import com.superbeta.blibberly_utils.capitalized
 
 @Composable
@@ -59,7 +58,7 @@ fun BioCard(user: com.superbeta.blibberly_models.UserDataModel) {
                 .fillMaxWidth()
         ) {
             BioCardChip(user.gender.capitalized(), 1)
-            BioCardChip(ageFromDate(user.dob).toString(), 2)
+            BioCardChip(ageFromDateCalculator(user.dob).toString(), 2)
             BioCardChip(user.location.capitalized(), 3)
         }
     }

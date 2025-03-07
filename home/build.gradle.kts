@@ -87,6 +87,7 @@ dependencies {
     implementation(project(":chat"))
     implementation(project(":utils"))
     implementation(project(":models"))
+    implementation(project(":user"))
 //    implementation(project(":chat"))
 //    implementation(project(":blibberly_supabase"))
 //profile likes, dislikes, reports and matches
