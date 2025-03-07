@@ -30,7 +30,6 @@ class MUserRepositoryImpl(
     override suspend fun getUser(email: String): UserDataModel {
         val remoteUserData = userRemoteService.getUser(email)
         val localUserData = db.getUser()
-        Log.i("MUserRepositoryImpl", "Remote Data" + remoteUserData.toString())
 
         //TODO change this logic
         try {
