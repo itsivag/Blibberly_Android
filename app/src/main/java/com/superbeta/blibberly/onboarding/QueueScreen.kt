@@ -44,7 +44,7 @@ import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.LinkTextColor
 import com.superbeta.blibberly.ui.PrimaryLinearGradient
 import com.superbeta.blibberly.ui.TextColorGrey
-import com.superbeta.blibberly.ui.components.PrimaryButton
+import com.superbeta.blibberly_components.buttons.PrimaryButton
 import com.superbeta.blibberly_home.utils.FontProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

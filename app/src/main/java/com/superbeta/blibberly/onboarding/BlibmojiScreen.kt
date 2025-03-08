@@ -55,8 +55,8 @@ import coil.request.ImageRequest
 import com.superbeta.blibberly.BuildConfig
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorPrimary
-import com.superbeta.blibberly.ui.components.PrimaryButton
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly_components.buttons.PrimaryButton
 import com.superbeta.blibberly_models.PhotoMetaData
 import com.superbeta.blibberly_models.UserDataModel
 import com.superbeta.blibberly_home.utils.FontProvider
@@ -367,7 +367,7 @@ fun BlibmojiScreen(
 //                        showBottomSheet = false
                         scope.launch {
                             viewModel.updatePhotoMetaData(
-                                com.superbeta.blibberly_models.PhotoMetaData(
+                                PhotoMetaData(
                                     blibmojiUrl = selectedBlibmoji,
                                     bgEmoji = selectedBGEmoji,
                                     bgColor = selectedBGColor

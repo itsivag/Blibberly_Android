@@ -35,8 +35,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.superbeta.blibberly.R
 import com.superbeta.blibberly.ui.ColorDisabled
 import com.superbeta.blibberly.ui.ColorPrimary
-import com.superbeta.blibberly.ui.components.PrimaryButtonColorDisabled
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly_components.buttons.PrimaryButtonColorDisabled
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

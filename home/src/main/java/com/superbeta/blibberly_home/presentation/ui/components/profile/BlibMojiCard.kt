@@ -47,8 +47,8 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly_home.R
 import com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS
-import com.superbeta.blibberly_home.presentation.ui.components.profile.profile_operations.ProfileOperationsCard
-import com.superbeta.blibberly_home.presentation.ui.components.profile.profile_operations.ReportProfileBottomSheet
+import com.superbeta.profile_ops.presentation.ui.ProfileOperationsCard
+import com.superbeta.profile_ops.report.presentation.ui.ReportProfileBottomSheet
 import com.superbeta.blibberly_home.utils.FontProvider
 import com.superbeta.blibberly_models.UserDataModel
 

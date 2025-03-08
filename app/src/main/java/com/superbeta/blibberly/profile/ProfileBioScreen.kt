@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.superbeta.blibberly.ui.components.TextFieldWithTrailingIcon
 import com.superbeta.blibberly.user.presentation.UserViewModel
+import com.superbeta.blibberly_components.textField.TextFieldWithTrailingIcon
 import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

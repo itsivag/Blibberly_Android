@@ -81,8 +81,12 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(project(":auth"))
+//    implementation(project(":auth"))
     implementation(project(":models"))
+    implementation(project(":utils"))
+    implementation(project(":components"))
+    implementation(project(":user"))
+    //    implementation(project(":user"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -107,4 +111,13 @@ dependencies {
 
     //gson
     implementation(libs.gson)
+
+    //compose
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    val composeBom = platform("androidx.compose:compose-bom:2024.05.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    //material3
+    implementation(libs.material3)
 }

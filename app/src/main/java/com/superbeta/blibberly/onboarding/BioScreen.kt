@@ -43,8 +43,8 @@ import com.superbeta.blibberly.onboarding.components.convertMillisToDate
 import com.superbeta.blibberly.onboarding.viewModel.OnBoardingViewModel
 import com.superbeta.blibberly.ui.ColorDisabled
 import com.superbeta.blibberly.ui.ColorPrimary
-import com.superbeta.blibberly.ui.components.PrimaryButton
-import com.superbeta.blibberly.ui.components.TextFieldWithLabel
+import com.superbeta.blibberly_components.buttons.PrimaryButton
+import com.superbeta.blibberly_components.textField.TextFieldWithLabel
 import com.superbeta.blibberly_models.PhotoMetaData
 import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.launch
@@ -259,14 +259,14 @@ fun BioScreen(
                     scope.launch {
                         try {
                             viewModel.getUserEmail()?.let { email ->
-                                com.superbeta.blibberly_models.UserDataModel(
+                                UserDataModel(
                                     email = email,
                                     name = name.text,
                                     dob = dob,
                                     aboutMe = aboutMe,
                                     interests = interests,
                                     gender = gender,
-                                    photoMetaData = com.superbeta.blibberly_models.PhotoMetaData(
+                                    photoMetaData = PhotoMetaData(
                                         "",
                                         "",
                                         ""

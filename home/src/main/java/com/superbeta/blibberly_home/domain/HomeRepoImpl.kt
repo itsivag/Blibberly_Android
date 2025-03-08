@@ -3,7 +3,7 @@ package com.superbeta.blibberly_home.domain
 import android.util.Log
 import com.superbeta.blibberly_chat.data.remote.socket.SocketHandler
 import com.superbeta.blibberly_chat.data.remote.supabase.ChatRemoteService
-import com.superbeta.blibberly_home.report.data.ReportRemoteService
+import com.superbeta.profile_ops.report.data.ReportRemoteService
 import com.superbeta.blibberly_models.UserDataModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
