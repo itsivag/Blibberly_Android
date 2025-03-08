@@ -1,14 +1,14 @@
-package com.superbeta.profile_ops.report.data
+package com.superbeta.profile_ops.report_ghost_block.data
 
 import android.util.Log
-import com.superbeta.profile_ops.report.model.ProfileReportDataModel
+import com.superbeta.profile_ops.report_ghost_block.model.ReportGhostBlockDataModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 
-class ReportRemoteServiceImpl(supabase: SupabaseClient) : ReportRemoteService {
+class ReportGhostBlockRemoteServiceImpl(supabase: SupabaseClient) : ReportGhostBlockRemoteService {
     private val supabaseProfileReportsDb = supabase.from("ProfileReports")
 
-    override suspend fun registerProfileReport(report: ProfileReportDataModel) {
+    override suspend fun registerProfileReport(report: ReportGhostBlockDataModel) {
         try {
             supabaseProfileReportsDb.insert(report)
         } catch (e: Exception) {

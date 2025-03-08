@@ -1,4 +1,4 @@
-package com.superbeta.profile_ops.report.presentation.ui
+package com.superbeta.profile_ops.report_ghost_block.presentation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,7 +33,7 @@ import com.superbeta.blibberly_components.buttons.PrimaryButton
 import com.superbeta.blibberly_components.colors.ColorDisabled
 import com.superbeta.blibberly_components.colors.TextColorGrey
 import com.superbeta.blibberly_utils.FontProvider
-import com.superbeta.profile_ops.report.presentation.viewModel.ReportViewModel
+import com.superbeta.profile_ops.report_ghost_block.presentation.viewModel.ReportGhostBlockViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -44,7 +44,7 @@ fun ReportProfileBottomSheet(
     sheetState: SheetState,
     changeBottomSheetVisibility: (Boolean) -> Unit,
     reportedUser: String,
-    viewModel: ReportViewModel = koinViewModel(),
+    viewModel: ReportGhostBlockViewModel = koinViewModel(),
 ) {
     val reportCategories = listOf(
         "Harassment/Bullying" to "User is being rude, aggressive, or threatening.",
@@ -157,7 +157,7 @@ fun ReportProfileBottomSheet(
                     report = selectedReport,
                     reportedUser = reportedUser
                 )
-                //TODO remove this and add animation
+                //TODO remove this and add a dialog
                 delay(1000)
                 sheetState.hide()
             }.invokeOnCompletion {

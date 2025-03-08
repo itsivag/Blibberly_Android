@@ -1,6 +1,8 @@
 package com.superbeta.blibberly.user.repo
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.superbeta.blibberly.user.data.local.UserLocalDao
 import com.superbeta.blibberly.user.data.remote.UserRemoteService
 import com.superbeta.blibberly_chat.notification.NotificationRepo
@@ -27,14 +29,21 @@ class MUserRepositoryImpl(
 //    }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getUser(email: String): UserDataModel {
         val remoteUserData = userRemoteService.getUser(email)
         val localUserData = db.getUser()
 
+        Log.i("CreatedAt", remoteUserData?.createdAt.toString())
         //TODO change this logic
         try {
+//            if (remoteUserData != null) {
+//                if (localUserData.updatedAt > remoteUserData.updatedAt) {
+//
+//                }
+//            }
 //            if (localUserData.email.isEmpty()) {
-//                setUserToLocalDb(remoteUserData)
+            setUserToLocalDb(remoteUserData)
 //            }
 
 //            if (remoteUserData != null) {

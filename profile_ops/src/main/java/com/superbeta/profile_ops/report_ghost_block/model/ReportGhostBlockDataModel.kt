@@ -1,4 +1,4 @@
-package com.superbeta.profile_ops.report.model
+package com.superbeta.profile_ops.report_ghost_block.model
 
 import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Immutable
 @Serializable
 @Stable
-data class ProfileReportDataModel(
+data class ReportGhostBlockDataModel(
     @SerialName("value") val value: String,
     @SerialName("createdAt") val createAt: String,
     @SerialName("status") val status: String,

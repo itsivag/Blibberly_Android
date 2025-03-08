@@ -1,6 +1,6 @@
-package com.superbeta.profile_ops.report.domain
+package com.superbeta.profile_ops.report_ghost_block.domain
 
-interface ReportRepo {
+interface ReportGhostBlockRepo {
     suspend fun registerProfileReport(report: String, reportedUser: String)
     suspend fun getProfileReportStatus()
 

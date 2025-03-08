@@ -18,14 +18,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.superbeta.blibberly_utils.FontProvider
 import com.superbeta.profile_ops.R
-import com.superbeta.profile_ops.report.presentation.viewModel.ReportViewModel
+import com.superbeta.profile_ops.report_ghost_block.presentation.viewModel.ReportGhostBlockViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileOperationsCard(
     modifier: Modifier,
     showReportProfileBottomSheet: () -> Unit,
-    viewModel: ReportViewModel = koinViewModel()
+    showBlockProfileBottomSheet: () -> Unit,
+    viewModel: ReportGhostBlockViewModel = koinViewModel(),
 ) {
     Column(modifier = modifier) {
         Row(Modifier.padding(8.dp)) {
@@ -46,7 +47,9 @@ fun ProfileOperationsCard(
                 content = "Block", icon = R.drawable.block, modifier =
                 Modifier.Companion
                     .weight(1f)
-                    .padding(8.dp), onCLick = {}
+                    .padding(8.dp), onCLick = {
+                    showBlockProfileBottomSheet()
+                }
             )
 
             ProfileOperationItem(content = "Report",

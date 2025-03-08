@@ -47,10 +47,11 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.superbeta.blibberly_home.R
 import com.superbeta.blibberly_home.presentation.ui.BLIBMOJI_BG_COLORS
-import com.superbeta.profile_ops.presentation.ui.ProfileOperationsCard
-import com.superbeta.profile_ops.report.presentation.ui.ReportProfileBottomSheet
 import com.superbeta.blibberly_home.utils.FontProvider
 import com.superbeta.blibberly_models.UserDataModel
+import com.superbeta.profile_ops.presentation.ui.ProfileOperationsCard
+import com.superbeta.profile_ops.report_ghost_block.presentation.ui.BlockProfileBottomSheet
+import com.superbeta.profile_ops.report_ghost_block.presentation.ui.ReportProfileBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,6 +80,10 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
     }
 
     var showReportProfileBottomSheet by remember {
+        mutableStateOf(false)
+    }
+
+    var showBlockProfileBottomSheet by remember {
         mutableStateOf(false)
     }
 
@@ -111,6 +116,8 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                     it,
                     showReportProfileBottomSheet = {
                         showReportProfileBottomSheet = true
+                    }, showBlockProfileBottomSheet = {
+                        showBlockProfileBottomSheet = true
                     })
             }
 
@@ -209,13 +216,25 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
         }
 
         //report profile bottom sheet
-        if (showReportProfileBottomSheet)
+        if (showReportProfileBottomSheet) {
             ReportProfileBottomSheet(
                 sheetState = rememberModalBottomSheetState(),
                 changeBottomSheetVisibility = {
                     showReportProfileBottomSheet = it
                 }, reportedUser = userDataModel.email
             )
+        }
+
+        //block profile bottom sheet
+        if (showBlockProfileBottomSheet) {
+            BlockProfileBottomSheet(
+                sheetState = rememberModalBottomSheetState(),
+                changeBottomSheetVisibility = {
+                    showBlockProfileBottomSheet = it
+                },
+                reportedUser = userDataModel.email
+            )
+        }
     }
 }
 
