@@ -36,7 +36,7 @@ import org.koin.androidx.compose.koinViewModel
 fun BlockProfileBottomSheet(
     sheetState: SheetState,
     changeBottomSheetVisibility: (Boolean) -> Unit,
-    reportedUser: String,
+    blockedUser: String,
     viewModel: ReportGhostBlockViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -106,10 +106,7 @@ fun BlockProfileBottomSheet(
         ) {
             scope.launch {
                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-//                viewModel.registerProfileReport(
-//                    report = selectedReport,
-//                    reportedUser = reportedUser
-//                )
+                viewModel.blockUser(blockedUser)
                 //TODO remove this and add dialog
                 delay(1000)
                 sheetState.hide()

@@ -232,7 +232,7 @@ fun BlibMojiCard(userDataModel: UserDataModel, navigateToChat: () -> Unit) {
                 changeBottomSheetVisibility = {
                     showBlockProfileBottomSheet = it
                 },
-                reportedUser = userDataModel.email
+                blockedUser = userDataModel.email
             )
         }
     }

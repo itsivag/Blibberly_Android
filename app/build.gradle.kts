@@ -111,6 +111,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(project(":models"))
     implementation(project(":components"))
+    implementation(project(":user"))
 
     //test
     testImplementation(libs.junit)

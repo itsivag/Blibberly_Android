@@ -78,12 +78,12 @@ fun CurateProfileScreen(
 //        viewModel.getUser()
 //    }
 
-    LaunchedEffect(key1 = userState) {
-            //TODO remove this
+    LaunchedEffect(key1 = true) {
+        //TODO remove this
 //            delay(5000)
-            Log.i("CurateProfileScreen", "Email -> ${userState.value}")
-            viewModel.uploadUserToDB()
-//            navigateToHome()
+        Log.i("CurateProfileScreen", "User Data -> ${userState.value}")
+        viewModel.uploadUserToDB()
+        navigateToHome()
     }
 
     Box(

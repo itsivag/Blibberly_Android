@@ -6,7 +6,8 @@ import com.superbeta.profile_ops.report_ghost_block.domain.ReportGhostBlockRepo
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
-class ReportGhostBlockViewModel(private val reportGhostBlockRepo: ReportGhostBlockRepo) : ViewModel() {
+class ReportGhostBlockViewModel(private val reportGhostBlockRepo: ReportGhostBlockRepo) :
+    ViewModel() {
     fun registerProfileReport(report: String, reportedUser: String) {
         viewModelScope.launch(IO) {
             reportGhostBlockRepo.registerProfileReport(report, reportedUser)
@@ -16,6 +17,12 @@ class ReportGhostBlockViewModel(private val reportGhostBlockRepo: ReportGhostBlo
     fun getProfileReportStatus() {
         viewModelScope.launch(IO) {
             reportGhostBlockRepo.getProfileReportStatus()
+        }
+    }
+
+    fun blockUser(blockedUserEmail: String) {
+        viewModelScope.launch(IO) {
+            reportGhostBlockRepo.blockUser(blockedUserEmail)
         }
     }
 

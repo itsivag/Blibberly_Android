@@ -10,10 +10,8 @@ import kotlinx.serialization.Serializable
 @Immutable
 @Serializable
 @Stable
-data class ReportGhostBlockDataModel(
-    @SerialName("value") val value: String,
-    @SerialName("createdAt") val createAt: String,
-    @SerialName("status") val status: String,
-    @SerialName("reporter") val reporter: String,
-    @SerialName("reportedUser") val reportedUser: String
+data class BlockDataModel(
+    @SerialName("blocker") val blocker: String,
+    @SerialName("blockedUser") val blockedUser: String,
+//    @SerialName("createdAt") val createAt: String,
 )

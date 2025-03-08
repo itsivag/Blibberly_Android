@@ -58,7 +58,7 @@ class MUserRepositoryImpl(
             Log.e("MUserRepositoryImpl", "Error getting current user : $e")
         }
 
-        return remoteUserData!!
+        return localUserData
     }
 
     override suspend fun getUserEmail(): String? {

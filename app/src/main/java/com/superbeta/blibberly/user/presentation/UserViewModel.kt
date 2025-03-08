@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.superbeta.blibberly.user.repo.MUserRepository
 import com.superbeta.blibberly_models.PhotoMetaData
 import com.superbeta.blibberly_models.UserDataModel
+import com.superbeta.blibberly_user.CurrentUserDataProvider
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +27,7 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
     fun getUser() {
         viewModelScope.launch(IO) {
             try {
-                val email = getUserEmail()
+                val email = CurrentUserDataProvider.getUserEmail()
                 if (email != null) {
                     val u = mUserRepository.getUser(email)
                     Log.i("UserViewModel", "User Data : $u")
@@ -34,9 +35,11 @@ class UserViewModel(private val mUserRepository: MUserRepository) : ViewModel() 
                     _userState.collectLatest {
                         Log.i("UserViewModel", "User Data : " + it.toString())
                     }
+                } else {
+                    Log.i("UserViewModel", "Get user -> email = null")
                 }
             } catch (e: Exception) {
-                Log.e("UserViewModel", "Error getting User Data : " + e.printStackTrace())
+                Log.e("UserViewModel", "Error getting User Data : $e")
             }
         }
     }
