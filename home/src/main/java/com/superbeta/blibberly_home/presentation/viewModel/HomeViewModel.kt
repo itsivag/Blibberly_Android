@@ -34,14 +34,7 @@ class HomeViewModel(private val homeRepo: HomeRepo) : ViewModel() {
     init {
         viewModelScope.launch(IO) {
             getUsers()
-//            delay(1000)
-//            getUserProfile()
         }
-//        viewModelScope.launch(IO) {
-//
-//            getUserProfile()
-//        }
-//
     }
 
     private fun getUsers() {

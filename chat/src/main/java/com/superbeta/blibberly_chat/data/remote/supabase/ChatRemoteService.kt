@@ -8,7 +8,7 @@ interface ChatRemoteService {
     suspend fun retrieveSession(): FirebaseUser?
     suspend fun getUsersProfile(
         liveUsers: List<String>,
-        appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit
+        appendProfiles: (UserDataModel) -> Unit
     )
 
     suspend fun saveMessageToRemoteDb(data: MessageDataModel) {}

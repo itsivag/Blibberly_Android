@@ -19,7 +19,7 @@ class ChatRemoteServiceImpl(supabase: SupabaseClient) : ChatRemoteService {
     }
 
     override suspend fun getUsersProfile(
-        liveUsers: List<String>, appendProfiles: (com.superbeta.blibberly_models.UserDataModel) -> Unit
+        liveUsers: List<String>, appendProfiles: (UserDataModel) -> Unit
     ) {
         Log.i("ChatRemoteServiceImpl", "Live user list: $liveUsers")
 
@@ -28,10 +28,9 @@ class ChatRemoteServiceImpl(supabase: SupabaseClient) : ChatRemoteService {
                 Log.i("ChatRemoteServiceImpl", "User :  $user")
                 val userProfile = supabaseUsersDb.select {
                     filter {
-                        com.superbeta.blibberly_models.UserDataModel::email eq user
+                        UserDataModel::email eq user
                     }
-                }.decodeSingle<com.superbeta.blibberly_models.UserDataModel>()
-//            _liveUserProfilesState.value += userProfile
+                }.decodeSingle<UserDataModel>()
                 appendProfiles(userProfile)
             }
         } catch (e: Exception) {

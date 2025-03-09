@@ -8,19 +8,26 @@ import com.superbeta.profile_ops.report_ghost_block.model.ReportDataModel
 
 class ReportGhostBlockRepoImpl(private val reportGhostBlockRemoteService: ReportGhostBlockRemoteService) :
     ReportGhostBlockRepo {
-    override suspend fun registerProfileReport(report: String, reportedUser: String) {
+    override suspend fun reportAndBlock(report: String, reportedAndBlockedUser: String) {
         try {
 
-            val reporter = CurrentUserDataProvider.getUserEmail()!!
+            val currentUser = CurrentUserDataProvider.getUserEmail()!!
 
-            val profileReportModel = ReportDataModel(
+            val reportDataModel = ReportDataModel(
                 value = report,
-//                createAt = current.toString(),
                 status = "",
-                reporter = reporter,
-                reportedUser = reportedUser
+                reporter = currentUser,
+                reportedUser = reportedAndBlockedUser
             )
-            reportGhostBlockRemoteService.registerProfileReport(profileReportModel)
+
+            val blockDataModel =
+                BlockDataModel(blocker = currentUser, blockedUser = reportedAndBlockedUser)
+
+
+            reportGhostBlockRemoteService.reportAndBlock(
+                report = reportDataModel,
+                block = blockDataModel
+            )
         } catch (e: Exception) {
             Log.e("ReportGhostBlockRepoImpl", "Error reporting the profile : $e")
         }
@@ -40,6 +47,16 @@ class ReportGhostBlockRepoImpl(private val reportGhostBlockRemoteService: Report
             reportGhostBlockRemoteService.blockUser(blockDataModel)
         } catch (e: Exception) {
             Log.e("ReportGhostBlockRepoImpl", "Error blocking the profile : $e")
+        }
+    }
+
+    override suspend fun getBlockedUsers(): List<BlockDataModel> {
+        try {
+            val currentUser = CurrentUserDataProvider.getUserEmail()!!
+            return reportGhostBlockRemoteService.getBlockedUsers(currentUser)
+        } catch (e: Exception) {
+            Log.e("ReportGhostBlockRepoImpl", "Error fetching blocked users : $e")
+            return emptyList()
         }
     }
 }

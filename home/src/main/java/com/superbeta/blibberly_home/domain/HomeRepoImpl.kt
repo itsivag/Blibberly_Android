@@ -27,6 +27,7 @@ class HomeRepoImpl(
                 { newProfiles ->
                     _liveUserProfilesState.value += newProfiles
                 }
+
             chatRemoteService.getUsersProfile(liveUsers, appendProfiles)
             Log.i("HomeRepoImpl", "Live user " + _liveUserProfilesState.value.toString())
         } catch (e: Exception) {
